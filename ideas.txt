@@ -4,10 +4,11 @@
     1. Välja 1 player eller 2 player
     2. Välja svårighetsgrad (kanske)
     3. Quit Game
+    4. Rita ut menyval på Canvas alternativt gör DOM manipulation
 
 2. Svårighetsgrader
     1. Ökar i svårighetsgrad beroende på level
-    
+
 3. Multiplayer
     1. Fixa multiplayer så vi kan ha flera paddlar
 
