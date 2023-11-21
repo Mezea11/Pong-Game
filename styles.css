@@ -1,0 +1,13 @@
+canvas {
+    display: block;
+    margin: auto;
+    background-color: black;
+}
+
+.game-title {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}

@@ -1,0 +1,19 @@
+// PONG SPEL IDEER
+
+1. Menysystem
+    1. Välja 1 player eller 2 player
+    2. Välja svårighetsgrad (kanske)
+    3. Quit Game
+
+2. Svårighetsgrader
+    1. Ökar i svårighetsgrad beroende på level
+    
+3. Multiplayer
+    1. Fixa multiplayer så vi kan ha flera paddlar
+
+4. Powerups
+    1. Förstör en av datorns paddlar
+    2. Större paddel/Mindre paddel
+
+5. Musik och ljudeffekter
+    1. Fixa bakgrundsmusik och ljudeffekter på paddlar/boll och powerups
