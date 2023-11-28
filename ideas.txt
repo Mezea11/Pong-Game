@@ -20,3 +20,6 @@
 
 5. Musik och ljudeffekter
     1. Fixa bakgrundsmusik och ljudeffekter på paddlar/boll och powerups
+
+//tillägg 20231128 - la till grundläggande rörelse för vänstra paddeln, eventlistener's och funktion, 
+                    uppdaterade då också vänstra paddelns properties

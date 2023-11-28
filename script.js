@@ -2,13 +2,55 @@
   const canvas = document.getElementById('pongCanvas');
   const ctx = canvas.getContext('2d');
 
+
+  console.log(canvas.width);
+  console.log(canvas.height);
+
   // Create the paddles
   const paddleWidth = 10, paddleHeight = 60;
-  const leftPaddle = { x: 0, y: canvas.height / 2 - paddleHeight / 2, width: paddleWidth, height: paddleHeight };
+  const leftPaddle = { 
+    x: 0, 
+    y: canvas.height / 2 - paddleHeight / 2, 
+    width: paddleWidth, 
+    height: paddleHeight,
+    speed: 10,
+    keys: {
+      up: false,
+      down: false,
+      } 
+    };
+  
   const rightPaddle = { x: canvas.width - paddleWidth, y: canvas.height / 2 - paddleHeight / 2, width: paddleWidth, height: paddleHeight };
 
   // Create the ball
   const ball = { x: canvas.width / 2, y: canvas.height / 2, radius: 8, speedX: 5, speedY: 5 };
+
+// Event listeners för att hantera spelarens rörelse.
+window.addEventListener("keydown", (event) => {
+  if (event.key === "ArrowUp") {
+    leftPaddle.keys.up = true;
+  } else if (event.key === "ArrowDown") {
+    leftPaddle.keys.down = true;
+  }
+});
+
+window.addEventListener("keyup", (event) => {
+  if (event.key === "ArrowUp") {
+    leftPaddle.keys.up = false;
+  }
+
+  if (event.key === "ArrowDown") {
+    leftPaddle.keys.down = false;
+  }
+});
+
+function movePaddle() {
+  if (leftPaddle.keys.up && leftPaddle.y > 0) {
+    leftPaddle.y -= leftPaddle.speed; //leftPaddle.speed * game.deltaTime;
+  } else if (leftPaddle.keys.down && leftPaddle.y + leftPaddle.height < canvas.height) {
+    leftPaddle.y += leftPaddle.speed; //leftPaddle.speed * game.deltaTime;
+  }
+}
 
   // Draw function to render the paddles and ball
   function draw() {
@@ -47,6 +89,7 @@
       ball.speedX = -ball.speedX;
     }
 
+    
     // Check for scoring
     if (ball.x - ball.radius < 0 || ball.x + ball.radius > canvas.width) {
       // Reset ball position
@@ -57,6 +100,7 @@
 
   // Game loop
   function gameLoop() {
+    movePaddle();
     draw();
     update();
     requestAnimationFrame(gameLoop);
