@@ -21,5 +21,7 @@
 5. Musik och ljudeffekter
     1. Fixa bakgrundsmusik och ljudeffekter på paddlar/boll och powerups
 
-//tillägg 20231128 - la till grundläggande rörelse för vänstra paddeln, eventlistener's och funktion, 
-                    uppdaterade då också vänstra paddelns properties
+//tillägg 20231129  - la till grundläggande rörelse för vänstra paddeln = eventlisteners och en funktion, 
+                    uppdaterade då också vänstra paddeln-objektets properties (Pelle)
+                    - la till grundläggande rörelse för högra paddeln = en funtion + uppdaterade objektets properties (Pelle)
+                    - la till 'laser-skott' för vänster paddel - när skott träffar bollen ändrar bollen riktning (Pelle)
