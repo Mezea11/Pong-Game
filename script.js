@@ -12,6 +12,8 @@ let laserSound = new Audio('Assets/laser2.wav');
 laserSound.volume = 0.1;
 let laserBall = new Audio('Assets/laser.wav');
 laserBall.volume = 0.05;
+let obstacleBall = new Audio('Assets/click2.wav');
+obstacleBall.volume = 0.1;
 
 let laser;
 let laserArray = [];
@@ -203,6 +205,7 @@ function update() {
         obstacle.status = 0;
         obstacleArray.splice(i, 1);
         i--;
+        obstacleBall.play();
     }
   }
   // check for and handle collision between laser and ball, and handle laserArray when laser leaves canvas

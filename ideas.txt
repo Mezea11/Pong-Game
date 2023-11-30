@@ -31,7 +31,7 @@
 //tillägg 20231130  - uppdaterat laser; skott försvinner när bollen träffas samt laser tas bort ur array vid träff eller 
     (Pelle)           när den lämnar skärmen
                     - la till 'Assets'-folder och la in ett par ljudfiler där, för att testa ljudeffekter
-                    - la till ljud för när boll träffas paddel + när man skjuter laser + när laser träffar boll 
+                    - la till ljud för när boll träffas paddel + när man skjuter laser + när laser träffar boll + boll träffar hinder
                     - ändrade canvas storlek bara för att testa funktioner
                     Hinder - la till ett objekt som spawnas vid 200 poäng, som man kan ta sönder med bollen,
                     bara för att testa principen
