@@ -2,8 +2,16 @@
 const canvas = document.getElementById('pongCanvas');
 const ctx = canvas.getContext('2d');
 
-//console.log(canvas.width);
-//console.log(canvas.height);
+canvas.width = 400;
+canvas.height = 300;
+
+// audio
+let paddleBall = new Audio('Assets/click.wav');
+paddleBall.volume = 0.2;
+let laserSound = new Audio('Assets/laser2.wav');
+laserSound.volume = 0.1;
+let laserBall = new Audio('Assets/laser.wav');
+laserBall.volume = 0.1;
 
 // Create the paddles
 const paddleWidth = 10, paddleHeight = 60;
@@ -24,7 +32,7 @@ const rightPaddle = {
   y: canvas.height / 2 - paddleHeight / 2,
   width: paddleWidth,
   height: paddleHeight,
-  speed: 3,
+  speed: 5,
   hit: true,
 };
 
@@ -34,7 +42,7 @@ const ball = { x: canvas.width / 2, y: canvas.height / 2, radius: 8, speedX: 5, 
 let laser;
 let laserArray = [];
 
-// Event listeners för att hantera spelarens rörelse.
+// Event listeners för att hantera spelarens rörelse + laser
 window.addEventListener("keydown", (event) => {
   if (event.key === "ArrowUp") {
     leftPaddle.keys.up = true;
@@ -53,25 +61,29 @@ window.addEventListener("keyup", (event) => {
   }
 
   if (event.key === ' ') {
-    shoot(); 
+    shoot();
+    // audio will trigger everytime you push space by resetting audio
+    laserSound.currentTime = 0;
+    laserSound.play();
    }
 });
 
+// move function for left side (player controlled)
 function moveLeftPaddle() {
   if (leftPaddle.keys.up && leftPaddle.y > 0) {
-    leftPaddle.y -= leftPaddle.speed; //leftPaddle.speed * game.deltaTime;
+    leftPaddle.y -= leftPaddle.speed;
   } else if (leftPaddle.keys.down && leftPaddle.y + leftPaddle.height < canvas.height) {
-    leftPaddle.y += leftPaddle.speed; //leftPaddle.speed * game.deltaTime;
+    leftPaddle.y += leftPaddle.speed;
   }
 }
 
-//move function for right side (computer controlled) paddle
+// move function for right side (computer controlled) paddle
 function moveRightpaddle() {
-  //resets variable so paddle can move again
+  // resets variable so paddle can move again
   if (ball.x < 100) {
     rightPaddle.hit = true;
   }
-  //paddle can't move before ball is on right side of screen
+  // paddle can't move before ball is on right side of screen
   if (ball.x >= 150 && rightPaddle.hit) {
     if (ball.y > rightPaddle.y + rightPaddle.height / 2) {
       rightPaddle.y += rightPaddle.speed;
@@ -124,20 +136,32 @@ function update() {
     (ball.x + ball.radius > rightPaddle.x && ball.y > rightPaddle.y && ball.y < rightPaddle.y + rightPaddle.height)
   ) {
     ball.speedX = -ball.speedX;
+    paddleBall.play();
     //makes paddle stop moving after ball hits paddle
     rightPaddle.hit = false;
   } 
 
+  // check for and handle collision between laser and ball, and handle laserArray when laser leaves canvas
   for (let i = 0; i < laserArray.length; i++) {
     let laser = laserArray[i];
+    // check for collision
     if (
       laser.x < ball.x + ball.radius &&
       laser.x + laser.width > ball.x &&
       laser.y < ball.y + ball.radius &&
       laser.y + laser.height > ball.y
     ) {
+      // change direction and remove laser from array
       ball.speedX = -ball.speedX;
+      laserArray.splice(i, 1);
+      i--;
+      laserBall.play();
     }
+    // remove laser from array when leaving canvas
+    if (laser.x - laser.width > canvas.width) {
+      laserArray.splice(i, 1);
+    }
+    //console.log(laserArray);
   }
   
   // Check for scoring
@@ -154,10 +178,11 @@ function shoot() {
     y: leftPaddle.y + leftPaddle.height / 2,
     width: 20,
     height: 20,
-    speed: 8,
+    speed: 12,
 //    used: false,
   };
   laserArray.push(laser);
+  
 }
 
 // Game loop

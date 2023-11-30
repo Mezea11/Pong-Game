@@ -25,3 +25,8 @@
                     uppdaterade då också vänstra paddeln-objektets properties (Pelle)
                     - la till grundläggande rörelse för högra paddeln = en funtion + uppdaterade objektets properties (Pelle)
                     - la till 'laser-skott' för vänster paddel - när skott träffar bollen ändrar bollen riktning (Pelle)
+//tillägg 20231130  - uppdaterat laser; skott försvinner när bollen träffas samt laser tas bort ur array vid träff eller 
+                    när den lämnar skärmen (Pelle)
+                    - la till 'Assets'-folder och la in ett par ljudfiler där, för att testa ljudeffekter
+                    - la till ljud för när boll träffas paddel + när man skjuter laser + när laser träffar boll
+                    - ändrade canvas storlek bara för att testa funktioner
