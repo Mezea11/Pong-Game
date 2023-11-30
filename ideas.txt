@@ -21,12 +21,20 @@
 5. Musik och ljudeffekter
     1. Fixa bakgrundsmusik och ljudeffekter på paddlar/boll och powerups
 
+6. buggar/att Fixa
+    1. interaktioner - boll/hinder, laser/boll, boll/paddel - beter sig konstigt ibland
+
 //tillägg 20231129  - la till grundläggande rörelse för vänstra paddeln = eventlisteners och en funktion, 
-                    uppdaterade då också vänstra paddeln-objektets properties (Pelle)
-                    - la till grundläggande rörelse för högra paddeln = en funtion + uppdaterade objektets properties (Pelle)
-                    - la till 'laser-skott' för vänster paddel - när skott träffar bollen ändrar bollen riktning (Pelle)
+    (Pelle)           uppdaterade då också vänstra paddeln-objektets properties
+                    - la till grundläggande rörelse för högra paddeln = en funtion + uppdaterade objektets properties 
+                    - la till 'laser-skott' för vänster paddel - när skott träffar bollen ändrar bollen riktning
 //tillägg 20231130  - uppdaterat laser; skott försvinner när bollen träffas samt laser tas bort ur array vid träff eller 
-                    när den lämnar skärmen (Pelle)
+    (Pelle)           när den lämnar skärmen
                     - la till 'Assets'-folder och la in ett par ljudfiler där, för att testa ljudeffekter
-                    - la till ljud för när boll träffas paddel + när man skjuter laser + när laser träffar boll
+                    - la till ljud för när boll träffas paddel + när man skjuter laser + när laser träffar boll 
                     - ändrade canvas storlek bara för att testa funktioner
+                    Hinder - la till ett objekt som spawnas vid 200 poäng, som man kan ta sönder med bollen,
+                    bara för att testa principen
+                    - la till poäng-räkning för att ha något att trigga hinder-funktionen
+                    - la till funktion för att randomise'a nummer som används för vart hinder ska dyka uppdaterade
+                    - la till funktion för att skapa objektet + kod för kollision

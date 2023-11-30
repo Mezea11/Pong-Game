@@ -11,7 +11,14 @@ paddleBall.volume = 0.2;
 let laserSound = new Audio('Assets/laser2.wav');
 laserSound.volume = 0.1;
 let laserBall = new Audio('Assets/laser.wav');
-laserBall.volume = 0.1;
+laserBall.volume = 0.05;
+
+let laser;
+let laserArray = [];
+
+let obstacleArray = [];
+
+let score = 0;
 
 // Create the paddles
 const paddleWidth = 10, paddleHeight = 60;
@@ -39,8 +46,33 @@ const rightPaddle = {
 // Create the ball
 const ball = { x: canvas.width / 2, y: canvas.height / 2, radius: 8, speedX: 5, speedY: 5 };
 
-let laser;
-let laserArray = [];
+// generate random number
+function getRandomNumber(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+// skapa hinder
+function CreateObstacle() {
+  if (score === 200 && obstacleArray.length == 0) {
+    let obstacleX = getRandomNumber(100, 200);
+    let obstacleY = obstacleX;
+
+      let makeObstacle = (x, y) => ({
+        x: x,
+        y: y,
+        width: 20,
+        height: 20,
+        status: 1,
+      });
+
+      obstacleArray.push(makeObstacle (obstacleX, obstacleY));
+      obstacleArray.push(makeObstacle (obstacleX + 20, obstacleY));
+      obstacleArray.push(makeObstacle (obstacleX, obstacleY + 20));
+      obstacleArray.push(makeObstacle (obstacleX + 20, obstacleY + 20));
+    }
+  }
 
 // Event listeners för att hantera spelarens rörelse + laser
 window.addEventListener("keydown", (event) => {
@@ -106,17 +138,30 @@ function draw() {
   // Draw ball
   ctx.beginPath();
   ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
-  ctx.fillStyle = 'white';
+  ctx.fillStyle = 'yellow';
   ctx.fill();
   ctx.closePath();
+
+  // draw obsactle
+  for (i = 0; i < obstacleArray.length; i++) {
+    let obstacle = obstacleArray[i];
+    if (obstacle.status === 1) {
+    ctx.fillStyle = 'grey';
+    ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+    }
+  }
 
   // draw laser
   for (let i = 0; i < laserArray.length; i++) {
     let laser = laserArray[i];
     laser.x += laser.speed;
-    ctx.fillStyle = "white";
+    ctx.fillStyle = "orange";
     ctx.fillRect(laser.x, laser.y, laser.width, laser.height);
   }
+
+  ctx.fillStyle = "white";
+  ctx.font = "16px courier";
+  ctx.fillText(score, 5, 20);
 }
 
 // Update function to handle game logic
@@ -137,10 +182,29 @@ function update() {
   ) {
     ball.speedX = -ball.speedX;
     paddleBall.play();
-    //makes paddle stop moving after ball hits paddle
+    // right paddle stop moving after ball hits paddle
     rightPaddle.hit = false;
   } 
-
+  // make right paddle move if ball leaves canvas
+  if (ball.x + ball.radius > canvas.width) {
+    rightPaddle.hit = true;
+  }
+  // ball and object collision
+  for (let i = 0; i < obstacleArray.length; i++) {
+    let obstacle = obstacleArray[i];
+      if (
+        (ball.x + ball.radius > obstacle.x && 
+        ball.x - ball.radius < obstacle.x + obstacle.width &&
+        ball.y > obstacle.y &&
+        ball.y < obstacle.y + obstacle.height) 
+      ) {
+        ball.speedX = -ball.speedX;
+        rightPaddle.hit = true;
+        obstacle.status = 0;
+        obstacleArray.splice(i, 1);
+        i--;
+    }
+  }
   // check for and handle collision between laser and ball, and handle laserArray when laser leaves canvas
   for (let i = 0; i < laserArray.length; i++) {
     let laser = laserArray[i];
@@ -161,15 +225,15 @@ function update() {
     if (laser.x - laser.width > canvas.width) {
       laserArray.splice(i, 1);
     }
-    //console.log(laserArray);
   }
   
   // Check for scoring
   if (ball.x - ball.radius < 0 || ball.x + ball.radius > canvas.width) {
     // Reset ball position
+    score += 100;
     ball.x = canvas.width / 2;
     ball.y = canvas.height / 2;
-  }
+  }    
 }
 
 function shoot() {
@@ -181,14 +245,14 @@ function shoot() {
     speed: 12,
 //    used: false,
   };
-  laserArray.push(laser);
-  
+  laserArray.push(laser); 
 }
 
 // Game loop
 function gameLoop() { 
   moveLeftPaddle();
   moveRightpaddle();
+  CreateObstacle(); 
   draw();
   update();
   requestAnimationFrame(gameLoop);
