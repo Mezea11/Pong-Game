@@ -23,6 +23,7 @@
 
 6. buggar/att Fixa
     1. interaktioner - boll/hinder, laser/boll, boll/paddel - beter sig konstigt ibland
+    2. hinder som rör sig "faller isär" efter att de studsar (samma problemm som i space invaders?)
 
 //tillägg 20231129  - la till grundläggande rörelse för vänstra paddeln = eventlisteners och en funktion, 
     (Pelle)           uppdaterade då också vänstra paddeln-objektets properties
@@ -38,3 +39,5 @@
                     - la till poäng-räkning för att ha något att trigga hinder-funktionen
                     - la till funktion för att randomise'a nummer som används för vart hinder ska dyka uppdaterade
                     - la till funktion för att skapa objektet + kod för kollision
+//tillägg 20231201  - la till hinder som rör sig (använder samma kod som stillastående hinder, speed-property på objektet styr hastighet)
+                    - la till hinder som ändrar färg första gången det träffas och försvinner andra gången det träffas
