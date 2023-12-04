@@ -22,9 +22,11 @@ let laserArray = [];
 
 let obstacleArray = [];
 let obstacleTwoArray = [];
+let PowerUpArray = [];
 
 let onHitArray = [];
 
+let isPaused = false;
 let score = 0;
 let lvlcount = 1;
 
@@ -34,7 +36,7 @@ const leftPaddle = {
   x: 0,
   y: canvas.height / 2 - paddleHeight / 2,
   width: paddleWidth,
-  height: paddleHeight,
+  height: 400,
   speed: 8,
   hit: true,
   keys: {
@@ -53,30 +55,81 @@ const rightPaddle = {
 };
 
 // Create the ball
-const ball = { 
-  x: canvas.width / 2, 
-  y: canvas.height / 2, 
-  radius: 8, 
-  speedX: 5, 
-  speedY: 5 
+const ball = {
+  x: canvas.width / 2,
+  y: canvas.height / 2,
+  radius: 8,
+  speedX: 5,
+  speedY: 5
 };
 
-getRandomNumber();
-
 // generate random number
+getRandomNumber();
 function getRandomNumber(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-// skapa hinder && level
-function CreateObstacle() {
-  if (score <= 200 && obstacleArray.length == 0) {
+// levels & powerups
+function getLevel() {
+  if (score <= 200) {
     lvlcount = 2;
-    rightPaddle.speed = 3;
-    let obstacleX = getRandomNumber(100, 300);
-    let obstacleY = 50;
+    rightPaddle.speed = 0.2;
+
+    if (score === 200 && PowerUpArray.length == 0) {
+      let powerUpX = getRandomNumber(100, 500);
+      let powerUpY = getRandomNumber(20, 280);
+      let makepowerUp = (x, y) => ({
+        x: x,
+        y: y,
+        width: 20,
+        height: 20,
+        status: 1,
+        speed: 0,
+      })
+      PowerUpArray.push(makepowerUp(powerUpX, powerUpY));
+    }
+  }
+
+  if (score >= 400) {
+    lvlcount = 3;
+    rightPaddle.speed = 0.2;
+
+    if (PowerUpArray.length >= 0 && PowerUpArray.length <= 0) {
+      let powerUpX = getRandomNumber(100, 500);
+      let powerUpY = getRandomNumber(20, 280);
+      let makepowerUp = (x, y) => ({
+        x: x,
+        y: y,
+        width: 20,
+        height: 20,
+        status: 1,
+        speed: 2,
+      })
+      PowerUpArray.push(makepowerUp(powerUpX, powerUpY));
+      powerUpX = getRandomNumber(100, 500);
+      powerUpY = getRandomNumber(20, 280);
+      PowerUpArray.push(makepowerUp(powerUpX, powerUpY));
+    }
+
+
+
+
+  }
+  if (score >= 600) {
+    lvlcount = 4;
+    rightPaddle.speed = 0.2;
+
+
+  }
+}
+
+// skapa hinder
+function CreateObstacle() {
+  if (score === 200 && obstacleArray.length == 0) {
+    let obstacleX = getRandomNumber(100, 500);
+    let obstacleY = getRandomNumber(50, 200);
     // hinder bestående av 4 stora block
     let makeObstacle = (x, y) => ({
       x: x,
@@ -92,9 +145,7 @@ function CreateObstacle() {
     obstacleArray.push(makeObstacle(obstacleX + 20, obstacleY + 20));
   }
   if (score === 400 && obstacleArray.length <= 4) {
-    lvlcount = 3;
-    rightPaddle.speed = 5;
-    let obstacleX = getRandomNumber(100, 200);
+    let obstacleX = getRandomNumber(100, 500);
     let obstacleY = obstacleX;
     // hinder bestående av 9 mindre block
     let makeObstacle = (x, y) => ({
@@ -116,8 +167,7 @@ function CreateObstacle() {
     obstacleArray.push(makeObstacle(obstacleX + 20, obstacleY + 20));
   }
   if (score === 500 && obstacleTwoArray.length <= 4) {
-    lvlcount = 4;
-    let obstacleX = getRandomNumber(100, 200);
+    let obstacleX = getRandomNumber(100, 500);
     let obstacleY = obstacleX;
     // hinder bestående av 9 mindre block
     let makeObstacle = (x, y) => ({
@@ -153,12 +203,11 @@ function collisionEffect() {
     speedX: speedX,
     speedY: speedY
   });
-    onHitArray.push(onHit(newSpeedX, newSpeedY));
-    onHitArray.push(onHit(newSpeedX + 0.5, newSpeedY - 0.5));
-    onHitArray.push(onHit(newSpeedX - 0.5, newSpeedY + 0.5));
-    onHitArray.push(onHit(newSpeedX - 0.2, newSpeedY + 0.2));
+  onHitArray.push(onHit(newSpeedX, newSpeedY));
+  onHitArray.push(onHit(newSpeedX + 0.5, newSpeedY - 0.5));
+  onHitArray.push(onHit(newSpeedX - 0.5, newSpeedY + 0.5));
+  onHitArray.push(onHit(newSpeedX - 0.2, newSpeedY + 0.2));
 }
-let isPaused = false;
 
 // Event listeners för att hantera spelarens rörelse + laser
 window.addEventListener("keydown", (event) => {
@@ -180,8 +229,7 @@ window.addEventListener("keyup", (event) => {
 
   //pause key
   if (event.key === "p") {
-    console.log(isPaused);
-      isPaused = !isPaused;
+    isPaused = !isPaused;
   }
 
   if (event.key === ' ') {
@@ -234,6 +282,15 @@ function draw() {
   ctx.fill();
   ctx.closePath();
 
+  //draw powerup
+  for (let i = 0; i < PowerUpArray.length; i++) {
+    let powerUp = PowerUpArray[i];
+    if (powerUp.status === 1) {
+      ctx.fillStyle = 'purple';
+      ctx.fillRect(powerUp.x, powerUp.y, powerUp.width, powerUp.height);
+    }
+  }
+
   // draw obstactle
   for (let i = 0; i < obstacleArray.length; i++) {
     let obstacle = obstacleArray[i];
@@ -246,7 +303,7 @@ function draw() {
   for (let i = 0; i < obstacleTwoArray.length; i++) {
     let obstacle = obstacleTwoArray[i];
     if (!obstacle.hit && obstacle.status === 1) {
-      ctx.fillStyle = 'brown';
+      ctx.fillStyle = 'darkpink';
       ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
     } else if (obstacle.hit && obstacle.status === 1) {
       ctx.fillStyle = 'red';
@@ -357,6 +414,25 @@ function update() {
       obstacleBall.play();
     }
   }
+
+  //pickup powerup with ball
+  for (let i = 0; i < PowerUpArray.length; i++) {
+    let powerUp = PowerUpArray[i];
+    if (
+      (ball.x + ball.radius > powerUp.x &&
+        ball.x - ball.radius < powerUp.x + powerUp.width &&
+        ball.y > powerUp.y &&
+        ball.y < powerUp.y + powerUp.height)
+    ) {
+     // ball.speedX = -ball.speedX;
+     // rightPaddle.hit = true;
+      rightPaddle.height = rightPaddle.height / 2;
+      powerUp.status = 0;
+      PowerUpArray.splice(i, 1);
+      i--;
+    }
+  }
+
   // ball and obstacleTwo collision
   for (let i = 0; i < obstacleTwoArray.length; i++) {
     let obstacle = obstacleTwoArray[i];
@@ -412,12 +488,12 @@ function update() {
     // Reset ball position
     ball.x = canvas.width / 2;
     ball.y = canvas.height / 2;
-  }else if (ball.x - ball.radius < 0) {
+  } else if (ball.x - ball.radius < 0) {
     score -= 100;
     // Reset ball position
     ball.x = canvas.width / 2;
     ball.y = canvas.height / 2;
-    
+
   }
 }
 
@@ -438,11 +514,12 @@ function gameLoop() {
   draw();
 
   //if game is paused skip these lines
-  if (isPaused == false){
-  moveLeftPaddle();
-  moveRightpaddle();
-  CreateObstacle();
-  update();
+  if (isPaused == false) {
+    moveLeftPaddle();
+    moveRightpaddle();
+    CreateObstacle();
+    getLevel();
+    update();
   }
 
   requestAnimationFrame(gameLoop);
