@@ -1,5 +1,5 @@
 // PONG SPEL IDEER
-
+Skapat en test branch men inte merge:at den än, Skapat en lvl counter som räknar lvls och gör Npc snabbare beroende på poöngen. även skapat en paus mekanik som triggas nä man trycker på tangentbordet knappen "P"
 1. Menysystem
     1. Välja 1 player eller 2 player
     2. Välja svårighetsgrad (kanske)
