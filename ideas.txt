@@ -27,7 +27,7 @@
 
 //tillägg 20231129  - la till grundläggande rörelse för vänstra paddeln = eventlisteners och en funktion, 
     (Pelle)           uppdaterade då också vänstra paddeln-objektets properties
-                    - la till grundläggande rörelse för högra paddeln = en funtion + uppdaterade objektets properties 
+                    - la till grundläggande rörelse för högra paddeln = en funktion + uppdaterade objektets properties 
                     - la till 'laser-skott' för vänster paddel - när skott träffar bollen ändrar bollen riktning
 //tillägg 20231130  - uppdaterat laser; skott försvinner när bollen träffas samt laser tas bort ur array vid träff eller 
     (Pelle)           när den lämnar skärmen
@@ -36,8 +36,9 @@
                     - ändrade canvas storlek bara för att testa funktioner
                     Hinder - la till ett objekt som spawnas vid 200 poäng, som man kan ta sönder med bollen,
                     bara för att testa principen
-                    - la till poäng-räkning för att ha något att trigga hinder-funktionen
+                    - la till poängräkning för att ha något att trigga hinder-funktionen
                     - la till funktion för att randomise'a nummer som används för vart hinder ska dyka uppdaterade
                     - la till funktion för att skapa objektet + kod för kollision
 //tillägg 20231201  - la till hinder som rör sig (använder samma kod som stillastående hinder, speed-property på objektet styr hastighet)
                     - la till hinder som ändrar färg första gången det träffas och försvinner andra gången det träffas
+//tillägg 20231204  - la till 'on hit'-effekt när boll träffar paddel
