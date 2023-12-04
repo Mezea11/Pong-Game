@@ -1,5 +1,5 @@
 // PONG SPEL IDEER
-
+Skapat en test branch men inte merge:at den än, Skapat en lvl counter som räknar lvls och gör Npc snabbare beroende på poöngen. även skapat en paus mekanik som triggas när man trycker på tangentbordet knappen "P" //Abbe
 1. Menysystem
     1. Välja 1 player eller 2 player
     2. Välja svårighetsgrad (kanske)
@@ -8,6 +8,7 @@
 
 2. Svårighetsgrader
     1. Ökar i svårighetsgrad beroende på level
+        Påbörjat men ej färdigt... Några ideér? //Abbe
 
 3. Multiplayer
     1. Fixa multiplayer så vi kan ha flera paddlar
