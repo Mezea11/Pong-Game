@@ -23,6 +23,8 @@ let laserArray = [];
 let obstacleArray = [];
 let obstacleTwoArray = [];
 
+let onHitArray = [];
+
 let score = 0;
 
 // Create the paddles
@@ -33,6 +35,7 @@ const leftPaddle = {
   width: paddleWidth,
   height: paddleHeight,
   speed: 10,
+  hit: true,
   keys: {
     up: false,
     down: false,
@@ -49,7 +52,13 @@ const rightPaddle = {
 };
 
 // Create the ball
-const ball = { x: canvas.width / 2, y: canvas.height / 2, radius: 8, speedX: 5, speedY: 5 };
+const ball = { 
+  x: canvas.width / 2, 
+  y: canvas.height / 2, 
+  radius: 8, 
+  speedX: 5, 
+  speedY: 5 
+};
 
 getRandomNumber();
 
@@ -74,7 +83,6 @@ function CreateObstacle() {
       status: 1,
       speed: 0,
     });
-
     obstacleArray.push(makeObstacle(obstacleX, obstacleY));
     obstacleArray.push(makeObstacle(obstacleX + 20, obstacleY));
     obstacleArray.push(makeObstacle(obstacleX, obstacleY + 20));
@@ -92,7 +100,6 @@ function CreateObstacle() {
       status: 1,
       speed: 3,
     });
-
     obstacleArray.push(makeObstacle(obstacleX, obstacleY));
     obstacleArray.push(makeObstacle(obstacleX + 10, obstacleY));
     obstacleArray.push(makeObstacle(obstacleX, obstacleY + 10));
@@ -116,7 +123,6 @@ function CreateObstacle() {
       speed: 3,
       hit: false,
     });
-
     obstacleTwoArray.push(makeObstacle(obstacleX, obstacleY));
     obstacleTwoArray.push(makeObstacle(obstacleX + 10, obstacleY));
     obstacleTwoArray.push(makeObstacle(obstacleX, obstacleY + 10));
@@ -127,6 +133,24 @@ function CreateObstacle() {
     obstacleTwoArray.push(makeObstacle(obstacleX + 20, obstacleY + 10));
     obstacleTwoArray.push(makeObstacle(obstacleX + 20, obstacleY + 20));
   }
+}
+// skapa onHit effekt när boll träffar paddel
+function collisionEffect() {
+  let newSpeedX = 2;
+  let newSpeedY = 2;
+
+  let onHit = (speedX, speedY) => ({
+    x: ball.x,
+    y: ball.y,
+    width: 5,
+    height: 5,
+    speedX: speedX,
+    speedY: speedY
+  });
+    onHitArray.push(onHit(newSpeedX, newSpeedY));
+    onHitArray.push(onHit(newSpeedX + 0.5, newSpeedY - 0.5));
+    onHitArray.push(onHit(newSpeedX - 0.5, newSpeedY + 0.5));
+    onHitArray.push(onHit(newSpeedX - 0.2, newSpeedY + 0.2));
 }
 
 // Event listeners för att hantera spelarens rörelse + laser
@@ -223,7 +247,16 @@ function draw() {
     ctx.fillStyle = "orange";
     ctx.fillRect(laser.x, laser.y, laser.width, laser.height);
   }
-
+  // draw collisionEffect
+  for (let i = 0; i < onHitArray.length; i++) {
+    let onHit = onHitArray[i];
+    ctx.fillStyle = 'white';
+    ctx.fillRect(onHit.x, onHit.y, onHit.width, onHit.height);
+    //if (onHit.x > 50 && onHit.x < canvas.width - 50) {
+    if (leftPaddle.hit && ball.x < 100 || rightPaddle.hit && ball.x > 200) {
+      onHitArray.splice(i, 1);
+    }
+  }
   // draw score
   ctx.fillStyle = "white";
   ctx.font = "16px courier";
@@ -236,6 +269,11 @@ function update() {
   ball.x += ball.speedX;
   ball.y += ball.speedY;
 
+  // reset leftPaddle.hit
+  if (ball.x > 210) {
+    leftPaddle.hit = true;
+  }
+
   // movement hinder
   for (let i = 0; i < obstacleArray.length; i++) {
     let obstacle = obstacleArray[i];
@@ -246,7 +284,7 @@ function update() {
     }
   }
 
-  // Bounce off the top and bottom edges
+  // Ball bounce off the top and bottom edges
   if (ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height) {
     ball.speedY = -ball.speedY;
   }
@@ -258,8 +296,30 @@ function update() {
   ) {
     ball.speedX = -ball.speedX;
     paddleBall.play();
-    // right paddle stop moving after ball hits paddle
+    // right paddle stop moving after ball hits paddle + control onHit effect for right paddle
     rightPaddle.hit = false;
+    //control onHit effect for left paddle
+    leftPaddle.hit = false;
+    // on paddle hit effect
+    collisionEffect();
+  }
+
+  // direction for onHit effect
+  for (let i = 0; i < onHitArray.length; i++) {
+    let onHit = onHitArray[i];
+    if (!leftPaddle.hit && i >= 2) {
+      onHit.y += onHit.speedY;
+      onHit.x += onHit.speedX;
+    } else if (!leftPaddle.hit && i <= 1) {
+      onHit.y -= onHit.speedY;
+      onHit.x += onHit.speedX;
+    } else if (!rightPaddle.hit && i >= 2) {
+      onHit.y += onHit.speedY;
+      onHit.x -= onHit.speedX;
+    } else if (!rightPaddle.hit && i <= 1) {
+      onHit.y -= onHit.speedY;
+      onHit.x -= onHit.speedX;
+    }
   }
   // make right paddle move if ball leaves canvas
   if (ball.x + ball.radius > canvas.width) {
@@ -348,7 +408,6 @@ function shoot() {
     width: 20,
     height: 20,
     speed: 12,
-    //    used: false,
   };
   laserArray.push(laser);
 }
