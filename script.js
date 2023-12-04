@@ -4,7 +4,7 @@
 const canvas = document.getElementById('pongCanvas');
 const ctx = canvas.getContext('2d');
 
-canvas.width = 400;
+canvas.width = 600;
 canvas.height = 300;
 
 // audio
@@ -26,6 +26,7 @@ let obstacleTwoArray = [];
 let onHitArray = [];
 
 let score = 0;
+let lvlcount = 1;
 
 // Create the paddles
 const paddleWidth = 10, paddleHeight = 60;
@@ -34,7 +35,7 @@ const leftPaddle = {
   y: canvas.height / 2 - paddleHeight / 2,
   width: paddleWidth,
   height: paddleHeight,
-  speed: 10,
+  speed: 8,
   hit: true,
   keys: {
     up: false,
@@ -47,7 +48,7 @@ const rightPaddle = {
   y: canvas.height / 2 - paddleHeight / 2,
   width: paddleWidth,
   height: paddleHeight,
-  speed: 5,
+  speed: 2,
   hit: true,
 };
 
@@ -69,9 +70,11 @@ function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-// skapa hinder
+// skapa hinder && level
 function CreateObstacle() {
-  if (score === 200 && obstacleArray.length == 0) {
+  if (score <= 200 && obstacleArray.length == 0) {
+    lvlcount = 2;
+    rightPaddle.speed = 3;
     let obstacleX = getRandomNumber(100, 300);
     let obstacleY = 50;
     // hinder bestående av 4 stora block
@@ -89,6 +92,8 @@ function CreateObstacle() {
     obstacleArray.push(makeObstacle(obstacleX + 20, obstacleY + 20));
   }
   if (score === 400 && obstacleArray.length <= 4) {
+    lvlcount = 3;
+    rightPaddle.speed = 5;
     let obstacleX = getRandomNumber(100, 200);
     let obstacleY = obstacleX;
     // hinder bestående av 9 mindre block
@@ -111,6 +116,7 @@ function CreateObstacle() {
     obstacleArray.push(makeObstacle(obstacleX + 20, obstacleY + 20));
   }
   if (score === 500 && obstacleTwoArray.length <= 4) {
+    lvlcount = 4;
     let obstacleX = getRandomNumber(100, 200);
     let obstacleY = obstacleX;
     // hinder bestående av 9 mindre block
@@ -152,6 +158,7 @@ function collisionEffect() {
     onHitArray.push(onHit(newSpeedX - 0.5, newSpeedY + 0.5));
     onHitArray.push(onHit(newSpeedX - 0.2, newSpeedY + 0.2));
 }
+let isPaused = false;
 
 // Event listeners för att hantera spelarens rörelse + laser
 window.addEventListener("keydown", (event) => {
@@ -169,6 +176,12 @@ window.addEventListener("keyup", (event) => {
 
   if (event.key === "ArrowDown") {
     leftPaddle.keys.down = false;
+  }
+
+  //pause key
+  if (event.key === "p") {
+    console.log(isPaused);
+      isPaused = !isPaused;
   }
 
   if (event.key === ' ') {
@@ -257,10 +270,12 @@ function draw() {
       onHitArray.splice(i, 1);
     }
   }
-  // draw score
+  // draw score & level counter
   ctx.fillStyle = "white";
   ctx.font = "16px courier";
   ctx.fillText(score, 5, 20);
+  ctx.fillStyle = "green";
+  ctx.fillText("Level: " + lvlcount, canvas.width - 100, canvas.height - 10);
 }
 
 // Update function to handle game logic
@@ -391,12 +406,18 @@ function update() {
     }
   }
 
-  // Check for scoring
-  if (ball.x - ball.radius < 0 || ball.x + ball.radius > canvas.width) {
-    // Reset ball position
+  // Check scoring, for player and NPC 
+  if (ball.x + ball.radius > canvas.width) {
     score += 100;
+    // Reset ball position
     ball.x = canvas.width / 2;
     ball.y = canvas.height / 2;
+  }else if (ball.x - ball.radius < 0) {
+    score -= 100;
+    // Reset ball position
+    ball.x = canvas.width / 2;
+    ball.y = canvas.height / 2;
+    
   }
 }
 
@@ -414,11 +435,16 @@ function shoot() {
 
 // Game loop
 function gameLoop() {
+  draw();
+
+  //if game is paused skip these lines
+  if (isPaused == false){
   moveLeftPaddle();
   moveRightpaddle();
   CreateObstacle();
-  draw();
   update();
+  }
+
   requestAnimationFrame(gameLoop);
 }
 
