@@ -1,5 +1,3 @@
-
-
 // Get the canvas element and its context
 const canvas = document.getElementById('pongCanvas');
 const ctx = canvas.getContext('2d');
@@ -20,10 +18,14 @@ obstacleBall.volume = 0.1;
 let laser;
 let laserArray = [];
 
-let obstacleArray = [];
+let obstacleStaticArray = [];
+let obstacleArrayArray = [];
 let obstacleTwoArray = [];
 
 let onHitArray = [];
+
+let lastTime = Date.now();
+let deltaTime;
 
 let score = 0;
 
@@ -52,12 +54,12 @@ const rightPaddle = {
 };
 
 // Create the ball
-const ball = { 
-  x: canvas.width / 2, 
-  y: canvas.height / 2, 
-  radius: 8, 
-  speedX: 5, 
-  speedY: 5 
+const ball = {
+  x: canvas.width / 2,
+  y: canvas.height / 2,
+  radius: 8,
+  speedX: 5,
+  speedY: 5
 };
 
 getRandomNumber();
@@ -71,7 +73,8 @@ function getRandomNumber(min, max) {
 
 // skapa hinder
 function CreateObstacle() {
-  if (score === 200 && obstacleArray.length == 0) {
+  let obstacleArray = [];
+  if (score === 200 && obstacleStaticArray.length <= 0) {
     let obstacleX = getRandomNumber(100, 300);
     let obstacleY = 50;
     // hinder bestående av 4 stora block
@@ -83,12 +86,12 @@ function CreateObstacle() {
       status: 1,
       speed: 0,
     });
-    obstacleArray.push(makeObstacle(obstacleX, obstacleY));
-    obstacleArray.push(makeObstacle(obstacleX + 20, obstacleY));
-    obstacleArray.push(makeObstacle(obstacleX, obstacleY + 20));
-    obstacleArray.push(makeObstacle(obstacleX + 20, obstacleY + 20));
+    obstacleStaticArray.push(makeObstacle(obstacleX, obstacleY));
+    obstacleStaticArray.push(makeObstacle(obstacleX + 20, obstacleY));
+    obstacleStaticArray.push(makeObstacle(obstacleX, obstacleY + 20));
+    obstacleStaticArray.push(makeObstacle(obstacleX + 20, obstacleY + 20));
   }
-  if (score === 400 && obstacleArray.length <= 4) {
+  if (score === 400 && obstacleArrayArray.length <= 0) {
     let obstacleX = getRandomNumber(100, 200);
     let obstacleY = obstacleX;
     // hinder bestående av 9 mindre block
@@ -98,7 +101,7 @@ function CreateObstacle() {
       width: 10,
       height: 10,
       status: 1,
-      speed: 3,
+      speed: 3
     });
     obstacleArray.push(makeObstacle(obstacleX, obstacleY));
     obstacleArray.push(makeObstacle(obstacleX + 10, obstacleY));
@@ -109,8 +112,10 @@ function CreateObstacle() {
     obstacleArray.push(makeObstacle(obstacleX + 10, obstacleY + 20));
     obstacleArray.push(makeObstacle(obstacleX + 20, obstacleY + 10));
     obstacleArray.push(makeObstacle(obstacleX + 20, obstacleY + 20));
-  }
-  if (score === 500 && obstacleTwoArray.length <= 4) {
+    obstacleArrayArray.push(obstacleArray);
+    console.log(obstacleArrayArray);
+  } //lägg arrayen i  en array och kolla för den i loopen
+  if (score === 500 && obstacleTwoArray.length <= 0) {
     let obstacleX = getRandomNumber(100, 200);
     let obstacleY = obstacleX;
     // hinder bestående av 9 mindre block
@@ -147,10 +152,10 @@ function collisionEffect() {
     speedX: speedX,
     speedY: speedY
   });
-    onHitArray.push(onHit(newSpeedX, newSpeedY));
-    onHitArray.push(onHit(newSpeedX + 0.5, newSpeedY - 0.5));
-    onHitArray.push(onHit(newSpeedX - 0.5, newSpeedY + 0.5));
-    onHitArray.push(onHit(newSpeedX - 0.2, newSpeedY + 0.2));
+  onHitArray.push(onHit(newSpeedX, newSpeedY));
+  onHitArray.push(onHit(newSpeedX + 0.5, newSpeedY - 0.5));
+  onHitArray.push(onHit(newSpeedX - 0.5, newSpeedY + 0.5));
+  onHitArray.push(onHit(newSpeedX - 0.2, newSpeedY + 0.2));
 }
 
 // Event listeners för att hantera spelarens rörelse + laser
@@ -221,12 +226,22 @@ function draw() {
   ctx.fill();
   ctx.closePath();
 
-  // draw obstactle
-  for (let i = 0; i < obstacleArray.length; i++) {
-    let obstacle = obstacleArray[i];
+  for (let i = 0; i < obstacleStaticArray.length; i++) {
+    let obstacle = obstacleStaticArray[i];
     if (obstacle.status === 1) {
       ctx.fillStyle = 'pink';
       ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+    }
+  }
+  // draw obstactle
+  for (let j = 0; j < obstacleArrayArray.length; j++) {
+    let obstacleArray = obstacleArrayArray[j];
+    for (let i = 0; i < obstacleArray.length; i++) {
+      let obstacle = obstacleArray[i];
+      if (obstacle.status === 1) {
+        ctx.fillStyle = 'pink';
+        ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+      }
     }
   }
   // draw obstacleTwo
@@ -265,22 +280,37 @@ function draw() {
 
 // Update function to handle game logic
 function update() {
+  //  let now = Date.now();
+  //  deltaTime = (now - lastTime) -1000;
+  //  lastTime = now;
+
   // Move the ball
   ball.x += ball.speedX;
   ball.y += ball.speedY;
-
   // reset leftPaddle.hit
   if (ball.x > 210) {
     leftPaddle.hit = true;
   }
-
-  // movement hinder
-  for (let i = 0; i < obstacleArray.length; i++) {
-    let obstacle = obstacleArray[i];
-    obstacle.y += obstacle.speed;
-    // hinder bounce off top and bottom edges    
-    if (obstacle.y - obstacle.height < 0 || obstacle.y + obstacle.height > canvas.height) {
-      obstacle.speed = -obstacle.speed;
+  // initiera movement hinder 
+  for (let i = 0; i < obstacleArrayArray.length; i++) {
+    let obstacleArray = obstacleArrayArray[i];
+    for (let j = 0; j < obstacleArray.length; j++) {
+      let obstacle = obstacleArray[j];
+      obstacle.y += obstacle.speed;
+    }
+  }
+  // movement hinder when bounce
+  for (let i = 0; i < obstacleArrayArray.length; i++) {
+    let obstacleArray = obstacleArrayArray[i];
+    for (let j = 0; j < obstacleArray.length; j++) {
+      let obstacle = obstacleArray[j];
+      // hinder bounce off top and bottom edges
+      if (obstacle.y < 0 || obstacle.y + obstacle.height > canvas.height) {
+        for (let l = 0; l < obstacleArray.length; l++) {
+          let newObject = obstacleArray[l];
+          newObject.speed = -newObject.speed;
+        } break;
+      }
     }
   }
 
@@ -288,7 +318,6 @@ function update() {
   if (ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height) {
     ball.speedY = -ball.speedY;
   }
-
   // Bounce off paddles
   if (
     (ball.x - ball.radius < leftPaddle.x + leftPaddle.width && ball.y > leftPaddle.y && ball.y < leftPaddle.y + leftPaddle.height) ||
@@ -303,7 +332,6 @@ function update() {
     // on paddle hit effect
     collisionEffect();
   }
-
   // direction for onHit effect
   for (let i = 0; i < onHitArray.length; i++) {
     let onHit = onHitArray[i];
@@ -325,9 +353,9 @@ function update() {
   if (ball.x + ball.radius > canvas.width) {
     rightPaddle.hit = true;
   }
-  // ball and obstacle collision
-  for (let i = 0; i < obstacleArray.length; i++) {
-    let obstacle = obstacleArray[i];
+
+  for (let i = 0; i < obstacleStaticArray.length; i++) {
+    let obstacle = obstacleStaticArray[i];
     if (
       (ball.x + ball.radius > obstacle.x &&
         ball.x - ball.radius < obstacle.x + obstacle.width &&
@@ -337,38 +365,58 @@ function update() {
       ball.speedX = -ball.speedX;
       rightPaddle.hit = true;
       obstacle.status = 0;
-      obstacleArray.splice(i, 1);
+      obstacleStaticArray.splice(i, 1);
       i--;
       obstacleBall.play();
     }
   }
-  // ball and obstacleTwo collision
-  for (let i = 0; i < obstacleTwoArray.length; i++) {
-    let obstacle = obstacleTwoArray[i];
-    if (
-      (!obstacle.hit && ball.x + ball.radius > obstacle.x &&
-        ball.x - ball.radius < obstacle.x + obstacle.width &&
-        ball.y > obstacle.y &&
-        ball.y < obstacle.y + obstacle.height)
-    ) {
-      obstacle.hit = true;
-      ball.speedX = -ball.speedX;
-      rightPaddle.hit = true;
-      obstacleBall.play();
-    } else if (
-      (obstacle.hit && ball.x + ball.radius > obstacle.x &&
-        ball.x - ball.radius < obstacle.x + obstacle.width &&
-        ball.y > obstacle.y &&
-        ball.y < obstacle.y + obstacle.height)
-    ) {
-      ball.speedX = -ball.speedX;
-      rightPaddle.hit = true;
-      obstacle.status = 0;
-      obstacleTwoArray.splice(i, 1);
-      i--;
-      obstacleBall.play();
+  // ball and obstacle collision
+  for (let j = 0; j < obstacleArrayArray.length; j++) {
+    let obstacleArray = obstacleArrayArray[j];
+    for (let i = 0; i < obstacleArray.length; i++) {
+      let obstacle = obstacleArray[i];
+      if (
+        (ball.x + ball.radius > obstacle.x &&
+          ball.x - ball.radius < obstacle.x + obstacle.width &&
+          ball.y > obstacle.y &&
+          ball.y < obstacle.y + obstacle.height)
+      ) {
+        ball.speedX = -ball.speedX;
+        rightPaddle.hit = true;
+        obstacle.status = 0;
+        obstacleArray.splice(i, 1);
+        i--;
+        obstacleBall.play();
+      }
     }
   }
+    // ball and obstacleTwo collision
+    for (let i = 0; i < obstacleTwoArray.length; i++) {
+      let obstacle = obstacleTwoArray[i];
+      if (
+        (!obstacle.hit && ball.x + ball.radius > obstacle.x &&
+          ball.x - ball.radius < obstacle.x + obstacle.width &&
+          ball.y > obstacle.y &&
+          ball.y < obstacle.y + obstacle.height)
+      ) {
+        obstacle.hit = true;
+        ball.speedX = -ball.speedX;
+        rightPaddle.hit = true;
+        obstacleBall.play();
+      } else if (
+        (obstacle.hit && ball.x + ball.radius > obstacle.x &&
+          ball.x - ball.radius < obstacle.x + obstacle.width &&
+          ball.y > obstacle.y &&
+          ball.y < obstacle.y + obstacle.height)
+      ) {
+        ball.speedX = -ball.speedX;
+        rightPaddle.hit = true;
+        obstacle.status = 0;
+        obstacleTwoArray.splice(i, 1);
+        i--;
+        obstacleBall.play();
+      }
+    }
   // check for and handle collision between laser and ball, and handle laserArray when laser leaves canvas
   for (let i = 0; i < laserArray.length; i++) {
     let laser = laserArray[i];
