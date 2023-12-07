@@ -351,10 +351,18 @@ function update() {
         ball.y < powerUp.y + powerUp.height)
     ) {
 
-      // ball.speedX = -ball.speedX; 
-      // rightPaddle.hit = true; 
-      rightPaddle.height = rightPaddle.height / 2;
-      powerUp.status = 0;
+      const temp = getRandomNumber(1, 3);
+      if (temp == 1) {
+        rightPaddle.height = rightPaddle.height / 2;
+        powerUp.status = 0;
+      }
+      if (temp == 2) {
+        ball.speedX = 10;
+        ball.speedY = 10;
+      }
+      if (temp == 3) {
+        rightPaddle.height = rightPaddle.height /2;
+      }
       powerUpArray.splice(i, 1);
       i--;
     }
