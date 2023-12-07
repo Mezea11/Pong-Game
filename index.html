@@ -9,6 +9,19 @@
 <body>
     <h1 class="game-title">Pong Game</h1>
     <canvas id="pongCanvas"></canvas>
+
+    <div id="menu">
+        <button id="menu-btn" onclick="startGame()">Start Game</button>
+        <button id="menu-btn" onclick="showInstructions()">Instructions</button>
+        <button id="menu-btn" onclick="selectDifficulty()">Difficulty</button>
+        <button id="menu-btn" onclick="startMultiplayer()">Multiplayer</button>
+        <div id="instructions" style="display:none;">
+          <!-- Instructions content here -->
+        </div>
+        <div id="difficulty" style="display:none;">
+          <!-- Difficulty options here -->
+        </div>
+      </div>
     <script type="module" src="script.js"></script>
     <!--<script type="module" src="obstaclesModule.js"></script>-->
 </body>
