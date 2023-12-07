@@ -1,7 +1,49 @@
+
+
+body {
+    background-color: black;
+    font-family: 'Bebas neue', sans-serif;
+    font-size: 24px;
+    height: 100vh;
+    margin: 0;
+}
+
+.game-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-left: 5rem;
+}
+
+.game-title {
+    color: white;
+    margin: 0;
+    padding-bottom: 5px;
+}
+
+.score-sidebar {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    width: 5rem;
+}
+
+.scoreboard {
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin: 0;
+    width: 5rem;
+    height: 5rem;
+}
 canvas {
     display: block;
     margin: auto;
     background-color: black;
+    border: 1px solid white;
 }
 
 .game-title {
