@@ -26,6 +26,7 @@ let obstacleTwoArray = [];
 let onHitArray = [];
 
 let score = 0;
+let score2 = 0;
 
 // Create the paddles
 const paddleWidth = 10, paddleHeight = 60;
@@ -75,7 +76,7 @@ function getRandomNumber(min, max) {
 
 // skapa hinder
 function CreateObstacle() {
-  if (score === 200 && obstacleArray.length == 0) {
+  if (score === 5 && obstacleArray.length == 0) {
     let obstacleX = getRandomNumber(100, 300);
     let obstacleY = 50;
     // hinder bestående av 4 stora block
@@ -276,7 +277,11 @@ function draw() {
   // draw score
   ctx.fillStyle = "white";
   ctx.font = "16px courier";
-  ctx.fillText(score, 5, 20);
+  ctx.fillText("player 1: " + score, 5, 20);
+
+  ctx.fillStyle = "white";
+  ctx.font = "16px courier";
+  ctx.fillText("player 2: " + score2, 280, 20);
 }
 
 // Update function to handle game logic
@@ -408,12 +413,19 @@ function update() {
   }
 
   // Check for scoring
-  if (ball.x - ball.radius < 0 || ball.x + ball.radius > canvas.width) {
+  if (ball.x - ball.radius < 0) {
     // Reset ball position
-    score += 100;
+    score += 1;
     ball.x = canvas.width / 2;
     ball.y = canvas.height / 2;
   }
+
+  if (ball.x + ball.radius > canvas.width) {
+    score2 += 1;
+    ball.x = canvas.width / 2;
+    ball.y = canvas.height / 2;
+  }
+   
 }
 
 // skapar laser-skott

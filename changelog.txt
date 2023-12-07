@@ -1,5 +1,5 @@
 // PONG SPEL IDEER
-
+hej
 1. Menysystem
     1. Välja 1 player eller 2 player
     2. Välja svårighetsgrad (kanske)
@@ -42,3 +42,4 @@
 //tillägg 20231201  - la till hinder som rör sig (använder samma kod som stillastående hinder, speed-property på objektet styr hastighet)
                     - la till hinder som ändrar färg första gången det träffas och försvinner andra gången det träffas
 //tillägg 20231204  - la till 'on hit'-effekt när boll träffar paddel
+//tillägg 20231205  - obstacle's rör sig ok ("faller inte isär") när de studsar mot kanterna
