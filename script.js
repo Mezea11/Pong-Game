@@ -1,4 +1,4 @@
-//import {  } from "./obstaclesModule";
+import { createObstacle } from "./obstaclesModule.js";
 
 // Get the canvas element and its context
 const canvas = document.getElementById('pongCanvas');
@@ -17,7 +17,7 @@ laserBall.volume = 0.05;
 let obstacleBall = new Audio('Assets/click2.wav');
 obstacleBall.volume = 0.1;
 
-let laser;
+//let laser;
 let laserArray = [];
 
 let obstacleStaticArray = [];
@@ -77,217 +77,54 @@ function getRandomNumber(min, max) {
 
 // levels & powerups 
 
-function getLevel() { 
-  if (score <= 200) { 
-    lvlcount = 2; 
-    rightPaddle.speed = 0.2; 
+function getLevel() {
+  if (score <= 200) {
+    lvlcount = 2;
+    rightPaddle.speed = 0.2;
 
-    if (score === 200 && powerUpArray.length == 0) { 
-      let powerUpX = getRandomNumber(100, 500); 
-      let powerUpY = getRandomNumber(20, 280); 
-      let makepowerUp = (x, y) => ({ 
-        x: x, 
-        y: y, 
-        width: 20, 
-        height: 20, 
-        status: 1, 
-        speed: 0, 
-      }) 
+    if (score === 200 && powerUpArray.length == 0) {
+      let powerUpX = getRandomNumber(100, 500);
+      let powerUpY = getRandomNumber(20, 280);
+      let makepowerUp = (x, y) => ({
+        x: x,
+        y: y,
+        width: 20,
+        height: 20,
+        status: 1,
+        speed: 0,
+      })
 
-      powerUpArray.push(makepowerUp(powerUpX, powerUpY)); 
-    } 
-  } 
-} 
-
-  if (score >= 400) { 
-    lvlcount = 3; 
-    rightPaddle.speed = 0.2; 
-
-    if (PowerUpArray.length >= 0 && PowerUpArray.length <= 0) { 
-      let powerUpX = getRandomNumber(100, 500); 
-      let powerUpY = getRandomNumber(20, 280); 
-      let makepowerUp = (x, y) => ({ 
-        x: x, 
-        y: y, 
-        width: 20, 
-        height: 20, 
-        status: 1, 
-        speed: 2, 
-      }) 
-
-      PowerUpArray.push(makepowerUp(powerUpX, powerUpY)); 
-
-      powerUpX = getRandomNumber(100, 500); 
-
-      powerUpY = getRandomNumber(20, 280); 
-
-      PowerUpArray.push(makepowerUp(powerUpX, powerUpY)); 
-    } 
-  }
-
-// skapa hinder
-function createObstacle() {
-  let obstacleArray = [];
-  if (score === 200 && obstacleStaticArray.length <= 0) {
-    let obstacleX = getRandomNumber(100, 300);
-    let obstacleY = 50;
-
-let makeObstacle = (x, y, width, height) => ({
-  x: x,
-  y: y,
-  width: width,
-  height: height,
-  status: 1,
-  speed: 0,
-});
-
-  const patternConfig = [
-    { width: 3, height: 3, count: 1 },
-    { width: 3, height: 3, count: 3 },
-    { width: 3, height: 3, count: 5 },
-    { width: 3, height: 3, count: 7 },
-    { width: 3, height: 3, count: 9 },
-    { width: 3, height: 3, count: 11 },
-    { width: 3, height: 3, count: 9 },
-    { width: 3, height: 3, count: 7 },
-    { width: 3, height: 3, count: 5 },
-    { width: 3, height: 3, count: 3 },
-    { width: 3, height: 3, count: 1 },
-  ];
-
-  for (const config of patternConfig) {
-    for (let i = 0; i < config.count; i++) {
-      obstacleStaticArray.push(makeObstacle(obstacleX, obstacleY, config.width, config.height));
-      obstacleX += config.width;
-    }
-    obstacleX -= (config.count + 1) * config.width;
-    obstacleY += config.height;
-  }
-
-// Print the result
-console.log(obstacleStaticArray);
-    makeObstacle = (x, y) => ({
-      x: x,
-      y: y,
-      width: 3,
-      height: 3,
-      status: 1,
-      speed: 0,
-    });
-
-    console.log(obstacleStaticArray);
-    for (let i = 0; i < 1; i++) {
-      obstacleStaticArray.push(makeObstacle(obstacleX, obstacleY));
-      obstacleX -= 3;
-      obstacleY += 3;
-    }
-    for (let i = 0; i < 3; i++) {
-      obstacleStaticArray.push(makeObstacle(obstacleX, obstacleY));
-      obstacleX += 3;
-    }
-    obstacleX -= 12;
-    obstacleY += 3;
-    for (let i = 0; i < 5; i++) {
-      obstacleStaticArray.push(makeObstacle(obstacleX, obstacleY));
-      obstacleX += 3;
-    }
-    obstacleX -= 18;
-    obstacleY += 3;
-    for (let i = 0; i < 7; i++) {
-      obstacleStaticArray.push(makeObstacle(obstacleX, obstacleY));
-      obstacleX += 3;
-    }
-    obstacleX -= 24;
-    obstacleY += 3;
-    for (let i = 0; i < 9; i++) {
-      obstacleStaticArray.push(makeObstacle(obstacleX, obstacleY));
-      obstacleX += 3;
-    }
-    obstacleX -= 30;
-    obstacleY += 3;
-    for (let i = 0; i < 11; i++) {
-      obstacleStaticArray.push(makeObstacle(obstacleX, obstacleY));
-      obstacleX += 3;
-    }
-    obstacleX -= 30;
-    obstacleY += 3;
-    for (let i = 0; i < 9; i++) {
-      obstacleStaticArray.push(makeObstacle(obstacleX, obstacleY));
-      obstacleX += 3;
-    }
-    obstacleX -= 24;
-    obstacleY += 3;
-    for (let i = 0; i < 7; i++) {
-      obstacleStaticArray.push(makeObstacle(obstacleX, obstacleY));
-      obstacleX += 3;
-    }
-    obstacleX -= 18;
-    obstacleY += 3;
-    for (let i = 0; i < 5; i++) {
-      obstacleStaticArray.push(makeObstacle(obstacleX, obstacleY));
-      obstacleX += 3;
-    }
-    obstacleX -= 12;
-    obstacleY += 3;
-    for (let i = 0; i < 3; i++) {
-      obstacleStaticArray.push(makeObstacle(obstacleX, obstacleY));
-      obstacleX += 3;
-    }
-    obstacleX -= 6;
-    obstacleY += 3;
-    for (let i = 0; i < 1; i++) {
-      obstacleStaticArray.push(makeObstacle(obstacleX, obstacleY));
-      obstacleX += 3;
+      powerUpArray.push(makepowerUp(powerUpX, powerUpY));
     }
   }
+  }
 
-  if (score === 400 && obstacleArrayArray.length <= 0) {
-    let obstacleX = getRandomNumber(100, 200);
-    let obstacleY = obstacleX;
-    // hinder bestående av 9 mindre block
-    let makeObstacle = (x, y) => ({
+if (score >= 400) {
+  lvlcount = 3;
+  rightPaddle.speed = 0.2;
+
+  if (powerUpArray.length >= 0 && powerUpArray.length <= 0) {
+    let powerUpX = getRandomNumber(100, 500);
+    let powerUpY = getRandomNumber(20, 280);
+    let makepowerUp = (x, y) => ({
       x: x,
       y: y,
-      width: 10,
-      height: 10,
+      width: 20,
+      height: 20,
       status: 1,
-      speed: 3
-    });
-    obstacleArray.push(makeObstacle(obstacleX, obstacleY));
-    obstacleArray.push(makeObstacle(obstacleX + 10, obstacleY));
-    obstacleArray.push(makeObstacle(obstacleX, obstacleY + 10));
-    obstacleArray.push(makeObstacle(obstacleX + 10, obstacleY + 10));
-    obstacleArray.push(makeObstacle(obstacleX + 20, obstacleY));
-    obstacleArray.push(makeObstacle(obstacleX, obstacleY + 20));
-    obstacleArray.push(makeObstacle(obstacleX + 10, obstacleY + 20));
-    obstacleArray.push(makeObstacle(obstacleX + 20, obstacleY + 10));
-    obstacleArray.push(makeObstacle(obstacleX + 20, obstacleY + 20));
-    obstacleArrayArray.push(obstacleArray);
-  } //lägg arrayen i  en array och kolla för den i loopen
-  if (score === 500 && obstacleTwoArray.length <= 0) {
-    let obstacleX = getRandomNumber(100, 200);
-    let obstacleY = obstacleX;
-    // hinder bestående av 9 mindre block
-    let makeObstacle = (x, y) => ({
-      x: x,
-      y: y,
-      width: 10,
-      height: 10,
-      status: 1,
-      speed: 3,
-      hit: false,
-    });
-    obstacleTwoArray.push(makeObstacle(obstacleX, obstacleY));
-    obstacleTwoArray.push(makeObstacle(obstacleX + 10, obstacleY));
-    obstacleTwoArray.push(makeObstacle(obstacleX, obstacleY + 10));
-    obstacleTwoArray.push(makeObstacle(obstacleX + 10, obstacleY + 10));
-    obstacleTwoArray.push(makeObstacle(obstacleX + 20, obstacleY));
-    obstacleTwoArray.push(makeObstacle(obstacleX, obstacleY + 20));
-    obstacleTwoArray.push(makeObstacle(obstacleX + 10, obstacleY + 20));
-    obstacleTwoArray.push(makeObstacle(obstacleX + 20, obstacleY + 10));
-    obstacleTwoArray.push(makeObstacle(obstacleX + 20, obstacleY + 20));
+      speed: 2,
+    })
+
+    powerUpArray.push(makepowerUp(powerUpX, powerUpY));
+
+    powerUpX = getRandomNumber(100, 500);
+
+    powerUpY = getRandomNumber(20, 280);
+
+    powerUpArray.push(makepowerUp(powerUpX, powerUpY));
   }
 }
+
 // skapa onHit effekt när boll träffar paddel
 function collisionEffect() {
   let newSpeedX = 2;
@@ -379,17 +216,17 @@ function draw() {
   ctx.fill();
   ctx.closePath();
 
-   
+
 
   //draw powerup 
 
-  for (let i = 0; i < powerUpArray.length; i++) { 
-    let powerUp = powerUpArray[i]; 
-    if (powerUp.status === 1) { 
-      ctx.fillStyle = 'purple'; 
-      ctx.fillRect(powerUp.x, powerUp.y, powerUp.width, powerUp.height); 
-    } 
-  } 
+  for (let i = 0; i < powerUpArray.length; i++) {
+    let powerUp = powerUpArray[i];
+    if (powerUp.status === 1) {
+      ctx.fillStyle = 'purple';
+      ctx.fillRect(powerUp.x, powerUp.y, powerUp.width, powerUp.height);
+    }
+  }
 
   for (let i = 0; i < obstacleStaticArray.length; i++) {
     let obstacle = obstacleStaticArray[i];
@@ -422,12 +259,13 @@ function draw() {
   }
   // draw laser
   if (!isPaused) {
-  for (let i = 0; i < laserArray.length; i++) {
-    let laser = laserArray[i];
-    laser.x += laser.speed;
-    ctx.fillStyle = "orange";
-    ctx.fillRect(laser.x, laser.y, laser.width, laser.height);
-  }}
+    for (let i = 0; i < laserArray.length; i++) {
+      let laser = laserArray[i];
+      laser.x += laser.speed;
+      ctx.fillStyle = "orange";
+      ctx.fillRect(laser.x, laser.y, laser.width, laser.height);
+    }
+  }
   // draw collisionEffect
   for (let i = 0; i < onHitArray.length; i++) {
     let onHit = onHitArray[i];
@@ -521,22 +359,22 @@ function update() {
   }
 
   //pickup powerup with ball 
-  for (let i = 0; i < powerUpArray.length; i++) { 
-    let powerUp = powerUpArray[i]; 
-    if ( 
-      (ball.x + ball.radius > powerUp.x && 
-        ball.x - ball.radius < powerUp.x + powerUp.width && 
-        ball.y > powerUp.y && 
-        ball.y < powerUp.y + powerUp.height) 
-    ) { 
+  for (let i = 0; i < powerUpArray.length; i++) {
+    let powerUp = powerUpArray[i];
+    if (
+      (ball.x + ball.radius > powerUp.x &&
+        ball.x - ball.radius < powerUp.x + powerUp.width &&
+        ball.y > powerUp.y &&
+        ball.y < powerUp.y + powerUp.height)
+    ) {
 
-     // ball.speedX = -ball.speedX; 
-     // rightPaddle.hit = true; 
-      rightPaddle.height = rightPaddle.height / 2; 
-      powerUp.status = 0; 
-      powerUpArray.splice(i, 1); 
-      i--; 
-    } 
+      // ball.speedX = -ball.speedX; 
+      // rightPaddle.hit = true; 
+      rightPaddle.height = rightPaddle.height / 2;
+      powerUp.status = 0;
+      powerUpArray.splice(i, 1);
+      i--;
+    }
   }
   // ball and static obstacle collision
   for (let i = 0; i < obstacleStaticArray.length; i++) {
@@ -550,7 +388,7 @@ function update() {
       ball.speedX = -ball.speedX;
       rightPaddle.hit = true;
       obstacle.status = 0;
-//      obstacleStaticArray.splice(i, 1);
+      //      obstacleStaticArray.splice(i, 1);
       obstacleStaticArray = [];
       i--;
       obstacleBall.play();
@@ -648,21 +486,21 @@ function shoot() {
 
 // Game loop 
 
-function gameLoop() { 
+function gameLoop() {
   draw();
   //if game is paused skip these lines 
 
-  if (isPaused == false) { 
-    moveLeftPaddle(); 
-    moveRightpaddle(); 
-    createObstacle(); 
-    getLevel(); 
-    update(); 
-  } 
-  requestAnimationFrame(gameLoop); 
-} 
+  if (isPaused == false) {
+    moveLeftPaddle();
+    moveRightpaddle();
+    createObstacle(score, obstacleStaticArray, obstacleArrayArray, obstacleTwoArray);
+    getLevel();
+    update();
+  }
+  requestAnimationFrame(gameLoop);
+}
 // Start the game loop 
-gameLoop(); 
+gameLoop();
 
 
 // Game loop
