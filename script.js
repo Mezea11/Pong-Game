@@ -9,6 +9,15 @@ canvas.height = 300;
 
 // menu
 
+getRandomNumber();
+
+// generate random number
+function getRandomNumber(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
 const menu = document.getElementById("menu");
 const instructionsDiv = document.getElementById("instructions");
 const difficultyDiv = document.getElementById("menu");
@@ -99,48 +108,6 @@ const ball = {
   speedX: 5,
   speedY: 5
 };
-
-// levels & powerups 
-
-function getLevel() { 
-  if (score <= 200) { 
-    lvlcount = 2; 
-    rightPaddle.speed = 3; 
-
-    if (score === 200 && powerUpArray.length == 0) {
-      let powerUpX = getRandomNumber(100, 500);
-      let powerUpY = getRandomNumber(20, 280);
-      let makepowerUp = (x, y) => ({
-        x: x,
-        y: y,
-        width: 20,
-        height: 20,
-        status: 1,
-        speed: 0,
-      })
-
-      powerUpArray.push(makepowerUp(powerUpX, powerUpY));
-    }
-  }
-  }
-
-  if (score >= 400) { 
-    lvlcount = 3; 
-    rightPaddle.speed = 7; 
-
-  if (powerUpArray.length >= 0 && powerUpArray.length <= 0) {
-    let powerUpX = getRandomNumber(100, 500);
-    let powerUpY = getRandomNumber(20, 280);
-    let makepowerUp = (x, y) => ({
-      x: x,
-      y: y,
-      width: 20,
-      height: 20,
-      status: 1,
-      speed: 2,
-    })
-
-    powerUpArray.push(makepowerUp(powerUpX, powerUpY));
 
 
 
@@ -385,10 +352,18 @@ function update() {
         ball.y < powerUp.y + powerUp.height)
     ) {
 
-      // ball.speedX = -ball.speedX; 
-      // rightPaddle.hit = true; 
-      rightPaddle.height = rightPaddle.height / 2;
-      powerUp.status = 0;
+      const temp = getRandomNumber(1, 3);
+      if (temp == 1) {
+        rightPaddle.height = rightPaddle.height / 2;
+        powerUp.status = 0;
+      }
+      if (temp == 2) {
+        ball.speedX = 10;
+        ball.speedY = 10;
+      }
+      if (temp == 3) {
+        rightPaddle.height = rightPaddle.height /2;
+      }
       powerUpArray.splice(i, 1);
       i--;
     }
