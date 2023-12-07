@@ -4,8 +4,8 @@
 const canvas = document.getElementById('pongCanvas');
 const ctx = canvas.getContext('2d');
 
-canvas.width = 400;
-canvas.height = 300;
+canvas.width = 500;
+canvas.height = 500;
 
 // audio
 let paddleBall = new Audio('Assets/click.wav');
