@@ -29,7 +29,7 @@ let onHitArray = [];
 
 let lastTime = Date.now();
 let deltaTime;
-let isPaused = false;
+let isPaused = true;
 
 let score = 0;
 let lvlcount = 1;
@@ -80,7 +80,7 @@ function getRandomNumber(min, max) {
 function getLevel() { 
   if (score <= 200) { 
     lvlcount = 2; 
-    rightPaddle.speed = 0.2; 
+    rightPaddle.speed = 3; 
 
     if (score === 200 && powerUpArray.length == 0) { 
       let powerUpX = getRandomNumber(100, 500); 
@@ -101,7 +101,7 @@ function getLevel() {
 
   if (score >= 400) { 
     lvlcount = 3; 
-    rightPaddle.speed = 0.2; 
+    rightPaddle.speed = 7; 
 
     if (PowerUpArray.length >= 0 && PowerUpArray.length <= 0) { 
       let powerUpX = getRandomNumber(100, 500); 
@@ -629,8 +629,8 @@ function update() {
   if (ball.x - ball.radius < 0 || ball.x + ball.radius > canvas.width) {
     // Reset ball position
     score += 100;
-    ball.x = canvas.width / 2;
-    ball.y = canvas.height / 2;
+    ball.x = canvas.width/2;
+    ball.y = getRandomNumber(8, 292);
   }
 }
 
