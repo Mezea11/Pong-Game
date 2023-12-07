@@ -26,4 +26,8 @@ canvas {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.219);
+    border-radius: 24px;
+    padding: 5px;
 }
