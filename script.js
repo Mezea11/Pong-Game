@@ -28,8 +28,6 @@ let onHitArray = [];
 let lastTime = Date.now();
 let deltaTime;
 
-let lastTime = Date.now();
-let deltaTime;
 
 let isPaused = false;
 let score = 0;
@@ -571,7 +569,7 @@ function gameLoop() {
   }
 
   requestAnimationFrame(gameLoop);
+  }
 }
-
 // Start the game loop
 gameLoop();
