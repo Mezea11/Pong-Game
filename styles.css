@@ -44,7 +44,7 @@ canvas {
     display: block;
     margin: auto;
     background-color: black;
-    border: 1px solid white;
+    border: yellow 0.5rem solid;
 }
 
 .game-title {

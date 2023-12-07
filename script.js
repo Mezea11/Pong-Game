@@ -2,8 +2,8 @@
 const canvas = document.getElementById('pongCanvas');
 const ctx = canvas.getContext('2d');
 
-canvas.width = 500;
-canvas.height = 500;
+canvas.width = 600;
+canvas.height = 400;
 
 // audio
 let paddleBall = new Audio('Assets/click.wav');
@@ -21,13 +21,19 @@ let laserArray = [];
 let obstacleStaticArray = [];
 let obstacleArrayArray = [];
 let obstacleTwoArray = [];
+let PowerUpArray = [];
 
 let onHitArray = [];
 
 let lastTime = Date.now();
 let deltaTime;
 
+let lastTime = Date.now();
+let deltaTime;
+
+let isPaused = false;
 let score = 0;
+let lvlcount = 1;
 
 // Create the paddles
 const paddleWidth = 10, paddleHeight = 60;
@@ -35,8 +41,8 @@ const leftPaddle = {
   x: 0,
   y: canvas.height / 2 - paddleHeight / 2,
   width: paddleWidth,
-  height: paddleHeight,
-  speed: 10,
+  height: 400,
+  speed: 8,
   hit: true,
   keys: {
     up: false,
@@ -49,7 +55,7 @@ const rightPaddle = {
   y: canvas.height / 2 - paddleHeight / 2,
   width: paddleWidth,
   height: paddleHeight,
-  speed: 5,
+  speed: 2,
   hit: true,
 };
 
@@ -62,17 +68,73 @@ const ball = {
   speedY: 5
 };
 
-getRandomNumber();
-
 // generate random number
+getRandomNumber();
 function getRandomNumber(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
+// levels & powerups
+function getLevel() {
+  if (score <= 200) {
+    lvlcount = 2;
+    rightPaddle.speed = 0.2;
+
+    if (score === 200 && PowerUpArray.length == 0) {
+      let powerUpX = getRandomNumber(100, 500);
+      let powerUpY = getRandomNumber(20, 280);
+      let makepowerUp = (x, y) => ({
+        x: x,
+        y: y,
+        width: 20,
+        height: 20,
+        status: 1,
+        speed: 0,
+      })
+      PowerUpArray.push(makepowerUp(powerUpX, powerUpY));
+    }
+  }
+
+  if (score >= 400) {
+    lvlcount = 3;
+    rightPaddle.speed = 0.2;
+
+    if (PowerUpArray.length >= 0 && PowerUpArray.length <= 0) {
+      let powerUpX = getRandomNumber(100, 500);
+      let powerUpY = getRandomNumber(20, 280);
+      let makepowerUp = (x, y) => ({
+        x: x,
+        y: y,
+        width: 20,
+        height: 20,
+        status: 1,
+        speed: 2,
+      })
+      PowerUpArray.push(makepowerUp(powerUpX, powerUpY));
+      powerUpX = getRandomNumber(100, 500);
+      powerUpY = getRandomNumber(20, 280);
+      PowerUpArray.push(makepowerUp(powerUpX, powerUpY));
+    }
+
+
+
+
+  }
+  if (score >= 600) {
+    lvlcount = 4;
+    rightPaddle.speed = 0.2;
+
+
+  }
+}
+
 // skapa hinder
 function CreateObstacle() {
+  if (score === 200 && obstacleArray.length == 0) {
+    let obstacleX = getRandomNumber(100, 500);
+    let obstacleY = getRandomNumber(50, 200);
   let obstacleArray = [];
   if (score === 200 && obstacleStaticArray.length <= 0) {
     let obstacleX = getRandomNumber(100, 300);
@@ -156,6 +218,10 @@ function collisionEffect() {
   onHitArray.push(onHit(newSpeedX + 0.5, newSpeedY - 0.5));
   onHitArray.push(onHit(newSpeedX - 0.5, newSpeedY + 0.5));
   onHitArray.push(onHit(newSpeedX - 0.2, newSpeedY + 0.2));
+  onHitArray.push(onHit(newSpeedX, newSpeedY));
+  onHitArray.push(onHit(newSpeedX + 0.5, newSpeedY - 0.5));
+  onHitArray.push(onHit(newSpeedX - 0.5, newSpeedY + 0.5));
+  onHitArray.push(onHit(newSpeedX - 0.2, newSpeedY + 0.2));
 }
 
 // Event listeners för att hantera spelarens rörelse + laser
@@ -174,6 +240,11 @@ window.addEventListener("keyup", (event) => {
 
   if (event.key === "ArrowDown") {
     leftPaddle.keys.down = false;
+  }
+
+  //pause key
+  if (event.key === "p") {
+    isPaused = !isPaused;
   }
 
   if (event.key === ' ') {
@@ -226,6 +297,24 @@ function draw() {
   ctx.fill();
   ctx.closePath();
 
+  //draw powerup
+  for (let i = 0; i < PowerUpArray.length; i++) {
+    let powerUp = PowerUpArray[i];
+    if (powerUp.status === 1) {
+      ctx.fillStyle = 'purple';
+      ctx.fillRect(powerUp.x, powerUp.y, powerUp.width, powerUp.height);
+    }
+  }
+
+  //draw powerup
+  for (let i = 0; i < PowerUpArray.length; i++) {
+    let powerUp = PowerUpArray[i];
+    if (powerUp.status === 1) {
+      ctx.fillStyle = 'purple';
+      ctx.fillRect(powerUp.x, powerUp.y, powerUp.width, powerUp.height);
+    }
+  }
+
   for (let i = 0; i < obstacleStaticArray.length; i++) {
     let obstacle = obstacleStaticArray[i];
     if (obstacle.status === 1) {
@@ -248,7 +337,7 @@ function draw() {
   for (let i = 0; i < obstacleTwoArray.length; i++) {
     let obstacle = obstacleTwoArray[i];
     if (!obstacle.hit && obstacle.status === 1) {
-      ctx.fillStyle = 'brown';
+      ctx.fillStyle = 'darkpink';
       ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
     } else if (obstacle.hit && obstacle.status === 1) {
       ctx.fillStyle = 'red';
@@ -272,10 +361,12 @@ function draw() {
       onHitArray.splice(i, 1);
     }
   }
-  // draw score
+  // draw score & level counter
   ctx.fillStyle = "white";
   ctx.font = "16px courier";
   ctx.fillText(score, 5, 20);
+  ctx.fillStyle = "green";
+  ctx.fillText("Level: " + lvlcount, canvas.width - 100, canvas.height - 10);
 }
 
 // Update function to handle game logic
@@ -439,12 +530,18 @@ function update() {
     }
   }
 
-  // Check for scoring
-  if (ball.x - ball.radius < 0 || ball.x + ball.radius > canvas.width) {
-    // Reset ball position
+  // Check scoring, for player and NPC 
+  if (ball.x + ball.radius > canvas.width) {
     score += 100;
+    // Reset ball position
     ball.x = canvas.width / 2;
     ball.y = canvas.height / 2;
+  } else if (ball.x - ball.radius < 0) {
+    score -= 100;
+    // Reset ball position
+    ball.x = canvas.width / 2;
+    ball.y = canvas.height / 2;
+
   }
 }
 
@@ -462,11 +559,17 @@ function shoot() {
 
 // Game loop
 function gameLoop() {
-  moveLeftPaddle();
-  moveRightpaddle();
-  CreateObstacle();
   draw();
-  update();
+
+  //if game is paused skip these lines
+  if (isPaused == false) {
+    moveLeftPaddle();
+    moveRightpaddle();
+    CreateObstacle();
+    getLevel();
+    update();
+  }
+
   requestAnimationFrame(gameLoop);
 }
 
