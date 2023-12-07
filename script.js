@@ -464,10 +464,16 @@ function update() {
   }
 
   // Check for scoring
-  if (ball.x - ball.radius < 0 || ball.x + ball.radius > canvas.width) {
+  if (ball.x - ball.radius > canvas.width) {
     // Reset ball position
     score += 100;
-    ball.x = canvas.width/2;
+    ball.x = canvas.width / 2;
+    ball.y = getRandomNumber(8, 292);
+  }
+
+  if (ball.x + ball.radius  < 0) {
+    score -= 100;
+    ball.x = canvas.width / 2;
     ball.y = getRandomNumber(8, 292);
   }
 }
