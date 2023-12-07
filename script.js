@@ -1,4 +1,4 @@
-import { createObstacle } from "./obstaclesModule.js";
+import { getLevel, createObstacle } from "./obstaclesModule.js";
 
 // Get the canvas element and its context
 const canvas = document.getElementById('pongCanvas');
@@ -8,6 +8,15 @@ canvas.width = 600;
 canvas.height = 300;
 
 // menu
+
+getRandomNumber();
+
+// generate random number
+function getRandomNumber(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
 
 const menu = document.getElementById("menu");
 const instructionsDiv = document.getElementById("instructions");
@@ -100,55 +109,8 @@ const ball = {
   speedY: 5
 };
 
-// levels & powerups 
 
-function getLevel() { 
-  if (score <= 200) { 
-    lvlcount = 2; 
-    rightPaddle.speed = 3; 
 
-    if (score === 200 && powerUpArray.length == 0) {
-      let powerUpX = getRandomNumber(100, 500);
-      let powerUpY = getRandomNumber(20, 280);
-      let makepowerUp = (x, y) => ({
-        x: x,
-        y: y,
-        width: 20,
-        height: 20,
-        status: 1,
-        speed: 0,
-      })
-
-      powerUpArray.push(makepowerUp(powerUpX, powerUpY));
-    }
-  }
-  }
-
-  if (score >= 400) { 
-    lvlcount = 3; 
-    rightPaddle.speed = 7; 
-
-  if (powerUpArray.length >= 0 && powerUpArray.length <= 0) {
-    let powerUpX = getRandomNumber(100, 500);
-    let powerUpY = getRandomNumber(20, 280);
-    let makepowerUp = (x, y) => ({
-      x: x,
-      y: y,
-      width: 20,
-      height: 20,
-      status: 1,
-      speed: 2,
-    })
-
-    powerUpArray.push(makepowerUp(powerUpX, powerUpY));
-
-    powerUpX = getRandomNumber(100, 500);
-
-    powerUpY = getRandomNumber(20, 280);
-
-    powerUpArray.push(makepowerUp(powerUpX, powerUpY));
-  }
-}
 
 // skapa onHit effekt när boll träffar paddel
 function collisionEffect() {
@@ -241,10 +203,7 @@ function draw() {
   ctx.fill();
   ctx.closePath();
 
-
-
   //draw powerup 
-
   for (let i = 0; i < powerUpArray.length; i++) {
     let powerUp = powerUpArray[i];
     if (powerUp.status === 1) {
@@ -524,7 +483,6 @@ function shoot() {
 }
 
 // Game loop 
-
 function gameLoop() {
   draw();
   //if game is paused skip these lines 
@@ -533,25 +491,10 @@ function gameLoop() {
     moveLeftPaddle();
     moveRightpaddle();
     createObstacle(score, obstacleStaticArray, obstacleArrayArray, obstacleTwoArray);
-    getLevel();
+    getLevel(score, lvlcount, rightPaddle,  powerUpArray);
     update();
   }
   requestAnimationFrame(gameLoop);
 }
 // Start the game loop 
 gameLoop();
-
-
-// Game loop
-/*
-  function gameLoop() {
-    moveLeftPaddle();
-    moveRightpaddle();
-    createObstacle();
-    draw();
-    update();
-    requestAnimationFrame(gameLoop);
-}
-
-// Start the game loop
-gameLoop();*/
