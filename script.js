@@ -7,6 +7,13 @@ const ctx = canvas.getContext('2d');
 canvas.width = 600;
 canvas.height = 300;
 
+// menu
+
+const menu = document.getElementById("menu");
+const instructionsDiv = document.getElementById("instructions");
+const difficultyDiv = document.getElementById("menu");
+
+
 // audio
 let paddleBall = new Audio('Assets/click.wav');
 paddleBall.volume = 0.2;
