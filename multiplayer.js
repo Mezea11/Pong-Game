@@ -48,7 +48,7 @@ const rightPaddle = {
   y: canvas.height / 2 - paddleHeight / 2,
   width: paddleWidth,
   height: paddleHeight,
-  speed: 5,
+  speed: 10,
   hit: true,
   keys: {
     up: false,
@@ -76,7 +76,7 @@ function getRandomNumber(min, max) {
 
 // skapa hinder
 function CreateObstacle() {
-  if (score === 5 && obstacleArray.length == 0) {
+  if (score === 2 && obstacleArray.length == 0) {
     let obstacleX = getRandomNumber(100, 300);
     let obstacleY = 50;
     // hinder bestående av 4 stora block
@@ -93,7 +93,7 @@ function CreateObstacle() {
     obstacleArray.push(makeObstacle(obstacleX, obstacleY + 20));
     obstacleArray.push(makeObstacle(obstacleX + 20, obstacleY + 20));
   }
-  if (score === 400 && obstacleArray.length <= 4) {
+  if (score === 4 && obstacleArray.length <= 4) {
     let obstacleX = getRandomNumber(100, 200);
     let obstacleY = obstacleX;
     // hinder bestående av 9 mindre block
@@ -115,7 +115,7 @@ function CreateObstacle() {
     obstacleArray.push(makeObstacle(obstacleX + 20, obstacleY + 10));
     obstacleArray.push(makeObstacle(obstacleX + 20, obstacleY + 20));
   }
-  if (score === 500 && obstacleTwoArray.length <= 4) {
+  if (score === 6 && obstacleTwoArray.length <= 4) {
     let obstacleX = getRandomNumber(100, 200);
     let obstacleY = obstacleX;
     // hinder bestående av 9 mindre block
@@ -160,19 +160,19 @@ function collisionEffect() {
 
 // Event listeners för att hantera spelarens rörelse + laser
 window.addEventListener("keydown", (event) => {
-  if (event.key === "ArrowUp") {
+  if (event.code === "KeyW") {
     leftPaddle.keys.up = true;
-  } else if (event.key === "ArrowDown") {
+  } else if (event.code === "KeyS") {
     leftPaddle.keys.down = true;
   }
 });
 
 window.addEventListener("keyup", (event) => {
-  if (event.key === "ArrowUp") {
+  if (event.code === "KeyW") {
     leftPaddle.keys.up = false;
   }
 
-  if (event.key === "ArrowDown") {
+  if (event.code === "KeyS") {
     leftPaddle.keys.down = false;
   }
 
@@ -195,19 +195,19 @@ function moveLeftPaddle() {
 
 // Event listeners för att hantera spelarens rörelse + laser
 window.addEventListener("keydown", (event) => {
-  if (event.code === "KeyW") {
+  if (event.key === "ArrowUp") {
     rightPaddle.keys.up = true;
-  } else if (event.code === "KeyS") {
+  } else if (event.key === "ArrowDown") {
     rightPaddle.keys.down = true;
   }
 });
 
 window.addEventListener("keyup", (event) => {
-  if (event.code === "KeyW") {
+  if (event.code === "ArrowUp") {
     rightPaddle.keys.up = false;
   }
 
-  if (event.code === "KeyS") {
+  if (event.key === "ArrowDown") {
     rightPaddle.keys.down = false;
   }
 });
@@ -277,7 +277,7 @@ function draw() {
   // draw score
   ctx.fillStyle = "white";
   ctx.font = "16px courier";
-  ctx.fillText("player 1: " + score, 5, 20);
+  ctx.fillText("player 1: " + score, 13, 20);
 
   ctx.fillStyle = "white";
   ctx.font = "16px courier";
@@ -412,15 +412,15 @@ function update() {
     }
   }
 
-  // Check for scoring
-  if (ball.x - ball.radius < 0) {
+  // Check for scoring for player 1 or 2 respectively
+  if (ball.x - ball.radius > canvas.width) {
     // Reset ball position
     score += 1;
     ball.x = canvas.width / 2;
     ball.y = canvas.height / 2;
   }
 
-  if (ball.x + ball.radius > canvas.width) {
+  if (ball.x + ball.radius  < 0) {
     score2 += 1;
     ball.x = canvas.width / 2;
     ball.y = canvas.height / 2;
