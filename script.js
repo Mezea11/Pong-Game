@@ -56,7 +56,7 @@ const rightPaddle = {
 // Create the ball
 const ball = {
   x: canvas.width / 2,
-  y: canvas.height / 2,
+  y: getRandomNumber(50, canvas.height - 50),
   radius: 8,
   speedX: 5,
   speedY: 5
