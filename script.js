@@ -8,7 +8,6 @@ canvas.width = 600;
 canvas.height = 300;
 
 // menu
-
 getRandomNumber();
 
 // generate random number
