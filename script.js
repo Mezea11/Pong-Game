@@ -7,6 +7,40 @@ const ctx = canvas.getContext('2d');
 canvas.width = 600;
 canvas.height = 300;
 
+// menu
+
+const menu = document.getElementById("menu");
+const instructionsDiv = document.getElementById("instructions");
+const difficultyDiv = document.getElementById("menu");
+
+let gameStarted = false;
+
+function startGame() {
+  if (!gameStarted) {
+    menu.style.display = 'none';
+    instructionsDiv.style.display = 'none';
+    difficultyDiv.style.display = 'none';
+    gameStarted = true;
+    // Start the game loop or any necessary initialization
+    gameLoop();
+  }
+}
+
+function showInstructions() {
+  instructionsDiv.style.display = 'block';
+  difficultyDiv.style.display = 'none';
+}
+
+function selectDifficulty() {
+  difficultyDiv.style.display = 'block';
+  instructionsDiv.style.display = 'none';
+}
+
+function startMultiplayer() {
+  // Implement multiplayer functionality
+}
+
+
 // audio
 let paddleBall = new Audio('Assets/click.wav');
 paddleBall.volume = 0.2;
@@ -29,7 +63,7 @@ let onHitArray = [];
 
 let lastTime = Date.now();
 let deltaTime;
-let isPaused = false;
+let isPaused = true;
 
 let score = 0;
 let lvlcount = 1;
@@ -66,15 +100,47 @@ const ball = {
   speedY: 5
 };
 
-getRandomNumber();
+// levels & powerups 
 
-// generate random number
-function getRandomNumber(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1) + min);
-}
+function getLevel() { 
+  if (score <= 200) { 
+    lvlcount = 2; 
+    rightPaddle.speed = 3; 
 
+    if (score === 200 && powerUpArray.length == 0) {
+      let powerUpX = getRandomNumber(100, 500);
+      let powerUpY = getRandomNumber(20, 280);
+      let makepowerUp = (x, y) => ({
+        x: x,
+        y: y,
+        width: 20,
+        height: 20,
+        status: 1,
+        speed: 0,
+      })
+
+      powerUpArray.push(makepowerUp(powerUpX, powerUpY));
+    }
+  }
+  }
+
+  if (score >= 400) { 
+    lvlcount = 3; 
+    rightPaddle.speed = 7; 
+
+  if (powerUpArray.length >= 0 && powerUpArray.length <= 0) {
+    let powerUpX = getRandomNumber(100, 500);
+    let powerUpY = getRandomNumber(20, 280);
+    let makepowerUp = (x, y) => ({
+      x: x,
+      y: y,
+      width: 20,
+      height: 20,
+      status: 1,
+      speed: 2,
+    })
+
+    powerUpArray.push(makepowerUp(powerUpX, powerUpY));
 
 
 
@@ -415,11 +481,17 @@ function update() {
   }
 
   // Check for scoring
-  if (ball.x - ball.radius < 0 || ball.x + ball.radius > canvas.width) {
+  if (ball.x - ball.radius > canvas.width) {
     // Reset ball position
     score += 100;
     ball.x = canvas.width / 2;
-    ball.y = canvas.height / 2;
+    ball.y = getRandomNumber(8, 292);
+  }
+
+  if (ball.x + ball.radius  < 0) {
+    score -= 100;
+    ball.x = canvas.width / 2;
+    ball.y = getRandomNumber(8, 292);
   }
 }
 
