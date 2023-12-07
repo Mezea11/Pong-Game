@@ -1,8 +1,10 @@
+//import {  } from "./obstaclesModule";
+
 // Get the canvas element and its context
 const canvas = document.getElementById('pongCanvas');
 const ctx = canvas.getContext('2d');
 
-canvas.width = 400;
+canvas.width = 600;
 canvas.height = 300;
 
 // audio
@@ -21,14 +23,16 @@ let laserArray = [];
 let obstacleStaticArray = [];
 let obstacleArrayArray = [];
 let obstacleTwoArray = [];
+let powerUpArray = [];
 
 let onHitArray = [];
 
 let lastTime = Date.now();
 let deltaTime;
+let isPaused = false;
 
 let score = 0;
-
+let lvlcount = 1;
 // Create the paddles
 const paddleWidth = 10, paddleHeight = 60;
 const leftPaddle = {
@@ -71,26 +75,172 @@ function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
+// levels & powerups 
+
+function getLevel() { 
+  if (score <= 200) { 
+    lvlcount = 2; 
+    rightPaddle.speed = 0.2; 
+
+    if (score === 200 && powerUpArray.length == 0) { 
+      let powerUpX = getRandomNumber(100, 500); 
+      let powerUpY = getRandomNumber(20, 280); 
+      let makepowerUp = (x, y) => ({ 
+        x: x, 
+        y: y, 
+        width: 20, 
+        height: 20, 
+        status: 1, 
+        speed: 0, 
+      }) 
+
+      powerUpArray.push(makepowerUp(powerUpX, powerUpY)); 
+    } 
+  } 
+} 
+
+  if (score >= 400) { 
+    lvlcount = 3; 
+    rightPaddle.speed = 0.2; 
+
+    if (PowerUpArray.length >= 0 && PowerUpArray.length <= 0) { 
+      let powerUpX = getRandomNumber(100, 500); 
+      let powerUpY = getRandomNumber(20, 280); 
+      let makepowerUp = (x, y) => ({ 
+        x: x, 
+        y: y, 
+        width: 20, 
+        height: 20, 
+        status: 1, 
+        speed: 2, 
+      }) 
+
+      PowerUpArray.push(makepowerUp(powerUpX, powerUpY)); 
+
+      powerUpX = getRandomNumber(100, 500); 
+
+      powerUpY = getRandomNumber(20, 280); 
+
+      PowerUpArray.push(makepowerUp(powerUpX, powerUpY)); 
+    } 
+  }
+
 // skapa hinder
-function CreateObstacle() {
+function createObstacle() {
   let obstacleArray = [];
   if (score === 200 && obstacleStaticArray.length <= 0) {
     let obstacleX = getRandomNumber(100, 300);
     let obstacleY = 50;
-    // hinder bestående av 4 stora block
-    let makeObstacle = (x, y) => ({
+
+let makeObstacle = (x, y, width, height) => ({
+  x: x,
+  y: y,
+  width: width,
+  height: height,
+  status: 1,
+  speed: 0,
+});
+
+  const patternConfig = [
+    { width: 3, height: 3, count: 1 },
+    { width: 3, height: 3, count: 3 },
+    { width: 3, height: 3, count: 5 },
+    { width: 3, height: 3, count: 7 },
+    { width: 3, height: 3, count: 9 },
+    { width: 3, height: 3, count: 11 },
+    { width: 3, height: 3, count: 9 },
+    { width: 3, height: 3, count: 7 },
+    { width: 3, height: 3, count: 5 },
+    { width: 3, height: 3, count: 3 },
+    { width: 3, height: 3, count: 1 },
+  ];
+
+  for (const config of patternConfig) {
+    for (let i = 0; i < config.count; i++) {
+      obstacleStaticArray.push(makeObstacle(obstacleX, obstacleY, config.width, config.height));
+      obstacleX += config.width;
+    }
+    obstacleX -= (config.count + 1) * config.width;
+    obstacleY += config.height;
+  }
+
+// Print the result
+console.log(obstacleStaticArray);
+    makeObstacle = (x, y) => ({
       x: x,
       y: y,
-      width: 20,
-      height: 20,
+      width: 3,
+      height: 3,
       status: 1,
       speed: 0,
     });
-    obstacleStaticArray.push(makeObstacle(obstacleX, obstacleY));
-    obstacleStaticArray.push(makeObstacle(obstacleX + 20, obstacleY));
-    obstacleStaticArray.push(makeObstacle(obstacleX, obstacleY + 20));
-    obstacleStaticArray.push(makeObstacle(obstacleX + 20, obstacleY + 20));
+
+    console.log(obstacleStaticArray);
+    for (let i = 0; i < 1; i++) {
+      obstacleStaticArray.push(makeObstacle(obstacleX, obstacleY));
+      obstacleX -= 3;
+      obstacleY += 3;
+    }
+    for (let i = 0; i < 3; i++) {
+      obstacleStaticArray.push(makeObstacle(obstacleX, obstacleY));
+      obstacleX += 3;
+    }
+    obstacleX -= 12;
+    obstacleY += 3;
+    for (let i = 0; i < 5; i++) {
+      obstacleStaticArray.push(makeObstacle(obstacleX, obstacleY));
+      obstacleX += 3;
+    }
+    obstacleX -= 18;
+    obstacleY += 3;
+    for (let i = 0; i < 7; i++) {
+      obstacleStaticArray.push(makeObstacle(obstacleX, obstacleY));
+      obstacleX += 3;
+    }
+    obstacleX -= 24;
+    obstacleY += 3;
+    for (let i = 0; i < 9; i++) {
+      obstacleStaticArray.push(makeObstacle(obstacleX, obstacleY));
+      obstacleX += 3;
+    }
+    obstacleX -= 30;
+    obstacleY += 3;
+    for (let i = 0; i < 11; i++) {
+      obstacleStaticArray.push(makeObstacle(obstacleX, obstacleY));
+      obstacleX += 3;
+    }
+    obstacleX -= 30;
+    obstacleY += 3;
+    for (let i = 0; i < 9; i++) {
+      obstacleStaticArray.push(makeObstacle(obstacleX, obstacleY));
+      obstacleX += 3;
+    }
+    obstacleX -= 24;
+    obstacleY += 3;
+    for (let i = 0; i < 7; i++) {
+      obstacleStaticArray.push(makeObstacle(obstacleX, obstacleY));
+      obstacleX += 3;
+    }
+    obstacleX -= 18;
+    obstacleY += 3;
+    for (let i = 0; i < 5; i++) {
+      obstacleStaticArray.push(makeObstacle(obstacleX, obstacleY));
+      obstacleX += 3;
+    }
+    obstacleX -= 12;
+    obstacleY += 3;
+    for (let i = 0; i < 3; i++) {
+      obstacleStaticArray.push(makeObstacle(obstacleX, obstacleY));
+      obstacleX += 3;
+    }
+    obstacleX -= 6;
+    obstacleY += 3;
+    for (let i = 0; i < 1; i++) {
+      obstacleStaticArray.push(makeObstacle(obstacleX, obstacleY));
+      obstacleX += 3;
+    }
   }
+
   if (score === 400 && obstacleArrayArray.length <= 0) {
     let obstacleX = getRandomNumber(100, 200);
     let obstacleY = obstacleX;
@@ -113,7 +263,6 @@ function CreateObstacle() {
     obstacleArray.push(makeObstacle(obstacleX + 20, obstacleY + 10));
     obstacleArray.push(makeObstacle(obstacleX + 20, obstacleY + 20));
     obstacleArrayArray.push(obstacleArray);
-    console.log(obstacleArrayArray);
   } //lägg arrayen i  en array och kolla för den i loopen
   if (score === 500 && obstacleTwoArray.length <= 0) {
     let obstacleX = getRandomNumber(100, 200);
@@ -182,6 +331,10 @@ window.addEventListener("keyup", (event) => {
     laserSound.currentTime = 0;
     laserSound.play();
   }
+
+  if (event.key === 'p') {
+    isPaused = !isPaused;
+  }
 });
 
 // move function for left side (player controlled)
@@ -200,7 +353,7 @@ function moveRightpaddle() {
     rightPaddle.hit = true;
   }
   // paddle can't move before ball is on right side of screen
-  if (ball.x >= 150 && rightPaddle.hit) {
+  if (ball.x >= 400 && rightPaddle.hit) {
     if (ball.y > rightPaddle.y + rightPaddle.height / 2) {
       rightPaddle.y += rightPaddle.speed;
     } else if (ball.y < rightPaddle.y + rightPaddle.height / 2) {
@@ -225,6 +378,18 @@ function draw() {
   ctx.fillStyle = 'yellow';
   ctx.fill();
   ctx.closePath();
+
+   
+
+  //draw powerup 
+
+  for (let i = 0; i < powerUpArray.length; i++) { 
+    let powerUp = powerUpArray[i]; 
+    if (powerUp.status === 1) { 
+      ctx.fillStyle = 'purple'; 
+      ctx.fillRect(powerUp.x, powerUp.y, powerUp.width, powerUp.height); 
+    } 
+  } 
 
   for (let i = 0; i < obstacleStaticArray.length; i++) {
     let obstacle = obstacleStaticArray[i];
@@ -256,12 +421,13 @@ function draw() {
     }
   }
   // draw laser
+  if (!isPaused) {
   for (let i = 0; i < laserArray.length; i++) {
     let laser = laserArray[i];
     laser.x += laser.speed;
     ctx.fillStyle = "orange";
     ctx.fillRect(laser.x, laser.y, laser.width, laser.height);
-  }
+  }}
   // draw collisionEffect
   for (let i = 0; i < onHitArray.length; i++) {
     let onHit = onHitArray[i];
@@ -354,18 +520,38 @@ function update() {
     rightPaddle.hit = true;
   }
 
+  //pickup powerup with ball 
+  for (let i = 0; i < powerUpArray.length; i++) { 
+    let powerUp = powerUpArray[i]; 
+    if ( 
+      (ball.x + ball.radius > powerUp.x && 
+        ball.x - ball.radius < powerUp.x + powerUp.width && 
+        ball.y > powerUp.y && 
+        ball.y < powerUp.y + powerUp.height) 
+    ) { 
+
+     // ball.speedX = -ball.speedX; 
+     // rightPaddle.hit = true; 
+      rightPaddle.height = rightPaddle.height / 2; 
+      powerUp.status = 0; 
+      powerUpArray.splice(i, 1); 
+      i--; 
+    } 
+  }
+  // ball and static obstacle collision
   for (let i = 0; i < obstacleStaticArray.length; i++) {
     let obstacle = obstacleStaticArray[i];
     if (
-      (ball.x + ball.radius > obstacle.x &&
-        ball.x - ball.radius < obstacle.x + obstacle.width &&
-        ball.y > obstacle.y &&
-        ball.y < obstacle.y + obstacle.height)
+      (ball.x + ball.radius > obstacle.x + 5 &&
+        ball.x - ball.radius < obstacle.x + obstacle.width + 5 &&
+        ball.y > obstacle.y + 5 &&
+        ball.y < obstacle.y + obstacle.height + 5)
     ) {
       ball.speedX = -ball.speedX;
       rightPaddle.hit = true;
       obstacle.status = 0;
-      obstacleStaticArray.splice(i, 1);
+//      obstacleStaticArray.splice(i, 1);
+      obstacleStaticArray = [];
       i--;
       obstacleBall.play();
     }
@@ -390,33 +576,33 @@ function update() {
       }
     }
   }
-    // ball and obstacleTwo collision
-    for (let i = 0; i < obstacleTwoArray.length; i++) {
-      let obstacle = obstacleTwoArray[i];
-      if (
-        (!obstacle.hit && ball.x + ball.radius > obstacle.x &&
-          ball.x - ball.radius < obstacle.x + obstacle.width &&
-          ball.y > obstacle.y &&
-          ball.y < obstacle.y + obstacle.height)
-      ) {
-        obstacle.hit = true;
-        ball.speedX = -ball.speedX;
-        rightPaddle.hit = true;
-        obstacleBall.play();
-      } else if (
-        (obstacle.hit && ball.x + ball.radius > obstacle.x &&
-          ball.x - ball.radius < obstacle.x + obstacle.width &&
-          ball.y > obstacle.y &&
-          ball.y < obstacle.y + obstacle.height)
-      ) {
-        ball.speedX = -ball.speedX;
-        rightPaddle.hit = true;
-        obstacle.status = 0;
-        obstacleTwoArray.splice(i, 1);
-        i--;
-        obstacleBall.play();
-      }
+  // ball and obstacleTwo collision
+  for (let i = 0; i < obstacleTwoArray.length; i++) {
+    let obstacle = obstacleTwoArray[i];
+    if (
+      (!obstacle.hit && ball.x + ball.radius > obstacle.x &&
+        ball.x - ball.radius < obstacle.x + obstacle.width &&
+        ball.y > obstacle.y &&
+        ball.y < obstacle.y + obstacle.height)
+    ) {
+      obstacle.hit = true;
+      ball.speedX = -ball.speedX;
+      rightPaddle.hit = true;
+      obstacleBall.play();
+    } else if (
+      (obstacle.hit && ball.x + ball.radius > obstacle.x &&
+        ball.x - ball.radius < obstacle.x + obstacle.width &&
+        ball.y > obstacle.y &&
+        ball.y < obstacle.y + obstacle.height)
+    ) {
+      ball.speedX = -ball.speedX;
+      rightPaddle.hit = true;
+      obstacle.status = 0;
+      obstacleTwoArray.splice(i, 1);
+      i--;
+      obstacleBall.play();
     }
+  }
   // check for and handle collision between laser and ball, and handle laserArray when laser leaves canvas
   for (let i = 0; i < laserArray.length; i++) {
     let laser = laserArray[i];
@@ -460,15 +646,35 @@ function shoot() {
   laserArray.push(laser);
 }
 
-// Game loop
-function gameLoop() {
-  moveLeftPaddle();
-  moveRightpaddle();
-  CreateObstacle();
+// Game loop 
+
+function gameLoop() { 
   draw();
-  update();
-  requestAnimationFrame(gameLoop);
+  //if game is paused skip these lines 
+
+  if (isPaused == false) { 
+    moveLeftPaddle(); 
+    moveRightpaddle(); 
+    createObstacle(); 
+    getLevel(); 
+    update(); 
+  } 
+  requestAnimationFrame(gameLoop); 
+} 
+// Start the game loop 
+gameLoop(); 
+
+
+// Game loop
+/*
+  function gameLoop() {
+    moveLeftPaddle();
+    moveRightpaddle();
+    createObstacle();
+    draw();
+    update();
+    requestAnimationFrame(gameLoop);
 }
 
 // Start the game loop
-gameLoop();
+gameLoop();*/
