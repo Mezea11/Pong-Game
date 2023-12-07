@@ -13,6 +13,33 @@ const menu = document.getElementById("menu");
 const instructionsDiv = document.getElementById("instructions");
 const difficultyDiv = document.getElementById("menu");
 
+let gameStarted = false;
+
+function startGame() {
+  if (!gameStarted) {
+    menu.style.display = 'none';
+    instructionsDiv.style.display = 'none';
+    difficultyDiv.style.display = 'none';
+    gameStarted = true;
+    // Start the game loop or any necessary initialization
+    gameLoop();
+  }
+}
+
+function showInstructions() {
+  instructionsDiv.style.display = 'block';
+  difficultyDiv.style.display = 'none';
+}
+
+function selectDifficulty() {
+  difficultyDiv.style.display = 'block';
+  instructionsDiv.style.display = 'none';
+}
+
+function startMultiplayer() {
+  // Implement multiplayer functionality
+}
+
 
 // audio
 let paddleBall = new Audio('Assets/click.wav');
@@ -72,15 +99,6 @@ const ball = {
   speedX: 5,
   speedY: 5
 };
-
-getRandomNumber();
-
-// generate random number
-function getRandomNumber(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1) + min);
-}
 
 // levels & powerups 
 
