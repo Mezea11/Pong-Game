@@ -69,8 +69,10 @@ let powerUpArray = [];
 
 let onHitArray = [];
 
-let lastTime = Date.now();
+//let now = Date.now();
 let deltaTime;
+let lastTime;
+
 let isPaused = true;
 
 let score = 0;
@@ -82,7 +84,7 @@ const leftPaddle = {
   y: canvas.height / 2 - paddleHeight / 2,
   width: paddleWidth,
   height: paddleHeight,
-  speed: 10,
+  speed: 350,
   hit: true,
   keys: {
     up: false,
@@ -104,12 +106,9 @@ const ball = {
   x: canvas.width / 2,
   y: canvas.height / 2,
   radius: 8,
-  speedX: 5,
-  speedY: 5
+  speedX: 200,
+  speedY: 200
 };
-
-
-
 
 // skapa onHit effekt när boll träffar paddel
 function collisionEffect() {
@@ -125,9 +124,11 @@ function collisionEffect() {
     speedY: speedY
   });
   onHitArray.push(onHit(newSpeedX, newSpeedY));
-  onHitArray.push(onHit(newSpeedX + 0.5, newSpeedY - 0.5));
-  onHitArray.push(onHit(newSpeedX - 0.5, newSpeedY + 0.5));
-  onHitArray.push(onHit(newSpeedX - 0.2, newSpeedY + 0.2));
+  onHitArray.push(onHit(newSpeedX, newSpeedY - 0.5));
+  onHitArray.push(onHit(newSpeedX -0.5, newSpeedY + 0.5));
+  onHitArray.push(onHit(newSpeedX, newSpeedY));
+  onHitArray.push(onHit(newSpeedX, newSpeedY - 0.5));
+  onHitArray.push(onHit(newSpeedX -0.5, newSpeedY + 0.5));
 }
 
 // Event listeners för att hantera spelarens rörelse + laser
@@ -161,11 +162,11 @@ window.addEventListener("keyup", (event) => {
 });
 
 // move function for left side (player controlled)
-function moveLeftPaddle() {
+function moveLeftPaddle(gameLoop) {
   if (leftPaddle.keys.up && leftPaddle.y > 0) {
-    leftPaddle.y -= leftPaddle.speed;
+    leftPaddle.y -= leftPaddle.speed * deltaTime;
   } else if (leftPaddle.keys.down && leftPaddle.y + leftPaddle.height < canvas.height) {
-    leftPaddle.y += leftPaddle.speed;
+    leftPaddle.y += leftPaddle.speed * deltaTime;
   }
 }
 
@@ -254,9 +255,8 @@ function draw() {
     let onHit = onHitArray[i];
     ctx.fillStyle = 'white';
     ctx.fillRect(onHit.x, onHit.y, onHit.width, onHit.height);
-    //if (onHit.x > 50 && onHit.x < canvas.width - 50) {
-    if (leftPaddle.hit && ball.x < 100 || rightPaddle.hit && ball.x > 200) {
-      onHitArray.splice(i, 1);
+    if (!leftPaddle.hit && ball.x > 100 || !rightPaddle.hit && ball.x < canvas.width - 100) {
+      onHitArray = [];
     }
   }
   // draw score
@@ -267,15 +267,11 @@ function draw() {
 
 // Update function to handle game logic
 function update() {
-  //  let now = Date.now();
-  //  deltaTime = (now - lastTime) -1000;
-  //  lastTime = now;
-
   // Move the ball
-  ball.x += ball.speedX;
-  ball.y += ball.speedY;
+  ball.x += ball.speedX * deltaTime;
+  ball.y += ball.speedY * deltaTime;
   // reset leftPaddle.hit
-  if (ball.x > 210) {
+  if (ball.x > 300) {
     leftPaddle.hit = true;
   }
   // initiera movement hinder 
@@ -305,33 +301,39 @@ function update() {
   if (ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height) {
     ball.speedY = -ball.speedY;
   }
-  // Bounce off paddles
-  if (
-    (ball.x - ball.radius < leftPaddle.x + leftPaddle.width && ball.y > leftPaddle.y && ball.y < leftPaddle.y + leftPaddle.height) ||
-    (ball.x + ball.radius > rightPaddle.x && ball.y > rightPaddle.y && ball.y < rightPaddle.y + rightPaddle.height)
-  ) {
+  // Bounce off left paddle
+  if (ball.x - ball.radius < leftPaddle.x + leftPaddle.width && ball.y > leftPaddle.y && ball.y < leftPaddle.y + leftPaddle.height) {
+    ball.speedX = -ball.speedX;
+    paddleBall.play();
+    //control onHit effect for left paddle
+    leftPaddle.hit = false;
+    console.log(leftPaddle.hit + ' left');
+    // on paddle hit effect
+    collisionEffect();
+    // bounce off rigght paddle
+  } if (ball.x + ball.radius > rightPaddle.x && ball.y > rightPaddle.y && ball.y < rightPaddle.y + rightPaddle.height) {
     ball.speedX = -ball.speedX;
     paddleBall.play();
     // right paddle stop moving after ball hits paddle + control onHit effect for right paddle
     rightPaddle.hit = false;
-    //control onHit effect for left paddle
-    leftPaddle.hit = false;
+    console.log(rightPaddle.hit + ' right');
     // on paddle hit effect
     collisionEffect();
   }
   // direction for onHit effect
   for (let i = 0; i < onHitArray.length; i++) {
     let onHit = onHitArray[i];
-    if (!leftPaddle.hit && i >= 2) {
+    if (!leftPaddle.hit && i >= 3) {
       onHit.y += onHit.speedY;
       onHit.x += onHit.speedX;
-    } else if (!leftPaddle.hit && i <= 1) {
+    } else if (!leftPaddle.hit && i <= 2) {
       onHit.y -= onHit.speedY;
       onHit.x += onHit.speedX;
-    } else if (!rightPaddle.hit && i >= 2) {
+    }
+    if (!rightPaddle.hit && i >= 3) {
       onHit.y += onHit.speedY;
       onHit.x -= onHit.speedX;
-    } else if (!rightPaddle.hit && i <= 1) {
+    } else if (!rightPaddle.hit && i <= 2) {
       onHit.y -= onHit.speedY;
       onHit.x -= onHit.speedX;
     }
@@ -361,7 +363,7 @@ function update() {
         ball.speedY = 10;
       }
       if (temp == 3) {
-        rightPaddle.height = rightPaddle.height /2;
+        rightPaddle.height = rightPaddle.height / 2;
       }
       powerUpArray.splice(i, 1);
       i--;
@@ -483,6 +485,10 @@ function shoot() {
 
 // Game loop 
 function gameLoop() {
+  let now = Date.now();
+  deltaTime = (now - lastTime) / 1000;
+  lastTime = now;
+
   draw();
   //if game is paused skip these lines 
 
@@ -490,7 +496,7 @@ function gameLoop() {
     moveLeftPaddle();
     moveRightpaddle();
     createObstacle(score, obstacleStaticArray, obstacleArrayArray, obstacleTwoArray);
-    getLevel(score, lvlcount, rightPaddle,  powerUpArray);
+    getLevel(score, lvlcount, rightPaddle, powerUpArray);
     update();
   }
   requestAnimationFrame(gameLoop);
