@@ -1,4 +1,7 @@
-import { getLevel, createObstacle } from "./obstaclesModule.js";
+import { lives, getLevel, createObstacle } from "./obstaclesModule.js";
+
+// export startgame function to other modules
+export { startGame };
 
 // Get the canvas element and its context
 const canvas = document.getElementById('pongCanvas');
@@ -17,37 +20,8 @@ function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-const menu = document.getElementById("menu");
-const instructionsDiv = document.getElementById("instructions");
-const difficultyDiv = document.getElementById("menu");
 
-let gameStarted = false;
-
-function startGame() {
-  if (!gameStarted) {
-    menu.style.display = 'none';
-    instructionsDiv.style.display = 'none';
-    difficultyDiv.style.display = 'none';
-    gameStarted = true;
-    // Start the game loop or any necessary initialization
-    gameLoop();
-  }
-}
-
-function showInstructions() {
-  instructionsDiv.style.display = 'block';
-  difficultyDiv.style.display = 'none';
-}
-
-function selectDifficulty() {
-  difficultyDiv.style.display = 'block';
-  instructionsDiv.style.display = 'none';
-}
-
-function startMultiplayer() {
-  // Implement multiplayer functionality
-}
-
+/////////////////////////////////////////////////////////////////////////////////////////
 
 // audio
 let paddleBall = new Audio('Assets/click.wav');
@@ -66,7 +40,7 @@ let obstacleStaticArray = [];
 let obstacleArrayArray = [];
 let obstacleTwoArray = [];
 let powerUpArray = [];
-
+let livesArray = [];
 let onHitArray = [];
 
 //let now = Date.now();
@@ -105,6 +79,42 @@ const rightPaddle = {
   hit: true,
 };
 
+//////////////////////////////////////////////////////////////////////////////////////////
+// MENU FUNCTION
+let gameStarted = false;
+
+function startGame() {
+  if (!gameStarted) {
+    gameStarted = true;
+    // Start the game loop
+    gameLoop();
+  } else {
+    // Toggle the game pause state
+    isPaused = !isPaused;
+    // If unpausing, resume the game loop
+    if (!isPaused) {
+      gameLoop();
+    }
+  }
+}
+
+function showInstructions() {
+  let x = document.getElementById("instructions");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
+
+function selectDifficulty() {
+  difficultyDiv.style.display = 'block';
+  instructionsDiv.style.display = 'none';
+}
+
+function startMultiplayer() {
+  
+}
 // Create the ball
 const ball = {
   x: canvas.width / 2,
@@ -267,6 +277,13 @@ function draw() {
   ctx.fillStyle = "white";
   ctx.font = "16px courier";
   ctx.fillText(score, 5, 20);
+
+  for (let i = 0; i < livesArray.length; i++) {
+    let live = livesArray[i];
+    ctx.fillStyle = "white";
+    ctx.font = "16px courier";
+    ctx.fillRect(live.x, live.y, live.width, live.height);
+  }
 }
 
 // Update function to handle game logic
@@ -408,7 +425,6 @@ function update() {
           obstacleArray.splice(i, 1);
           i--;
           console.log('hello'); }, 10000);
-          
       }
     }
   }
@@ -466,8 +482,11 @@ function update() {
     // Reset ball position
     score += 100;
     leftLives -= 1;
+//    livesArray.splice(i, 1);
+//    i--;
     ball.x = canvas.width / 2;
     ball.y = getRandomNumber(8, 292);
+
   }
 
   if (ball.x + ball.radius  < 0) {
@@ -504,9 +523,12 @@ function gameLoop() {
     moveRightpaddle();
     createObstacle(score, obstacleStaticArray, obstacleArrayArray, obstacleTwoArray);
     getLevel(score, lvlcount, rightPaddle, powerUpArray);
+    lives(livesArray);
     update();
   }
   requestAnimationFrame(gameLoop);
 }
-// Start the game loop 
+// Start the game loop
 gameLoop();
+
+document.getElementById('menu-btn').addEventListener('click', startGame);
