@@ -26,12 +26,40 @@ function getRandomNumber(min, max) {
 let gameStarted = false;
 
 function startGame() {
-  console.log(startGame);
   if (!gameStarted) {
     gameStarted = true;
-    // Start the game loop or any necessary initialization
+    // Reset game state or perform any necessary initialization
+    resetGame();
+    // Start the game loop
     gameLoop();
+  } else {
+    // Toggle the game pause state
+    isPaused = !isPaused;
+    // If unpausing, resume the game loop
+    if (!isPaused) {
+      gameLoop();
+    }
   }
+}
+
+// Function to reset the game state
+function resetGame() {
+  // Reset variables, scores, lives, etc.
+  score = 0;
+  leftLives = 5;
+  rightLives = 5;
+  // Reset paddles, ball, obstacles, etc. to their initial positions
+  leftPaddle.y = canvas.height / 2 - paddleHeight / 2;
+  rightPaddle.y = canvas.height / 2 - paddleHeight / 2;
+  ball.x = canvas.width / 2;
+  ball.y = getRandomNumber(8, 292);
+  // Clear arrays (laserArray, obstacleArrayArray, etc.) if needed
+  laserArray = [];
+  obstacleStaticArray = [];
+  obstacleArrayArray = [];
+  obstacleTwoArray = [];
+  powerUpArray = [];
+  onHitArray = [];
 }
 
 function showInstructions() {
@@ -515,3 +543,5 @@ function gameLoop() {
 }
 // Start the game loop
 gameLoop();
+
+document.getElementById('menu-btn').addEventListener('click', startGame);
