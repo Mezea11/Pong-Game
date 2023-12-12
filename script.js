@@ -490,13 +490,6 @@ function update() {
     // Reset ball position
     console.log("hallo");
     score += 100;
-    leftLives -= 1;
-    for (let i = 0; i < livesArray.length; i++) {
-    livesArray.splice(i, 1);
-    i--;
-    }
-//    livesArray.splice(i, 1);
-//    i--;
     ball.x = canvas.width / 2;
     ball.y = getRandomNumber(8, 292);
 
@@ -505,6 +498,7 @@ function update() {
   if (ball.x + ball.radius  < 0) {
     score -= 100;
     rightLives -= 1;
+    livesArray.shift();
     ball.x = canvas.width / 2;
     ball.y = getRandomNumber(8, 292);
   }
