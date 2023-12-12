@@ -355,16 +355,16 @@ function update() {
         ball.y < powerUp.y + powerUp.height)
     ) {
       const temp = getRandomNumber(1, 3);
-      if (temp == 3) {
-        leftPaddle.height = leftPaddle.height / 2;
+      if (temp == 1) {
+        leftPaddle.height = leftPaddle.height -= 5;
         powerUp.status = 0;
       }
       if (temp == 2) {
         ball.speedX = ball.speedX += 100;
         ball.speedY = ball.speedY += 100;
       }
-      if (temp == 1) {
-        rightPaddle.height = rightPaddle.height /2;
+      if (temp == 3) {
+        rightPaddle.height = rightPaddle.height -= 5;
       }
       powerUpArray.splice(i, 1);
       i--;
