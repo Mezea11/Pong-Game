@@ -1,5 +1,8 @@
 import { getLevel, createObstacle } from "./obstaclesModule.js";
 
+// export startgame function to other modules
+export { startGame };
+
 // Get the canvas element and its context
 const canvas = document.getElementById('pongCanvas');
 const ctx = canvas.getContext('2d');
@@ -17,17 +20,14 @@ function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-const menu = document.getElementById("menu");
-const instructionsDiv = document.getElementById("instructions");
-const difficultyDiv = document.getElementById("menu");
 
+//////////////////////////////////////////////////////////////////////////////////////////
+// MENU FUNCTION
 let gameStarted = false;
 
 function startGame() {
+  console.log(startGame);
   if (!gameStarted) {
-    menu.style.display = 'none';
-    instructionsDiv.style.display = 'none';
-    difficultyDiv.style.display = 'none';
     gameStarted = true;
     // Start the game loop or any necessary initialization
     gameLoop();
@@ -35,8 +35,12 @@ function startGame() {
 }
 
 function showInstructions() {
-  instructionsDiv.style.display = 'block';
-  difficultyDiv.style.display = 'none';
+  let x = document.getElementById("instructions");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
 }
 
 function selectDifficulty() {
@@ -45,9 +49,10 @@ function selectDifficulty() {
 }
 
 function startMultiplayer() {
-  // Implement multiplayer functionality
+  
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////
 
 // audio
 let paddleBall = new Audio('Assets/click.wav');
@@ -501,5 +506,5 @@ function gameLoop() {
   }
   requestAnimationFrame(gameLoop);
 }
-// Start the game loop 
+// Start the game loop
 gameLoop();

@@ -1,4 +1,4 @@
-
+import { startGame } from './script.js';
 
 // Get the canvas element and its context
 const canvas = document.getElementById('pongCanvas');
