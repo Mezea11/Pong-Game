@@ -105,7 +105,6 @@ export function createObstacle(score, obstacleStaticArray, obstacleArrayArray, o
       obstacleY += config.height;
     }
 
-    // Print the result
     makeObstacle = (x, y) => ({
       x: x,
       y: y,
