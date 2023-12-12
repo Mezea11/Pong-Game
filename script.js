@@ -87,22 +87,28 @@ const rightPaddle = {
 // MENU FUNCTION
 let gameStarted = false;
 
-function startGame() {
+document.getElementById('menu-btn').addEventListener('click', startGame);
 
-isPaused = false;
-// Function to reset the game statefunctionresetGame() {​​​​​​​​ // Reset variables, scores, lives, etc. 
-score = 0; 
-leftLives = 5; 
-rightLives = 5; 
-// Reset paddles, ball, obstacles, etc. to their initial positions 
-leftPaddle.y = canvas.height / 2 - paddleHeight / 2; rightPaddle.y = canvas.height / 2 - paddleHeight / 2; ball.x = canvas.width / 2; ball.y = getRandomNumber(8, 292); 
-// Clear arrays (laserArray, obstacleArrayArray, etc.) if needed 
-laserArray = []; 
-obstacleStaticArray = []; 
-obstacleArrayArray = []; 
-obstacleTwoArray = []; powerUpArray = []; 
-onHitArray = [];
+function togglePause() {
+  isPaused = !isPaused;
+
+  if (!isPaused) {
+    gameLoop();
+  }
 }
+
+function startGame() {
+  if (!gameStarted) {
+    gameStarted = true;
+    // Start the game loop
+    gameLoop();
+  } else {
+       // Toggle the game pause state
+       togglePause();
+    }
+  }
+
+
 
 function showInstructions() {
   let x = document.getElementById("instructions");
@@ -177,7 +183,7 @@ window.addEventListener("keyup", (event) => {
   }
 
   if (event.key === 'p') {
-    isPaused = !isPaused;
+    togglePause();
   }
 });
 
@@ -536,4 +542,5 @@ function gameLoop() {
 }
 // Start the game loop
 gameLoop();
+
 
