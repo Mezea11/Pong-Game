@@ -70,7 +70,7 @@ const ball = {
 
 let gameStarted = false;
 
-function startGame2() {
+function startGame() {
   if (!gameStarted) {
     gameStarted = true;
     // Reset game state or perform any necessary initialization
