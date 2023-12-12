@@ -1,4 +1,4 @@
-
+import { startGame } from './script.js';
 
 // Get the canvas element and its context
 const canvas = document.getElementById('pongCanvas');
@@ -160,19 +160,19 @@ function collisionEffect() {
 
 // Event listeners för att hantera spelarens rörelse + laser
 window.addEventListener("keydown", (event) => {
-  if (event.key === "ArrowUp") {
+  if (event.code === "KeyW") {
     leftPaddle.keys.up = true;
-  } else if (event.key === "ArrowDown") {
+  } else if (event.code === "KeyS") {
     leftPaddle.keys.down = true;
   }
 });
 
 window.addEventListener("keyup", (event) => {
-  if (event.key === "ArrowUp") {
+  if (event.code === "KeyW") {
     leftPaddle.keys.up = false;
   }
 
-  if (event.key === "ArrowDown") {
+  if (event.code === "KeyS") {
     leftPaddle.keys.down = false;
   }
 
@@ -195,19 +195,19 @@ function moveLeftPaddle() {
 
 // Event listeners för att hantera spelarens rörelse + laser
 window.addEventListener("keydown", (event) => {
-  if (event.code === "KeyW") {
+  if (event.key === "ArrowUp") {
     rightPaddle.keys.up = true;
-  } else if (event.code === "KeyS") {
+  } else if (event.key === "ArrowDown") {
     rightPaddle.keys.down = true;
   }
 });
 
 window.addEventListener("keyup", (event) => {
-  if (event.code === "KeyW") {
+  if (event.code === "ArrowUp") {
     rightPaddle.keys.up = false;
   }
 
-  if (event.code === "KeyS") {
+  if (event.key === "ArrowDown") {
     rightPaddle.keys.down = false;
   }
 });

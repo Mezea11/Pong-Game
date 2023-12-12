@@ -1,5 +1,8 @@
 import { lives, getLevel, createObstacle } from "./obstaclesModule.js";
 
+// export startgame function to other modules
+export { startGame };
+
 // Get the canvas element and its context
 const canvas = document.getElementById('pongCanvas');
 const ctx = canvas.getContext('2d');
@@ -17,26 +20,55 @@ function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-const menu = document.getElementById("menu");
-const instructionsDiv = document.getElementById("instructions");
-const difficultyDiv = document.getElementById("menu");
 
+//////////////////////////////////////////////////////////////////////////////////////////
+// MENU FUNCTION
 let gameStarted = false;
 
 function startGame() {
   if (!gameStarted) {
-    menu.style.display = 'none';
-    instructionsDiv.style.display = 'none';
-    difficultyDiv.style.display = 'none';
     gameStarted = true;
-    // Start the game loop or any necessary initialization
+    // Reset game state or perform any necessary initialization
+    resetGame();
+    // Start the game loop
     gameLoop();
+  } else {
+    // Toggle the game pause state
+    isPaused = !isPaused;
+    // If unpausing, resume the game loop
+    if (!isPaused) {
+      gameLoop();
+    }
   }
 }
 
+// Function to reset the game state
+function resetGame() {
+  // Reset variables, scores, lives, etc.
+  score = 0;
+  leftLives = 5;
+  rightLives = 5;
+  // Reset paddles, ball, obstacles, etc. to their initial positions
+  leftPaddle.y = canvas.height / 2 - paddleHeight / 2;
+  rightPaddle.y = canvas.height / 2 - paddleHeight / 2;
+  ball.x = canvas.width / 2;
+  ball.y = getRandomNumber(8, 292);
+  // Clear arrays (laserArray, obstacleArrayArray, etc.) if needed
+  laserArray = [];
+  obstacleStaticArray = [];
+  obstacleArrayArray = [];
+  obstacleTwoArray = [];
+  powerUpArray = [];
+  onHitArray = [];
+}
+
 function showInstructions() {
-  instructionsDiv.style.display = 'block';
-  difficultyDiv.style.display = 'none';
+  let x = document.getElementById("instructions");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
 }
 
 function selectDifficulty() {
@@ -45,9 +77,10 @@ function selectDifficulty() {
 }
 
 function startMultiplayer() {
-  // Implement multiplayer functionality
+  
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////
 
 // audio
 let paddleBall = new Audio('Assets/click.wav');
@@ -362,16 +395,16 @@ function update() {
         ball.y < powerUp.y + powerUp.height)
     ) {
       const temp = getRandomNumber(1, 3);
-      if (temp == 3) {
-        leftPaddle.height = leftPaddle.height / 2;
+      if (temp == 1) {
+        leftPaddle.height = leftPaddle.height -= 5;
         powerUp.status = 0;
       }
       if (temp == 2) {
         ball.speedX = ball.speedX += 100;
         ball.speedY = ball.speedY += 100;
       }
-      if (temp == 1) {
-        rightPaddle.height = rightPaddle.height /2;
+      if (temp == 3) {
+        rightPaddle.height = rightPaddle.height -= 5;
       }
       powerUpArray.splice(i, 1);
       i--;
@@ -518,5 +551,7 @@ function gameLoop() {
   }
   requestAnimationFrame(gameLoop);
 }
-// Start the game loop 
+// Start the game loop
 gameLoop();
+
+document.getElementById('menu-btn').addEventListener('click', startGame);
