@@ -537,5 +537,3 @@ function gameLoop() {
   requestAnimationFrame(gameLoop);
 }
 // Start the game loop
-gameLoop();
-
