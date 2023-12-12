@@ -19,12 +19,11 @@ export function lives (livesArray) {
     width: 4,
     height: 15 
   });
-  livesArray.push(live(liveX));
   livesArray.push(live(liveX + 5));
-  livesArray.push(live(liveX + 10));
-  livesArray.push(live(liveX + 15));
-  livesArray.push(live(liveX + 20));
-  //console.log(livesArray);
+  livesArray.push(live(liveX + 5));
+  livesArray.push(live(liveX + 5));
+  livesArray.push(live(liveX + 5));
+
 }
 // levels & powerups
 export function getLevel(score, lvlcount, rightPaddle, powerUpArray) {

@@ -21,64 +21,7 @@ function getRandomNumber(min, max) {
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// MENU FUNCTION
-let gameStarted = false;
 
-function startGame() {
-  if (!gameStarted) {
-    gameStarted = true;
-    // Reset game state or perform any necessary initialization
-    resetGame();
-    // Start the game loop
-    gameLoop();
-  } else {
-    // Toggle the game pause state
-    isPaused = !isPaused;
-    // If unpausing, resume the game loop
-    if (!isPaused) {
-      gameLoop();
-    }
-  }
-}
-
-// Function to reset the game state
-function resetGame() {
-  // Reset variables, scores, lives, etc.
-  score = 0;
-  leftLives = 5;
-  rightLives = 5;
-  // Reset paddles, ball, obstacles, etc. to their initial positions
-  leftPaddle.y = canvas.height / 2 - paddleHeight / 2;
-  rightPaddle.y = canvas.height / 2 - paddleHeight / 2;
-  ball.x = canvas.width / 2;
-  ball.y = getRandomNumber(8, 292);
-  // Clear arrays (laserArray, obstacleArrayArray, etc.) if needed
-  laserArray = [];
-  obstacleStaticArray = [];
-  obstacleArrayArray = [];
-  obstacleTwoArray = [];
-  powerUpArray = [];
-  onHitArray = [];
-}
-
-function showInstructions() {
-  let x = document.getElementById("instructions");
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "none";
-  }
-}
-
-function selectDifficulty() {
-  difficultyDiv.style.display = 'block';
-  instructionsDiv.style.display = 'none';
-}
-
-function startMultiplayer() {
-  
-}
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
@@ -138,6 +81,42 @@ const rightPaddle = {
   hit: true,
 };
 
+//////////////////////////////////////////////////////////////////////////////////////////
+// MENU FUNCTION
+let gameStarted = false;
+
+function startGame() {
+  if (!gameStarted) {
+    gameStarted = true;
+    // Start the game loop
+    gameLoop();
+  } else {
+    // Toggle the game pause state
+    isPaused = !isPaused;
+    // If unpausing, resume the game loop
+    if (!isPaused) {
+      gameLoop();
+    }
+  }
+}
+
+function showInstructions() {
+  let x = document.getElementById("instructions");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
+
+function selectDifficulty() {
+  difficultyDiv.style.display = 'block';
+  instructionsDiv.style.display = 'none';
+}
+
+function startMultiplayer() {
+  
+}
 // Create the ball
 const ball = {
   x: canvas.width / 2,
