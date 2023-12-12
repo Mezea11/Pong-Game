@@ -28,6 +28,8 @@ let onHitArray = [];
 let score = 0;
 let score2 = 0;
 
+
+//////////////////////////////////////////////////////////////////////////////////////
 // Create the paddles
 const paddleWidth = 10, paddleHeight = 60;
 const leftPaddle = {
@@ -65,6 +67,7 @@ const ball = {
   speedY: 5
 };
 
+//////////////////////////////////////////////////////////////////////////////////////
 getRandomNumber();
 
 // generate random number
@@ -184,6 +187,7 @@ window.addEventListener("keyup", (event) => {
   }
 });
 
+//////////////////////////////////////////////////////////////////////////////////////
 // move function for left side (player controlled)
 function moveLeftPaddle() {
   if (leftPaddle.keys.up && leftPaddle.y > 0) {
@@ -221,6 +225,7 @@ function moveRightpaddle() {
   }
 }
 
+//////////////////////////////////////////////////////////////////////////////////
 // Draw function to render the paddles and ball
 function draw() {
   // Clear the canvas
