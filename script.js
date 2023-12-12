@@ -7,6 +7,10 @@ export { startGame };
 const canvas = document.getElementById('pongCanvas');
 const ctx = canvas.getContext('2d');
 
+let startButton = document.getElementById('menu-btn');
+startButton.addEventListener('click', startGame);
+
+
 canvas.width = 600;
 canvas.height = 300;
 
@@ -84,18 +88,20 @@ const rightPaddle = {
 let gameStarted = false;
 
 function startGame() {
-  if (!gameStarted) {
-    gameStarted = true;
-    // Start the game loop
-    gameLoop();
-  } else {
-    // Toggle the game pause state
-    isPaused = !isPaused;
-    // If unpausing, resume the game loop
-    if (!isPaused) {
-      gameLoop();
-    }
-  }
+
+isPaused = false;
+// Function to reset the game statefunctionresetGame() {​​​​​​​​ // Reset variables, scores, lives, etc. 
+score = 0; 
+leftLives = 5; 
+rightLives = 5; 
+// Reset paddles, ball, obstacles, etc. to their initial positions 
+leftPaddle.y = canvas.height / 2 - paddleHeight / 2; rightPaddle.y = canvas.height / 2 - paddleHeight / 2; ball.x = canvas.width / 2; ball.y = getRandomNumber(8, 292); 
+// Clear arrays (laserArray, obstacleArrayArray, etc.) if needed 
+laserArray = []; 
+obstacleStaticArray = []; 
+obstacleArrayArray = []; 
+obstacleTwoArray = []; powerUpArray = []; 
+onHitArray = [];
 }
 
 function showInstructions() {
@@ -418,13 +424,9 @@ function update() {
         ball.speedX = -ball.speedX;
         rightPaddle.hit = true;
         obstacle.status = 0;
-        //obstacleArray.splice(i, 1);
-        //i--;
+        obstacleArray.splice(i, 1);
+        i--;
         obstacleBall.play();
-        setTimeout(() => {
-          obstacleArray.splice(i, 1);
-          i--;
-          console.log('hello'); }, 10000);
       }
     }
   }
@@ -482,6 +484,10 @@ function update() {
     // Reset ball position
     score += 100;
     leftLives -= 1;
+    for (let i = 0; i < livesArray.length; i++) {
+    livesArray.splice(i, 1);
+    i--;
+    }
 //    livesArray.splice(i, 1);
 //    i--;
     ball.x = canvas.width / 2;
@@ -531,4 +537,3 @@ function gameLoop() {
 // Start the game loop
 gameLoop();
 
-document.getElementById('menu-btn').addEventListener('click', startGame);
