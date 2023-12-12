@@ -109,7 +109,7 @@ function togglePause() {
 }
 
 function startGame() {
-  console.log("START", ball);
+
   if (!gameStarted) {
     gameStarted = true;
     // Start the game loop
@@ -117,7 +117,7 @@ function startGame() {
     lastTime = Date.now();
     gameLoop();
   } else {
-    console.log("START PAUSE", ball);
+
     // Toggle the game pause state
     togglePause();
   }
@@ -322,7 +322,7 @@ function draw() {
 
 // Update function to handle game logic
 function update() {
-  console.log(1, ball.x);
+
   // Move the ball
   ball.x += ball.speedX * deltaTime;
   ball.y += ball.speedY * deltaTime;
@@ -330,8 +330,6 @@ function update() {
   if (ball.x > 300) {
     leftPaddle.hit = true;
   }
-
-  console.log(2, ball, " DT ", deltaTime);
 
   // initiera movement hinder
   for (let i = 0; i < obstacleArrayArray.length; i++) {
@@ -341,8 +339,6 @@ function update() {
       obstacle.y += obstacle.speed;
     }
   }
-
-  console.log(3, ball.x);
 
   // movement hinder when bounce
   for (let i = 0; i < obstacleArrayArray.length; i++) {
@@ -360,14 +356,10 @@ function update() {
     }
   }
 
-  console.log(4, ball.x);
-
   // Ball bounce off the top and bottom edges
   if (ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height) {
     ball.speedY = -ball.speedY;
   }
-
-  console.log(5, ball.x);
 
   // Bounce off left paddle
   if (
@@ -384,8 +376,6 @@ function update() {
     // bounce off rigght paddle
   }
 
-  console.log(6, ball.x);
-
   if (
     ball.x + ball.radius > rightPaddle.x &&
     ball.y > rightPaddle.y &&
@@ -398,7 +388,7 @@ function update() {
     // on paddle hit effect
     collisionEffect();
   }
-  console.log(7, ball.x);
+
   // direction for onHit effect
   for (let i = 0; i < onHitArray.length; i++) {
     let onHit = onHitArray[i];
@@ -417,7 +407,7 @@ function update() {
       onHit.x -= onHit.speedX;
     }
   }
-  console.log(8, ball.x);
+
   // make right paddle move if ball leaves canvas
   if (ball.x + ball.radius > canvas.width) {
     rightPaddle.hit = true;
@@ -539,15 +529,12 @@ function update() {
   // Check for scoring
   if (ball.x - ball.radius > canvas.width) {
     // Reset ball position
-    console.log("hallo");
     score += 100;
     leftLives -= 1;
     for (let i = 0; i < livesArray.length; i++) {
       livesArray.splice(i, 1);
       i--;
     }
-    //    livesArray.splice(i, 1);
-    //    i--;
     ball.x = canvas.width / 2;
     ball.y = getRandomNumber(8, 292);
   }
@@ -556,7 +543,6 @@ function update() {
     score -= 100;
     leftLives -= 1;
     livesArray.pop();
-    console.log(livesArray);
     ball.x = canvas.width / 2;
     ball.y = getRandomNumber(8, 292);
   }
@@ -576,7 +562,7 @@ function shoot() {
 
 // Game loop
 function gameLoop() {
-  console.log(isPaused);
+
   let now = Date.now();
   deltaTime = (now - lastTime) / 1000;
   lastTime = now;
