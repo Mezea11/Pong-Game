@@ -15,15 +15,14 @@ export function lives (livesArray) {
   let liveX = 5;
   let live = (x) => ({
     x: x,
-    y: 40,
+    y: 30,
     width: 4,
     height: 15 
   });
+  livesArray.push(live(liveX));
   livesArray.push(live(liveX + 5));
-  livesArray.push(live(liveX + 5));
-  livesArray.push(live(liveX + 5));
-  livesArray.push(live(liveX + 5));
-
+  livesArray.push(live(liveX + 10));
+  livesArray.push(live(liveX + 15));
 }
 // levels & powerups
 export function getLevel(score, lvlcount, rightPaddle, powerUpArray) {

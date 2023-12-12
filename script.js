@@ -7,6 +7,10 @@ export { startGame };
 const canvas = document.getElementById('pongCanvas');
 const ctx = canvas.getContext('2d');
 
+let startButton = document.getElementById('menu-btn');
+startButton.addEventListener('click', startGame);
+
+
 canvas.width = 600;
 canvas.height = 300;
 
@@ -426,13 +430,9 @@ function update() {
         ball.speedX = -ball.speedX;
         rightPaddle.hit = true;
         obstacle.status = 0;
-        //obstacleArray.splice(i, 1);
-        //i--;
+        obstacleArray.splice(i, 1);
+        i--;
         obstacleBall.play();
-        setTimeout(() => {
-          obstacleArray.splice(i, 1);
-          i--;
-          console.log('hello'); }, 10000);
       }
     }
   }
@@ -490,6 +490,10 @@ function update() {
     // Reset ball position
     score += 100;
     leftLives -= 1;
+    for (let i = 0; i < livesArray.length; i++) {
+    livesArray.splice(i, 1);
+    i--;
+    }
 //    livesArray.splice(i, 1);
 //    i--;
     ball.x = canvas.width / 2;
