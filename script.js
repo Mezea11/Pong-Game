@@ -83,6 +83,8 @@ const rightPaddle = {
 // MENU FUNCTION
 let gameStarted = false;
 
+document.getElementById('menu-btn').addEventListener('click', startGame);
+
 function startGame() {
   if (!gameStarted) {
     gameStarted = true;
@@ -97,6 +99,8 @@ function startGame() {
     }
   }
 }
+
+
 
 function showInstructions() {
   let x = document.getElementById("instructions");
@@ -531,4 +535,3 @@ function gameLoop() {
 // Start the game loop
 gameLoop();
 
-document.getElementById('menu-btn').addEventListener('click', startGame);
