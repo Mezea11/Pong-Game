@@ -3,7 +3,6 @@ import { startGame } from './script.js';
 randomNumber();
 
 
-
 // generate random number
 function randomNumber(min, max) {
   min = Math.ceil(min);
@@ -92,7 +91,6 @@ export function createObstacle(score, obstacleStaticArray, obstacleArrayArray, o
       obstacleY += config.height;
     }
 
-    // Print the result
     makeObstacle = (x, y) => ({
       x: x,
       y: y,
