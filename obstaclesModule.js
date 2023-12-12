@@ -24,7 +24,6 @@ export function lives (livesArray) {
   livesArray.push(live(liveX + 5));
   livesArray.push(live(liveX + 5));
   livesArray.push(live(liveX + 5));
-  console.log(livesArray);
 }
 // levels & powerups
 export function getLevel(score, lvlcount, rightPaddle, powerUpArray) {
