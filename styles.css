@@ -7,8 +7,7 @@ body {
     background-color: whitesmoke;
     overflow: visible;
     margin: 0;
-    background-image: url(Assets/planets1.jpg);
-    background-repeat: repeat;
+    background-color: black;
     opacity: 95%;
 }
 
@@ -19,6 +18,7 @@ canvas {
     background-color: black;
     background-image: url(Assets/planets2.jpg);
     background-size: 100%, 100%;
+    border: 1px solid white;
 }
 
 .game-title {
