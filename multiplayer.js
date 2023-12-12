@@ -1,4 +1,21 @@
-import { startGame } from './script.js';
+let gameStarted = false;
+
+function startGame2() {
+  if (!gameStarted) {
+    gameStarted = true;
+    // Reset game state or perform any necessary initialization
+    resetGame();
+    // Start the game loop
+    gameLoop();
+  } else {
+    // Toggle the game pause state
+    isPaused = !isPaused;
+    // If unpausing, resume the game loop
+    if (!isPaused) {
+      gameLoop();
+    }
+  }
+}
 
 // Get the canvas element and its context
 const canvas = document.getElementById('pongCanvas');
@@ -25,6 +42,11 @@ let obstacleTwoArray = [];
 
 let onHitArray = [];
 
+let deltaTime;
+let lastTime;
+
+let isPaused = true;
+
 let score = 0;
 let score2 = 0;
 
@@ -35,7 +57,7 @@ const leftPaddle = {
   y: canvas.height / 2 - paddleHeight / 2,
   width: paddleWidth,
   height: paddleHeight,
-  speed: 10,
+  speed: 350,
   hit: true,
   keys: {
     up: false,
@@ -48,7 +70,7 @@ const rightPaddle = {
   y: canvas.height / 2 - paddleHeight / 2,
   width: paddleWidth,
   height: paddleHeight,
-  speed: 10,
+  speed: 350,
   hit: true,
   keys: {
     up: false,
@@ -61,8 +83,8 @@ const ball = {
   x: canvas.width / 2,
   y: canvas.height / 2,
   radius: 8,
-  speedX: 5,
-  speedY: 5
+  speedX: 200,
+  speedY: 200
 };
 
 getRandomNumber();
@@ -182,14 +204,18 @@ window.addEventListener("keyup", (event) => {
     laserSound.currentTime = 0;
     laserSound.play();
   }
+
+  if (event.key === 'p') {
+    isPaused = !isPaused;
+  }
 });
 
 // move function for left side (player controlled)
 function moveLeftPaddle() {
   if (leftPaddle.keys.up && leftPaddle.y > 0) {
-    leftPaddle.y -= leftPaddle.speed;
+    leftPaddle.y -= leftPaddle.speed * deltaTime;;
   } else if (leftPaddle.keys.down && leftPaddle.y + leftPaddle.height < canvas.height) {
-    leftPaddle.y += leftPaddle.speed;
+    leftPaddle.y += leftPaddle.speed * deltaTime;
   }
 }
 
@@ -215,9 +241,9 @@ window.addEventListener("keyup", (event) => {
 // move function for right side (player controlled) paddle
 function moveRightpaddle() {
   if (rightPaddle.keys.up && rightPaddle.y > 0) {
-    rightPaddle.y -= rightPaddle.speed;
+    rightPaddle.y -= rightPaddle.speed * deltaTime;
   } else if (rightPaddle.keys.down && rightPaddle.y + rightPaddle.height < canvas.height) {
-    rightPaddle.y += rightPaddle.speed;
+    rightPaddle.y += rightPaddle.speed * deltaTime;
   }
 }
 
@@ -287,8 +313,8 @@ function draw() {
 // Update function to handle game logic
 function update() {
   // Move the ball
-  ball.x += ball.speedX;
-  ball.y += ball.speedY;
+  ball.x += ball.speedX * deltaTime;
+  ball.y += ball.speedY * deltaTime;
 
   // reset leftPaddle.hit
   if (ball.x > 210) {
@@ -441,11 +467,18 @@ function shoot() {
 
 // Game loop
 function gameLoop() {
-  moveLeftPaddle();
-  moveRightpaddle();
-  CreateObstacle();
+  let now = Date.now();
+  deltaTime = (now - lastTime) / 1000;
+  lastTime = now;
+
   draw();
-  update();
+  //if game is paused skip these lines 
+
+  if (isPaused == false) {
+    moveLeftPaddle();
+    moveRightpaddle();
+    update();
+  }
   requestAnimationFrame(gameLoop);
 }
 
