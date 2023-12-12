@@ -210,6 +210,7 @@ window.addEventListener("keyup", (event) => {
   if (event.key === "ArrowDown") {
     rightPaddle.keys.down = false;
   }
+});
 
 // move function for right side (player controlled) paddle
 function moveRightpaddle() {
