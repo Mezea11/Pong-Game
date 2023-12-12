@@ -1,4 +1,4 @@
-import { getLevel, createObstacle } from "./obstaclesModule.js";
+import { lives, getLevel, createObstacle } from "./obstaclesModule.js";
 
 // Get the canvas element and its context
 const canvas = document.getElementById('pongCanvas');
@@ -66,7 +66,7 @@ let obstacleStaticArray = [];
 let obstacleArrayArray = [];
 let obstacleTwoArray = [];
 let powerUpArray = [];
-
+let livesArray = [];
 let onHitArray = [];
 
 //let now = Date.now();
@@ -267,6 +267,13 @@ function draw() {
   ctx.fillStyle = "white";
   ctx.font = "16px courier";
   ctx.fillText(score, 5, 20);
+
+  for (let i = 0; i < livesArray.length; i++) {
+    let live = livesArray[i];
+    ctx.fillStyle = "white";
+    ctx.font = "16px courier";
+    ctx.fillRect(live.x, live.y, live.width, live.height);
+  }
 }
 
 // Update function to handle game logic
@@ -408,7 +415,6 @@ function update() {
           obstacleArray.splice(i, 1);
           i--;
           console.log('hello'); }, 10000);
-          
       }
     }
   }
@@ -466,8 +472,11 @@ function update() {
     // Reset ball position
     score += 100;
     leftLives -= 1;
+//    livesArray.splice(i, 1);
+//    i--;
     ball.x = canvas.width / 2;
     ball.y = getRandomNumber(8, 292);
+
   }
 
   if (ball.x + ball.radius  < 0) {
@@ -504,6 +513,7 @@ function gameLoop() {
     moveRightpaddle();
     createObstacle(score, obstacleStaticArray, obstacleArrayArray, obstacleTwoArray);
     getLevel(score, lvlcount, rightPaddle, powerUpArray);
+    lives(livesArray);
     update();
   }
   requestAnimationFrame(gameLoop);
