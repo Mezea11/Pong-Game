@@ -1,22 +1,3 @@
-let gameStarted = false;
-
-function startGame2() {
-  if (!gameStarted) {
-    gameStarted = true;
-    // Reset game state or perform any necessary initialization
-    resetGame();
-    // Start the game loop
-    gameLoop();
-  } else {
-    // Toggle the game pause state
-    isPaused = !isPaused;
-    // If unpausing, resume the game loop
-    if (!isPaused) {
-      gameLoop();
-    }
-  }
-}
-
 // Get the canvas element and its context
 const canvas = document.getElementById('pongCanvas');
 const ctx = canvas.getContext('2d');
@@ -87,6 +68,24 @@ const ball = {
   speedY: 200
 };
 
+let gameStarted = false;
+
+function startGame2() {
+  if (!gameStarted) {
+    gameStarted = true;
+    // Reset game state or perform any necessary initialization
+    resetGame();
+    // Start the game loop
+    gameLoop();
+  } else {
+    // Toggle the game pause state
+    isPaused = !isPaused;
+    // If unpausing, resume the game loop
+    if (!isPaused) {
+      gameLoop();
+    }
+  }
+}
 getRandomNumber();
 
 // generate random number
