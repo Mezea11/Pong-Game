@@ -359,8 +359,8 @@ function update() {
         powerUp.status = 0;
       }
       if (temp == 2) {
-        ball.speedX = 10;
-        ball.speedY = 10;
+        ball.speedX = ball.speedX += 100;
+        ball.speedY = ball.speedY += 100;
       }
       if (temp == 1) {
         rightPaddle.height = rightPaddle.height /2;
