@@ -97,7 +97,7 @@ function getRandomNumber(min, max) {
 
 // skapa hinder
 function CreateObstacle() {
-  if (score === 200 && obstacleArray.length == 0) {
+  if (score === 2 && obstacleArray.length == 0) {
     let obstacleX = getRandomNumber(100, 300);
     let obstacleY = 50;
     // hinder bestående av 4 stora block
@@ -114,7 +114,7 @@ function CreateObstacle() {
     obstacleArray.push(makeObstacle(obstacleX, obstacleY + 20));
     obstacleArray.push(makeObstacle(obstacleX + 20, obstacleY + 20));
   }
-  if (score === 400 && obstacleArray.length <= 4) {
+  if (score === 4 && obstacleArray.length <= 4) {
     let obstacleX = getRandomNumber(100, 200);
     let obstacleY = obstacleX;
     // hinder bestående av 9 mindre block
@@ -136,7 +136,7 @@ function CreateObstacle() {
     obstacleArray.push(makeObstacle(obstacleX + 20, obstacleY + 10));
     obstacleArray.push(makeObstacle(obstacleX + 20, obstacleY + 20));
   }
-  if (score === 500 && obstacleTwoArray.length <= 4) {
+  if (score === 6 && obstacleTwoArray.length <= 4) {
     let obstacleX = getRandomNumber(100, 200);
     let obstacleY = obstacleX;
     // hinder bestående av 9 mindre block
@@ -476,6 +476,7 @@ function gameLoop() {
   if (isPaused == false) {
     moveLeftPaddle();
     moveRightpaddle();
+    CreateObstacle();
     update();
   }
   requestAnimationFrame(gameLoop);
