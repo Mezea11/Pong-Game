@@ -1,4 +1,4 @@
-import { getLevel, createObstacle } from "./obstaclesModule.js";
+import { lives, getLevel, createObstacle } from "./obstaclesModule.js";
 
 // export startgame function to other modules
 export { startGame };
@@ -21,65 +21,6 @@ function getRandomNumber(min, max) {
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// MENU FUNCTION
-let gameStarted = false;
-
-function startGame() {
-  if (!gameStarted) {
-    gameStarted = true;
-    // Reset game state or perform any necessary initialization
-    resetGame();
-    // Start the game loop
-    gameLoop();
-  } else {
-    // Toggle the game pause state
-    isPaused = !isPaused;
-    // If unpausing, resume the game loop
-    if (!isPaused) {
-      gameLoop();
-    }
-  }
-}
-
-// Function to reset the game state
-function resetGame() {
-  // Reset variables, scores, lives, etc.
-  score = 0;
-  leftLives = 5;
-  rightLives = 5;
-  // Reset paddles, ball, obstacles, etc. to their initial positions
-  leftPaddle.y = canvas.height / 2 - paddleHeight / 2;
-  rightPaddle.y = canvas.height / 2 - paddleHeight / 2;
-  ball.x = canvas.width / 2;
-  ball.y = getRandomNumber(8, 292);
-  // Clear arrays (laserArray, obstacleArrayArray, etc.) if needed
-  laserArray = [];
-  obstacleStaticArray = [];
-  obstacleArrayArray = [];
-  obstacleTwoArray = [];
-  powerUpArray = [];
-  onHitArray = [];
-}
-
-function showInstructions() {
-  let x = document.getElementById("instructions");
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "none";
-  }
-}
-
-function selectDifficulty() {
-  difficultyDiv.style.display = 'block';
-  instructionsDiv.style.display = 'none';
-}
-
-function startMultiplayer() {
-  
-}
-
 /////////////////////////////////////////////////////////////////////////////////////////
 
 // audio
@@ -99,7 +40,7 @@ let obstacleStaticArray = [];
 let obstacleArrayArray = [];
 let obstacleTwoArray = [];
 let powerUpArray = [];
-
+let livesArray = [];
 let onHitArray = [];
 
 //let now = Date.now();
@@ -138,6 +79,42 @@ const rightPaddle = {
   hit: true,
 };
 
+//////////////////////////////////////////////////////////////////////////////////////////
+// MENU FUNCTION
+let gameStarted = false;
+
+function startGame() {
+  if (!gameStarted) {
+    gameStarted = true;
+    // Start the game loop
+    gameLoop();
+  } else {
+    // Toggle the game pause state
+    isPaused = !isPaused;
+    // If unpausing, resume the game loop
+    if (!isPaused) {
+      gameLoop();
+    }
+  }
+}
+
+function showInstructions() {
+  let x = document.getElementById("instructions");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
+
+function selectDifficulty() {
+  difficultyDiv.style.display = 'block';
+  instructionsDiv.style.display = 'none';
+}
+
+function startMultiplayer() {
+  
+}
 // Create the ball
 const ball = {
   x: canvas.width / 2,
@@ -300,6 +277,13 @@ function draw() {
   ctx.fillStyle = "white";
   ctx.font = "16px courier";
   ctx.fillText(score, 5, 20);
+
+  for (let i = 0; i < livesArray.length; i++) {
+    let live = livesArray[i];
+    ctx.fillStyle = "white";
+    ctx.font = "16px courier";
+    ctx.fillRect(live.x, live.y, live.width, live.height);
+  }
 }
 
 // Update function to handle game logic
@@ -441,7 +425,6 @@ function update() {
           obstacleArray.splice(i, 1);
           i--;
           console.log('hello'); }, 10000);
-          
       }
     }
   }
@@ -499,8 +482,11 @@ function update() {
     // Reset ball position
     score += 100;
     leftLives -= 1;
+//    livesArray.splice(i, 1);
+//    i--;
     ball.x = canvas.width / 2;
     ball.y = getRandomNumber(8, 292);
+
   }
 
   if (ball.x + ball.radius  < 0) {
@@ -537,6 +523,7 @@ function gameLoop() {
     moveRightpaddle();
     createObstacle(score, obstacleStaticArray, obstacleArrayArray, obstacleTwoArray);
     getLevel(score, lvlcount, rightPaddle, powerUpArray);
+    lives(livesArray);
     update();
   }
   requestAnimationFrame(gameLoop);
