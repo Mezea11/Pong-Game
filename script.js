@@ -82,6 +82,10 @@ let isPaused = true;
 
 let score = 0;
 let lvlcount = 1;
+
+let leftLives = 5;
+let rightLives = 5;
+
 // Create the paddles
 const paddleWidth = 10, paddleHeight = 60;
 const leftPaddle = {
@@ -102,7 +106,7 @@ const rightPaddle = {
   y: canvas.height / 2 - paddleHeight / 2,
   width: paddleWidth,
   height: paddleHeight,
-  speed: 5,
+  speed: 200,
   hit: true,
 };
 
@@ -184,9 +188,9 @@ function moveRightpaddle() {
   // paddle can't move before ball is on right side of screen
   if (ball.x >= 400 && rightPaddle.hit) {
     if (ball.y > rightPaddle.y + rightPaddle.height / 2) {
-      rightPaddle.y += rightPaddle.speed;
+      rightPaddle.y += rightPaddle.speed * deltaTime;
     } else if (ball.y < rightPaddle.y + rightPaddle.height / 2) {
-      rightPaddle.y -= rightPaddle.speed;
+      rightPaddle.y -= rightPaddle.speed * deltaTime;
     }
   }
 }
@@ -312,7 +316,6 @@ function update() {
     paddleBall.play();
     //control onHit effect for left paddle
     leftPaddle.hit = false;
-    console.log(leftPaddle.hit + ' left');
     // on paddle hit effect
     collisionEffect();
     // bounce off rigght paddle
@@ -321,7 +324,6 @@ function update() {
     paddleBall.play();
     // right paddle stop moving after ball hits paddle + control onHit effect for right paddle
     rightPaddle.hit = false;
-    console.log(rightPaddle.hit + ' right');
     // on paddle hit effect
     collisionEffect();
   }
@@ -357,18 +359,17 @@ function update() {
         ball.y > powerUp.y &&
         ball.y < powerUp.y + powerUp.height)
     ) {
-
       const temp = getRandomNumber(1, 3);
-      if (temp == 3) {
-        leftPaddle.height = leftPaddle.height / 2;
+      if (temp == 1) {
+        leftPaddle.height = leftPaddle.height -= 5;
         powerUp.status = 0;
       }
       if (temp == 2) {
-        ball.speedX = 10;
-        ball.speedY = 10;
+        ball.speedX = ball.speedX += 100;
+        ball.speedY = ball.speedY += 100;
       }
-      if (temp == 1) {
-        rightPaddle.height = rightPaddle.height /2;
+      if (temp == 3) {
+        rightPaddle.height = rightPaddle.height -= 5;
       }
       powerUpArray.splice(i, 1);
       i--;
@@ -386,7 +387,6 @@ function update() {
       ball.speedX = -ball.speedX;
       rightPaddle.hit = true;
       obstacle.status = 0;
-      //      obstacleStaticArray.splice(i, 1);
       obstacleStaticArray = [];
       i--;
       obstacleBall.play();
@@ -406,9 +406,14 @@ function update() {
         ball.speedX = -ball.speedX;
         rightPaddle.hit = true;
         obstacle.status = 0;
-        obstacleArray.splice(i, 1);
-        i--;
+        //obstacleArray.splice(i, 1);
+        //i--;
         obstacleBall.play();
+        setTimeout(() => {
+          obstacleArray.splice(i, 1);
+          i--;
+          console.log('hello'); }, 10000);
+          
       }
     }
   }
@@ -434,9 +439,9 @@ function update() {
       ball.speedX = -ball.speedX;
       rightPaddle.hit = true;
       obstacle.status = 0;
+      obstacleBall.play();
       obstacleTwoArray.splice(i, 1);
       i--;
-      obstacleBall.play();
     }
   }
   // check for and handle collision between laser and ball, and handle laserArray when laser leaves canvas
@@ -465,12 +470,14 @@ function update() {
   if (ball.x - ball.radius > canvas.width) {
     // Reset ball position
     score += 100;
+    leftLives -= 1;
     ball.x = canvas.width / 2;
     ball.y = getRandomNumber(8, 292);
   }
 
   if (ball.x + ball.radius  < 0) {
     score -= 100;
+    rightLives -= 1;
     ball.x = canvas.width / 2;
     ball.y = getRandomNumber(8, 292);
   }
