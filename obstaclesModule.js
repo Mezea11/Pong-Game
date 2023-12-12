@@ -11,19 +11,6 @@ function randomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-export function lives (livesArray) {
-  let liveX = 5;
-  let live = (x) => ({
-    x: x,
-    y: 30,
-    width: 4,
-    height: 15 
-  });
-  livesArray.push(live(liveX));
-  livesArray.push(live(liveX + 5));
-  livesArray.push(live(liveX + 10));
-  livesArray.push(live(liveX + 15));
-}
 // levels & powerups
 export function getLevel(score, lvlcount, rightPaddle, powerUpArray) {
   if (score == 200) {

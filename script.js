@@ -1,4 +1,4 @@
-import { lives, getLevel, createObstacle } from "./obstaclesModule.js";
+import { getLevel, createObstacle } from "./obstaclesModule.js";
 
 // export startgame function to other modules
 export { startGame };
@@ -58,6 +58,18 @@ let lvlcount = 1;
 
 let leftLives = 5;
 let rightLives = 5;
+
+let lifeX = 5;
+let life = (x) => ({
+  x: x,
+  y: 30,
+  width: 4,
+  height: 15 
+});
+livesArray.push(life(lifeX));
+livesArray.push(life(lifeX + 5));
+livesArray.push(life(lifeX + 10));
+livesArray.push(life(lifeX + 15));
 
 // Create the paddles
 const paddleWidth = 10, paddleHeight = 60;
@@ -491,13 +503,13 @@ function update() {
     score += 100;
     ball.x = canvas.width / 2;
     ball.y = getRandomNumber(8, 292);
-
   }
 
   if (ball.x + ball.radius  < 0) {
     score -= 100;
-    rightLives -= 1;
-    livesArray.shift();
+    leftLives -= 1;
+    livesArray.pop();
+    console.log(livesArray);
     ball.x = canvas.width / 2;
     ball.y = getRandomNumber(8, 292);
   }
@@ -529,7 +541,6 @@ function gameLoop() {
     moveRightpaddle();
     createObstacle(score, obstacleStaticArray, obstacleArrayArray, obstacleTwoArray);
     getLevel(score, lvlcount, rightPaddle, powerUpArray);
-    lives(livesArray);
     update();
   }
   requestAnimationFrame(gameLoop);
