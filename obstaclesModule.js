@@ -9,7 +9,7 @@ function randomNumber(min, max) {
 
 // levels & powerups
 export function getLevel(score, lvlcount, rightPaddle, powerUpArray) {
-    if (score <= 200) {
+    if (score == 200) {
       lvlcount = 2;
       rightPaddle.speed = 0.2;
   
@@ -29,8 +29,8 @@ export function getLevel(score, lvlcount, rightPaddle, powerUpArray) {
       }
     }
     if (score >= 400) {
-      lvlcount = 3;
-      rightPaddle.speed = 0.2;
+//      lvlcount = 3;
+//      rightPaddle.speed = 0.2;
     
       if (powerUpArray.length >= 0 && powerUpArray.length <= 0) {
         let powerUpX = randomNumber(100, 500);

@@ -4,7 +4,7 @@
 const canvas = document.getElementById('pongCanvas');
 const ctx = canvas.getContext('2d');
 
-canvas.width = 400;
+canvas.width = 600;
 canvas.height = 300;
 
 // audio
@@ -26,6 +26,7 @@ let obstacleTwoArray = [];
 let onHitArray = [];
 
 let score = 0;
+let score2 = 0;
 
 // Create the paddles
 const paddleWidth = 10, paddleHeight = 60;
@@ -47,7 +48,7 @@ const rightPaddle = {
   y: canvas.height / 2 - paddleHeight / 2,
   width: paddleWidth,
   height: paddleHeight,
-  speed: 5,
+  speed: 10,
   hit: true,
   keys: {
     up: false,
@@ -276,7 +277,11 @@ function draw() {
   // draw score
   ctx.fillStyle = "white";
   ctx.font = "16px courier";
-  ctx.fillText(score, 5, 20);
+  ctx.fillText("player 1: " + score, 15, 20);
+
+  ctx.fillStyle = "white";
+  ctx.font = "16px courier";
+  ctx.fillText("player 2: " + score2, 460, 20);
 }
 
 // Update function to handle game logic
