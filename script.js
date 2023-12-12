@@ -85,20 +85,24 @@ let gameStarted = false;
 
 document.getElementById('menu-btn').addEventListener('click', startGame);
 
+function togglePause() {
+  isPaused = !isPaused;
+
+  if (!isPaused) {
+    gameLoop();
+  }
+}
+
 function startGame() {
   if (!gameStarted) {
     gameStarted = true;
     // Start the game loop
     gameLoop();
   } else {
-    // Toggle the game pause state
-    isPaused = !isPaused;
-    // If unpausing, resume the game loop
-    if (!isPaused) {
-      gameLoop();
+       // Toggle the game pause state
+       togglePause();
     }
   }
-}
 
 
 
@@ -175,7 +179,7 @@ window.addEventListener("keyup", (event) => {
   }
 
   if (event.key === 'p') {
-    isPaused = !isPaused;
+    togglePause();
   }
 });
 
