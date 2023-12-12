@@ -93,7 +93,7 @@ function togglePause() {
   isPaused = !isPaused;
 
   if (!isPaused) {
-    gameLoop();
+    return;
   }
 }
 
@@ -389,8 +389,8 @@ function update() {
         powerUp.status = 0;
       }
       if (temp == 2) {
-        ball.speedX = ball.speedX += 100;
-        ball.speedY = ball.speedY += 100;
+        ball.speedX = ball.speedX += 50;
+        ball.speedY = ball.speedY += 50;
       }
       if (temp == 3) {
         rightPaddle.height = rightPaddle.height -= 5;
@@ -488,6 +488,7 @@ function update() {
   // Check for scoring
   if (ball.x - ball.radius > canvas.width) {
     // Reset ball position
+    console.log("hallo");
     score += 100;
     leftLives -= 1;
     for (let i = 0; i < livesArray.length; i++) {
@@ -540,4 +541,3 @@ function gameLoop() {
   }
   requestAnimationFrame(gameLoop);
 }
-// Start the game loop
