@@ -106,7 +106,6 @@ export function createObstacle(score, obstacleStaticArray, obstacleArrayArray, o
     }
 
     // Print the result
-    console.log(obstacleStaticArray);
     makeObstacle = (x, y) => ({
       x: x,
       y: y,
@@ -116,7 +115,6 @@ export function createObstacle(score, obstacleStaticArray, obstacleArrayArray, o
       speed: 0,
     });
 
-    console.log(obstacleStaticArray);
     for (let i = 0; i < 1; i++) {
       obstacleStaticArray.push(makeObstacle(obstacleX, obstacleY));
       obstacleX -= 3;
