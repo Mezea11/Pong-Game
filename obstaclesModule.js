@@ -11,7 +11,7 @@ function randomNumber(min, max) {
 }
 
 // levels & powerups
-export function getLevel(score, lvlcount, rightPaddle, powerUpArray) {
+export function getLevel(score, lvlcount, rightPaddle, powerUpArray) {  
   if (score == 200) {
     lvlcount = 2;
     //  rightPaddle.speed = 0.2;
@@ -27,7 +27,6 @@ export function getLevel(score, lvlcount, rightPaddle, powerUpArray) {
         status: 1,
         speed: 0,
       })
-
       powerUpArray.push(makepowerUp(powerUpX, powerUpY));
     }
   }
@@ -53,12 +52,24 @@ export function getLevel(score, lvlcount, rightPaddle, powerUpArray) {
   }
 }
 // skapa hinder
-export function createObstacle(score, obstacleStaticArray, obstacleArrayArray, obstacleTwoArray) {
+export function createObstacle(score, obstacleStaticArray, obstacleArrayArray, obstacleTwoArray, objectArray) {
+  if (score == 200 && objectArray.length <= 0) {
+    let objectX = randomNumber(100, 500);
+    let objectY = randomNumber(50, 250);
+    let object = (x, y) => ({
+      x: x,
+      y: y,
+      width: 40,
+      height: 40,
+      hit: false
+    })
+    objectArray.push(object(objectX, objectY));
+  }
+  
   let obstacleArray = [];
   if (score === 200 && obstacleStaticArray.length <= 0) {
     let obstacleX = randomNumber(100, 500);
     let obstacleY = randomNumber(50, 250);
-    console.log(obstacleY);
 
     let makeObstacle = (x, y, width, height) => ({
       x: x,
@@ -200,7 +211,7 @@ export function createObstacle(score, obstacleStaticArray, obstacleArrayArray, o
       height: 10,
       status: 1,
       speed: 3,
-      hit: false,
+      hit: false
     });
     obstacleTwoArray.push(makeObstacle(obstacleX, obstacleY));
     obstacleTwoArray.push(makeObstacle(obstacleX + 10, obstacleY));
