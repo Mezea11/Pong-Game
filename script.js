@@ -7,9 +7,6 @@ export { startGame };
 const canvas = document.getElementById("pongCanvas");
 const ctx = canvas.getContext("2d");
 
-let startButton = document.getElementById("menu-btn");
-startButton.addEventListener("click", startGame);
-
 canvas.width = 600;
 canvas.height = 300;
 
@@ -98,7 +95,10 @@ const rightPaddle = {
 // MENU FUNCTION
 let gameStarted = false;
 
-document.getElementById("menu-btn").addEventListener("click", startGame);
+document.getElementById("menu-btn").addEventListener("mousedown", startGame);
+document.getElementById("menu-btn").addEventListener("mouseup", function() {
+  canvas.focus();
+});
 
 function togglePause() {
   isPaused = !isPaused;
@@ -113,7 +113,7 @@ function startGame() {
   if (!gameStarted) {
     gameStarted = true;
     // Start the game loop
-
+    
     lastTime = Date.now();
     gameLoop();
   } else {
@@ -453,8 +453,8 @@ function update() {
     if (
       ball.x + ball.radius > obstacle.x &&
       ball.x - ball.radius < obstacle.x + obstacle.width &&
-      ball.y > obstacle.y &&
-      ball.y < obstacle.y + obstacle.height
+      ball.y + ball.radius > obstacle.y &&
+      ball.y - ball.radius < obstacle.y + obstacle.height
     ) {
       ball.speedX = -ball.speedX;
       rightPaddle.hit = true;
@@ -472,9 +472,10 @@ function update() {
       if (
         ball.x + ball.radius > obstacle.x &&
         ball.x - ball.radius < obstacle.x + obstacle.width &&
-        ball.y > obstacle.y &&
-        ball.y < obstacle.y + obstacle.height
+        ball.y + ball.radius > obstacle.y &&
+        ball.y - ball.radius < obstacle.y + obstacle.height
       ) {
+        ball.x = obstacle.x + obstacle.width + ball.radius;
         ball.speedX = -ball.speedX;
         rightPaddle.hit = true;
         obstacle.status = 0;
@@ -491,8 +492,8 @@ function update() {
       !obstacle.hit &&
       ball.x + ball.radius > obstacle.x &&
       ball.x - ball.radius < obstacle.x + obstacle.width &&
-      ball.y > obstacle.y &&
-      ball.y < obstacle.y + obstacle.height
+      ball.y + ball.radius > obstacle.y &&
+      ball.y - ball.radius < obstacle.y + obstacle.height
     ) {
       obstacle.hit = true;
       ball.speedX = -ball.speedX;
