@@ -56,9 +56,9 @@ export function getLevel(score, lvlcount, rightPaddle, powerUpArray) {
 export function createObstacle(score, obstacleStaticArray, obstacleArrayArray, obstacleTwoArray) {
   let obstacleArray = [];
   if (score === 200 && obstacleStaticArray.length <= 0) {
-    let obstacleX = randomNumber(100, 300);
-    let obstacleY = 50;
-    console.lg(obstacleY);
+    let obstacleX = randomNumber(100, 500);
+    let obstacleY = randomNumber(50, 250);
+    console.log(obstacleY);
 
     let makeObstacle = (x, y, width, height) => ({
       x: x,
@@ -167,8 +167,8 @@ export function createObstacle(score, obstacleStaticArray, obstacleArrayArray, o
   }
 
   if (score === 400 && obstacleArrayArray.length <= 0) {
-    let obstacleX = randomNumber(100, 200);
-    let obstacleY = obstacleX;
+    let obstacleX = randomNumber(100, 500);
+    let obstacleY = randomNumber(50, 250);
     // hinder bestående av 9 mindre block
     let makeObstacle = (x, y) => ({
       x: x,
@@ -190,7 +190,7 @@ export function createObstacle(score, obstacleStaticArray, obstacleArrayArray, o
     obstacleArrayArray.push(obstacleArray);
   } //lägg arrayen i  en array och kolla för den i loopen
   if (score === 500 && obstacleTwoArray.length <= 0) {
-    let obstacleX = randomNumber(100, 200);
+    let obstacleX = randomNumber(100, 500);
     let obstacleY = obstacleX;
     // hinder bestående av 9 mindre block
     let makeObstacle = (x, y) => ({
