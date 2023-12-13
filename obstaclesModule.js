@@ -58,6 +58,7 @@ export function createObstacle(score, obstacleStaticArray, obstacleArrayArray, o
   if (score === 200 && obstacleStaticArray.length <= 0) {
     let obstacleX = randomNumber(100, 300);
     let obstacleY = 50;
+    console.lg(obstacleY);
 
     let makeObstacle = (x, y, width, height) => ({
       x: x,
