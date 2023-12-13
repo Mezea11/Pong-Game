@@ -421,7 +421,6 @@ function update() {
   if (ball.x + ball.radius > canvas.width) {
     rightPaddle.hit = true;
   }
-  console.log(ball.speedX);
   //pickup powerup with ball
   for (let i = 0; i < powerUpArray.length; i++) {
     let powerUp = powerUpArray[i];
