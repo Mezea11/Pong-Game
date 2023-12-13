@@ -431,10 +431,13 @@ function update() {
       ball.y > powerUp.y &&
       ball.y < powerUp.y + powerUp.height
     ) {
-      const temp = getRandomNumber(2, 2);
+      const temp = getRandomNumber(1, 3);
       if (temp == 1) {
-        leftPaddle.height = leftPaddle.height -= 5;
-        powerUp.status = 0;
+        if (leftPaddle.height == 60) {
+          leftPaddle.height = leftPaddle.height / 2;
+        }else {
+          leftPaddle.height = 60;
+        }
       }
       if (temp == 2) {
         if (ball.speedX == 600 || ball.speedX == -600) {
@@ -447,8 +450,11 @@ function update() {
         }
       }
       if (temp == 3) {
-        rightPaddle.height = rightPaddle.height -= 5;
-      }
+        if (rightPaddle.height == 60) {
+          rightPaddle.height = rightPaddle.height / 2;
+        }else {
+          rightPaddle.height = 60;
+        }      }
       powerUpArray.splice(i, 1);
       i--;
     }
