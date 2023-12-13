@@ -421,7 +421,7 @@ function update() {
   if (ball.x + ball.radius > canvas.width) {
     rightPaddle.hit = true;
   }
-
+  console.log(ball.speedX);
   //pickup powerup with ball
   for (let i = 0; i < powerUpArray.length; i++) {
     let powerUp = powerUpArray[i];
@@ -431,14 +431,20 @@ function update() {
       ball.y > powerUp.y &&
       ball.y < powerUp.y + powerUp.height
     ) {
-      const temp = getRandomNumber(1, 3);
+      const temp = getRandomNumber(2, 2);
       if (temp == 1) {
         leftPaddle.height = leftPaddle.height -= 5;
         powerUp.status = 0;
       }
       if (temp == 2) {
-        ball.speedX = ball.speedX += 50;
-        ball.speedY = ball.speedY += 50;
+        if (ball.speedX == 600 || ball.speedX == -600) {
+          ball.speedX = 200;
+        }
+        if (ball.speedX < 0) {
+          ball.speedX = ball.speedX -= 100;
+        }else if (ball.speedX > 0) {
+          ball.speedX = ball.speedX += 100;
+        }
       }
       if (temp == 3) {
         rightPaddle.height = rightPaddle.height -= 5;
