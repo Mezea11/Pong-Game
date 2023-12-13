@@ -51,7 +51,7 @@ let lastTime = 0;
 
 let isPaused = false;
 
-let score = 0;
+let score = 500;
 let lvlcount = 1;
 
 let leftLives = 5;
@@ -257,11 +257,13 @@ function draw() {
     }
   }
 
+  // draw obstactle
   for (let i = 0; i < obstacleStaticArray.length; i++) {
     let obstacle = obstacleStaticArray[i];
     if (obstacle.status === 1) {
       ctx.fillStyle = "pink";
       ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+      ctx.fillStyle = 'blue';
     }
   }
   // draw obstactle
@@ -357,7 +359,12 @@ function update() {
   }
 
   // Ball bounce off the top and bottom edges
-  if (ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height) {
+  if (ball.y - ball.radius < 0) {
+    ball.y += ball.radius;
+    ball.speedY = -ball.speedY;
+  }
+  if  (ball.y + ball.radius > canvas.height) {
+    ball.y -= ball.radius;
     ball.speedY = -ball.speedY;
   }
 
@@ -367,20 +374,22 @@ function update() {
     ball.y > leftPaddle.y &&
     ball.y < leftPaddle.y + leftPaddle.height
   ) {
+    ball.x = leftPaddle.width + ball.radius;
     ball.speedX = -ball.speedX;
     paddleBall.play();
     //control onHit effect for left paddle
     leftPaddle.hit = false;
     // on paddle hit effect
     collisionEffect();
-    // bounce off rigght paddle
+    
   }
-
+  // bounce off rigght paddle
   if (
     ball.x + ball.radius > rightPaddle.x &&
     ball.y > rightPaddle.y &&
     ball.y < rightPaddle.y + rightPaddle.height
   ) {
+    ball.x = canvas.width - rightPaddle.width - ball.radius;
     ball.speedX = -ball.speedX;
     paddleBall.play();
     // right paddle stop moving after ball hits paddle + control onHit effect for right paddle
@@ -442,10 +451,10 @@ function update() {
   for (let i = 0; i < obstacleStaticArray.length; i++) {
     let obstacle = obstacleStaticArray[i];
     if (
-      ball.x + ball.radius > obstacle.x + 5 &&
-      ball.x - ball.radius < obstacle.x + obstacle.width + 5 &&
-      ball.y > obstacle.y + 5 &&
-      ball.y < obstacle.y + obstacle.height + 5
+      ball.x + ball.radius > obstacle.x &&
+      ball.x - ball.radius < obstacle.x + obstacle.width &&
+      ball.y > obstacle.y &&
+      ball.y < obstacle.y + obstacle.height
     ) {
       ball.speedX = -ball.speedX;
       rightPaddle.hit = true;
