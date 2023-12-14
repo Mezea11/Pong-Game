@@ -138,20 +138,16 @@ function togglePause() {
   }
 }
 function chooseDifficulty(difficulty) {
-      // Customize the game based on the selected difficulty
       if (difficulty === 'easy') {
         // Set up the game for easy difficulty
-        // For example, reduce the speed of the ball or increase paddle size
         ball.speedX = 150;
         leftPaddle.height = 80;
       } else if (difficulty === 'medium') {
         // Set up the game for medium difficulty
-        // You can adjust various parameters here
         ball.speedX = 200;
         leftPaddle.height = 60;
       } else if (difficulty === 'hard') {
         // Set up the game for hard difficulty
-        // You can make the game more challenging for hard difficulty
         ball.speedX = 250;
         leftPaddle.height = 40;
       }
@@ -161,7 +157,7 @@ function startGame() {
   if (!gameStarted) {
     gameStarted = true;
 
-    score = 400;
+    score = 0;
 
     // Start the game loop
     lastTime = Date.now();
@@ -174,7 +170,6 @@ function startGame() {
 
 function resetGame() {
   // Reset all game-related variables to their initial values
-  isPaused = true;
   score = 0;
   lvlcount = 1;
   leftLives = 5;
@@ -200,7 +195,7 @@ function resetGame() {
   onHitArray = [];
 
   // Reset other game-related settings
-  isPaused = false;
+  isPaused = true;
 
   // Reset paddle heights if they were modified during gameplay
   leftPaddle.height = 60;
@@ -790,20 +785,35 @@ draw();
 
 
 // EVENTLISTENERS
+
+const difficultyButtons = document.querySelectorAll('.difficulty-btn');
+
+function removeSelectedClass() {
+  difficultyButtons.forEach(button => {
+    button.classList.remove('selected');
+  });
+}
+
 document.getElementById("instructions-btn").addEventListener("click", showInstructions);
-
-document.getElementById("easy-btn").addEventListener("click", function() {
-  chooseDifficulty('easy');
-});
-
-document.getElementById("medium-btn").addEventListener("click", function() {
-  chooseDifficulty('medium');
-});
-
-document.getElementById("hard-btn").addEventListener("click", function() {
-  chooseDifficulty('hard');
-});
 
 document.getElementById("reset-btn").addEventListener("click", function(){
   resetGame();
 })
+
+document.getElementById("easy-btn").addEventListener("click", function() {
+  removeSelectedClass();
+  chooseDifficulty('easy');
+  this.classList.add('selected');
+});
+
+document.getElementById("medium-btn").addEventListener("click", function() {
+  removeSelectedClass();
+  chooseDifficulty('medium');
+  this.classList.add('selected');
+});
+
+document.getElementById("hard-btn").addEventListener("click", function() {
+  removeSelectedClass();
+  chooseDifficulty('hard');
+  this.classList.add('selected');
+});
