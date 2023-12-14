@@ -31,6 +31,8 @@ let laserBall = new Audio("Assets/laser.wav");
 laserBall.volume = 0.05;
 let obstacleBall = new Audio("Assets/click2.wav");
 obstacleBall.volume = 0.1;
+let ufoMove = new Audio ("Assets/ufoMove.wav");
+ufoMove.volume = 0.8;
 
 // delcare arrays
 let laserArray = [];
@@ -194,7 +196,7 @@ function resetGame() {
   planetArray = [];
   ufoArrayArray = [];
   powerUpArray = [];
-  livesArray = [];
+  lifeArray = [];
   onHitArray = [];
 
   // Reset other game-related settings
@@ -496,8 +498,11 @@ function update() {
             newUfo.speed = -newUfo.speed;
             if (newUfo.status === 1) {
             newUfo.status = 0;
+            ufoMove.play();
             } else if (newUfo.status === 0) {
               newUfo.status = 1;
+              ufoMove.pause();
+              ufoMove.currentTime = 0;
             }
           }
           break;
