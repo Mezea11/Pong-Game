@@ -63,7 +63,7 @@ let lastTime = 0;
 
 let isPaused = false;
 
-let score = 400;
+let score = 0;
 let lvlcount = 1;
 
 let leftLives = 5;
@@ -136,9 +136,30 @@ function togglePause() {
   }
 }
 
-function startGame() {
+function startGame(difficulty) {
   if (!gameStarted) {
     gameStarted = true;
+
+    score = 0;
+
+    // Customize the game based on the selected difficulty
+    if (difficulty === 'easy') {
+      // Set up the game for easy difficulty
+      // For example, reduce the speed of the ball or increase paddle size
+      ball.speedX = 150;
+      leftPaddle.height = 80;
+    } else if (difficulty === 'medium') {
+      // Set up the game for medium difficulty
+      // You can adjust various parameters here
+      ball.speedX = 200;
+      leftPaddle.height = 60;
+    } else if (difficulty === 'hard') {
+      // Set up the game for hard difficulty
+      // You can make the game more challenging for hard difficulty
+      ball.speedX = 250;
+      leftPaddle.height = 40;
+    }
+
     // Start the game loop
     lastTime = Date.now();
     gameLoop();
@@ -159,10 +180,14 @@ function showInstructions() {
 }
 
 
-function selectDifficulty() {
-  difficultyDiv.style.display = "block";
-  instructionsDiv.style.display = "none";
-}
+/* function selectDifficulty() {
+  if (difficultyDiv.style.display === "none") {
+      difficultyDiv.style.display = "block";
+  } else {
+    difficultyDiv.style.display = "none";
+  }
+  
+} */
 
 function startMultiplayer() {}
 // Create the ball
@@ -719,4 +744,20 @@ function gameLoop() {
 }
 
 draw();
+
+
+
+// EVENTLISTENERS
 document.getElementById("instructions-btn").addEventListener("click", showInstructions);
+
+document.getElementById("easy-btn").addEventListener("click", function() {
+  startGame('easy');
+});
+
+document.getElementById("medium-btn").addEventListener("click", function() {
+  startGame('medium');
+});
+
+document.getElementById("hard-btn").addEventListener("click", function() {
+  startGame('hard');
+});
