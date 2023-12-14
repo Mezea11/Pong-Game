@@ -135,27 +135,31 @@ function togglePause() {
     return;
   }
 }
+function chooseDifficulty(difficulty) {
+      // Customize the game based on the selected difficulty
+      if (difficulty === 'easy') {
+        // Set up the game for easy difficulty
+        // For example, reduce the speed of the ball or increase paddle size
+        ball.speedX = 150;
+        leftPaddle.height = 80;
+      } else if (difficulty === 'medium') {
+        // Set up the game for medium difficulty
+        // You can adjust various parameters here
+        ball.speedX = 200;
+        leftPaddle.height = 60;
+      } else if (difficulty === 'hard') {
+        // Set up the game for hard difficulty
+        // You can make the game more challenging for hard difficulty
+        ball.speedX = 250;
+        leftPaddle.height = 40;
+      }
+}
 
-function startGame(difficulty) {
+function startGame() {
   if (!gameStarted) {
     gameStarted = true;
 
-    score = 0;
-
-    // Customize the game based on the selected difficulty
-    if (difficulty === 'easy') {
-      // Easy difficulty
-      ball.speedX = 150;
-      leftPaddle.height = 80;
-    } else if (difficulty === 'medium') {
-      // Medium difficulty
-      ball.speedX = 200;
-      leftPaddle.height = 60;
-    } else if (difficulty === 'hard') {
-      // Hard difficulty
-      ball.speedX = 250;
-      leftPaddle.height = 40;
-    }
+    score = 400;
 
     // Start the game loop
     lastTime = Date.now();
@@ -784,17 +788,13 @@ draw();
 document.getElementById("instructions-btn").addEventListener("click", showInstructions);
 
 document.getElementById("easy-btn").addEventListener("click", function() {
-  startGame('easy');
+  chooseDifficulty('easy');
 });
 
 document.getElementById("medium-btn").addEventListener("click", function() {
-  startGame('medium');
+  chooseDifficulty('medium');
 });
 
 document.getElementById("hard-btn").addEventListener("click", function() {
-  startGame('hard');
+  chooseDifficulty('hard');
 });
-
-document.getElementById("reset-btn").addEventListener("click", function() {
-  resetGame();
-})
