@@ -137,15 +137,12 @@ function togglePause() {
 }
 
 function startGame() {
-
   if (!gameStarted) {
     gameStarted = true;
     // Start the game loop
-    
     lastTime = Date.now();
     gameLoop();
   } else {
-
     // Toggle the game pause state
     togglePause();
   }
@@ -221,7 +218,6 @@ window.addEventListener("keyup", (event) => {
     laserSound.currentTime = 0;
     laserSound.play();
     shotsArray.pop();
-    
     }
   }
 
@@ -319,7 +315,6 @@ function draw() {
         ctx.drawImage(ufoGrey1Img, ufo.x, ufo.y, ufo.width, ufo.height);
       } else if (ufo.status === 0) {
         ctx.drawImage(ufoGrey2Img, ufo.x, ufo.y, ufo.width, ufo.height);
-        console.log('here');
       }
     }
   }
@@ -586,7 +581,7 @@ function update() {
       }
     }
   }
-  //ball and plaet collision
+  //ball and planet collision
   for (let i = 0; i < planetArray.length; i++) {
     let object = planetArray[i];
     if (!object.hit &&

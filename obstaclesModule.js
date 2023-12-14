@@ -54,16 +54,16 @@ export function getLevel(score, lvlcount, rightPaddle, powerUpArray) {
 // skapa hinder
 export function createObstacle(score, obstacleArrayArray, obstacleTwoArray, planetArray, ufoArrayArray) {
   if (score == 200 && planetArray.length <= 0) {
-    let objectX = randomNumber(100, 500);
-    let objectY = randomNumber(50, 250);
-    let object = (x, y) => ({
+    let planetX = randomNumber(100, 500);
+    let planetY = randomNumber(50, 250);
+    let planet = (x, y) => ({
       x: x,
       y: y,
       width: 40,
       height: 40,
       hit: false
     })
-    planetArray.push(object(objectX, objectY));
+    planetArray.push(planet(planetX, planetY));
   }
   
   let ufoArray = [];
@@ -88,53 +88,5 @@ export function createObstacle(score, obstacleArrayArray, obstacleTwoArray, plan
     ufoArray.push(ufo(ufoX + 15, ufoY + 15));
     ufoArray.push(ufo(ufoX + 30, ufoY + 30));
     ufoArrayArray.push(ufoArray);
-  }
-
-  let obstacleArray = [];
-  if (score === 400 && obstacleArrayArray.length <= 0) {
-    let obstacleX = randomNumber(100, 500);
-    let obstacleY = randomNumber(50, 250);
-    // hinder bestående av 9 mindre block
-    let makeObstacle = (x, y) => ({
-      x: x,
-      y: y,
-      width: 10,
-      height: 10,
-      status: 1,
-      speed: 3
-    });
-    obstacleArray.push(makeObstacle(obstacleX, obstacleY));
-    obstacleArray.push(makeObstacle(obstacleX + 10, obstacleY));
-    obstacleArray.push(makeObstacle(obstacleX, obstacleY + 10));
-    obstacleArray.push(makeObstacle(obstacleX + 10, obstacleY + 10));
-    obstacleArray.push(makeObstacle(obstacleX + 20, obstacleY));
-    obstacleArray.push(makeObstacle(obstacleX, obstacleY + 20));
-    obstacleArray.push(makeObstacle(obstacleX + 10, obstacleY + 20));
-    obstacleArray.push(makeObstacle(obstacleX + 20, obstacleY + 10));
-    obstacleArray.push(makeObstacle(obstacleX + 20, obstacleY + 20));
-    obstacleArrayArray.push(obstacleArray);
-  } //lägg arrayen i  en array och kolla för den i loopen
-  if (score === 500 && obstacleTwoArray.length <= 0) {
-    let obstacleX = randomNumber(100, 500);
-    let obstacleY = obstacleX;
-    // hinder bestående av 9 mindre block
-    let makeObstacle = (x, y) => ({
-      x: x,
-      y: y,
-      width: 10,
-      height: 10,
-      status: 1,
-      speed: 3,
-      hit: false
-    });
-    obstacleTwoArray.push(makeObstacle(obstacleX, obstacleY));
-    obstacleTwoArray.push(makeObstacle(obstacleX + 10, obstacleY));
-    obstacleTwoArray.push(makeObstacle(obstacleX, obstacleY + 10));
-    obstacleTwoArray.push(makeObstacle(obstacleX + 10, obstacleY + 10));
-    obstacleTwoArray.push(makeObstacle(obstacleX + 20, obstacleY));
-    obstacleTwoArray.push(makeObstacle(obstacleX, obstacleY + 20));
-    obstacleTwoArray.push(makeObstacle(obstacleX + 10, obstacleY + 20));
-    obstacleTwoArray.push(makeObstacle(obstacleX + 20, obstacleY + 10));
-    obstacleTwoArray.push(makeObstacle(obstacleX + 20, obstacleY + 20));
   }
 }
