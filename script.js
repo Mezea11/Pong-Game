@@ -780,7 +780,6 @@ function gameLoop() {
 draw();
 
 
-
 // EVENTLISTENERS
 document.getElementById("instructions-btn").addEventListener("click", showInstructions);
 
