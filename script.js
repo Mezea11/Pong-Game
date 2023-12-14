@@ -140,16 +140,21 @@ function togglePause() {
 function chooseDifficulty(difficulty) {
       if (difficulty === 'easy') {
         // Set up the game for easy difficulty
+        lvlcount = 1;
         ball.speedX = 150;
         leftPaddle.height = 80;
+        
       } else if (difficulty === 'medium') {
         // Set up the game for medium difficulty
+        lvlcount = 2;
         ball.speedX = 200;
         leftPaddle.height = 60;
+  
       } else if (difficulty === 'hard') {
         // Set up the game for hard difficulty
-        ball.speedX = 250;
-        leftPaddle.height = 40;
+        lvlcount = 3;
+        ball.speedX = 400;
+        leftPaddle.height = 60;
       }
 }
 
@@ -577,6 +582,7 @@ function update() {
       ball.y > powerUp.y &&
       ball.y < powerUp.y + powerUp.height
     ) {
+
       const temp = getRandomNumber(1, 3);
       if (temp == 1) {
         if (leftPaddle.height == 60) {
@@ -605,6 +611,7 @@ function update() {
       i--;
     }
   }
+
   // ball and obstacle collision
   for (let j = 0; j < obstacleArrayArray.length; j++) {
     let obstacleArray = obstacleArrayArray[j];
