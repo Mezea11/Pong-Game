@@ -798,3 +798,7 @@ document.getElementById("medium-btn").addEventListener("click", function() {
 document.getElementById("hard-btn").addEventListener("click", function() {
   chooseDifficulty('hard');
 });
+
+document.getElementById("reset-btn").addEventListener("click", function(){
+  resetGame();
+})
