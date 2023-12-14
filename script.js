@@ -39,7 +39,7 @@ let obstacleTwoArray = [];
 let planetArray = [];
 let ufoArrayArray = [];
 let powerUpArray = [];
-let livesArray = [];
+let lifeArray = [];
 let onHitArray = [];
 
 //delcare images
@@ -75,10 +75,10 @@ let life = {
   width: 4,
   height: 15 
 };
-livesArray.push(life);
-livesArray.push(life);
-livesArray.push(life);
-livesArray.push(life);
+lifeArray.push(life);
+lifeArray.push(life);
+lifeArray.push(life);
+lifeArray.push(life);
 
 let shotsArray = [];
 
@@ -358,8 +358,8 @@ function draw() {
   ctx.fillText(score, 5, 20);
   
   // draw lives
-  for (let i = 0; i < livesArray.length; i++) {
-    let life = livesArray[i];
+  for (let i = 0; i < lifeArray.length; i++) {
+    let life = lifeArray[i];
     ctx.fillStyle = "white";
 //    ctx.font = "16px courier";
     ctx.fillRect(life.x + i * 5, life.y, life.width, life.height);
@@ -419,7 +419,6 @@ function update() {
       for (let j = 0; j < ufoArray.length; j++) {
         let ufo = ufoArray[j];
         ufo.y += ufo.speed;
-        ufo.status = 1;
       }
     }  
 
@@ -433,7 +432,11 @@ function update() {
           for (let l = 0; l < ufoArray.length; l++) {
             let newUfo = ufoArray[l];
             newUfo.speed = -newUfo.speed;
+            if (newUfo.status === 1) {
             newUfo.status = 0;
+            } else if (newUfo.status === 0) {
+              newUfo.status = 1;
+            }
           }
           break;
         }
@@ -671,7 +674,7 @@ function update() {
   if (ball.x + ball.radius < 0) {
     score -= 100;
     leftLives -= 1;
-    livesArray.pop();
+    lifeArray.pop();
     ball.x = canvas.width / 2;
     ball.y = getRandomNumber(8, 292);
   }

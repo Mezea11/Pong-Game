@@ -73,20 +73,20 @@ export function createObstacle(score, obstacleArrayArray, obstacleTwoArray, plan
     let ufo = (x, y) => ({
       x: x,
       y: y,
-      width: 15,
-      height: 15,
+      width: 20,
+      height: 20,
       status: 1,
       speed: 3
     })
     ufoArray.push(ufo(ufoX, ufoY));
-    ufoArray.push(ufo(ufoX + 15, ufoY));
-    ufoArray.push(ufo(ufoX + 30, ufoY));
-    ufoArray.push(ufo(ufoX, ufoY + 15));
-    ufoArray.push(ufo(ufoX, ufoY + 30));
-    ufoArray.push(ufo(ufoX + 15, ufoY + 15));
-    ufoArray.push(ufo(ufoX + 30, ufoY + 15));
-    ufoArray.push(ufo(ufoX + 15, ufoY + 15));
-    ufoArray.push(ufo(ufoX + 30, ufoY + 30));
+    ufoArray.push(ufo(ufoX + 20, ufoY));
+    ufoArray.push(ufo(ufoX + 40, ufoY));
+    ufoArray.push(ufo(ufoX, ufoY + 23));
+    ufoArray.push(ufo(ufoX, ufoY + 46));
+    ufoArray.push(ufo(ufoX + 20, ufoY + 23));
+    ufoArray.push(ufo(ufoX + 40, ufoY + 23));
+    ufoArray.push(ufo(ufoX + 20, ufoY + 23));
+    ufoArray.push(ufo(ufoX + 40, ufoY + 46));
     ufoArrayArray.push(ufoArray);
   }
 }
