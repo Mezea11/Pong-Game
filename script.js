@@ -159,7 +159,7 @@ function startGame() {
   if (!gameStarted) {
     gameStarted = true;
 
-    score = 400;
+    score = 0;
 
     // Start the game loop
     lastTime = Date.now();
@@ -785,20 +785,38 @@ draw();
 
 
 // EVENTLISTENERS
+
+const difficultyButtons = document.querySelectorAll('.difficulty-btn');
+
+function removeSelectedClass() {
+  difficultyButtons.forEach(button => {
+    button.classList.remove('selected');
+  });
+}
+
 document.getElementById("instructions-btn").addEventListener("click", showInstructions);
-
-document.getElementById("easy-btn").addEventListener("click", function() {
-  chooseDifficulty('easy');
-});
-
-document.getElementById("medium-btn").addEventListener("click", function() {
-  chooseDifficulty('medium');
-});
-
-document.getElementById("hard-btn").addEventListener("click", function() {
-  chooseDifficulty('hard');
-});
 
 document.getElementById("reset-btn").addEventListener("click", function(){
   resetGame();
 })
+
+document.getElementById("easy-btn").addEventListener("click", function() {
+  removeSelectedClass();
+  chooseDifficulty('easy');
+  this.classList.add('selected');
+});
+
+document.getElementById("medium-btn").addEventListener("click", function() {
+  removeSelectedClass();
+  chooseDifficulty('medium');
+  this.classList.add('selected');
+});
+
+document.getElementById("hard-btn").addEventListener("click", function() {
+  removeSelectedClass();
+  chooseDifficulty('hard');
+  this.classList.add('selected');
+});
+
+
+
