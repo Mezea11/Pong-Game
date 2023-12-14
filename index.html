@@ -12,19 +12,30 @@
     <canvas id="pongCanvas"></canvas>
     
     <div id="menu">
-        <button id="menu-btn">Start Game</button>
-        <button id="menu-btn" onclick="showInstructions()">Instructions</button>
-        <button id="menu-btn">Difficulty</button>
+        <button id="start-btn">Start Game</button>
+        <button id="instructions-btn" id="instructions-btn">Instructions</button>
+        <button id="difficulty-btn">Difficulty</button>
 
         <button id="menu-btn">
             <a href="multiplayer.html"> Multiplayer</a>
         </button>
 
+
+    </div>
+        <section id="instructions-section">
         <div id="instructions" style="display:none;">
             <h2 style="color: white;">Instructions</h2>
-            <p style="color: white;">Use the left and right arrow keys to move the paddles and score points. Avoid losing the ball off the sides of the screen.</p>
+            <p style="color: white;">
+                Use the left and right arrow keys to move the paddles and score points. Score by getting the ball through the right side of the canvas.
+             </p>
+
+            <p style="color: white;">The <span style="color: red;">red</span> question marks are random powerups.
+            You can shoot <span style="color: orange;">lasers</span> with spacebar.
+            </p>
         </div>
-    </div>
+        </section>
+
+        
         <div id="difficulty" style="display:none;"></div>
 
     

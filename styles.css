@@ -43,13 +43,26 @@ canvas {
     gap: 10px;
 }
 
-#menu-btn {
+.button {
     width: 7rem;
     height: 2rem;
 }
 
-#menu-btn:hover {
+.button:hover {
     cursor: pointer;
     transform: scale(1.1);
     transition: 0.3s ease-in-out;
+}
+
+#instructions {
+    font-family: "Courier New", Courier, monospace;
+    max-width: 15rem;
+    text-align: center;
+}
+
+#instructions-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
 }

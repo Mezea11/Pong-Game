@@ -123,8 +123,8 @@ const rightPaddle = {
 // MENU FUNCTION
 let gameStarted = false;
 
-document.getElementById("menu-btn").addEventListener("mousedown", startGame);
-document.getElementById("menu-btn").addEventListener("mouseup", function() {
+document.getElementById("start-btn").addEventListener("mousedown", startGame);
+document.getElementById("start-btn").addEventListener("mouseup", function() {
   canvas.focus();
 });
 
@@ -148,14 +148,16 @@ function startGame() {
   }
 }
 
+let instructionsDiv = document.getElementById("instructions");
+
 function showInstructions() {
-  let instructionsDiv = document.getElementById("instructions");
-  if (instructionsDiv.style.display === "none") {
-    instructionsDiv.style.display = "block";
-  } else {
-    instructionsDiv.style.display = "none";
-  }
+    if (instructionsDiv.style.display === "none") {
+        instructionsDiv.style.display = "block";
+    } else {
+        instructionsDiv.style.display = "none";
+    }
 }
+
 
 function selectDifficulty() {
   difficultyDiv.style.display = "block";
@@ -717,3 +719,4 @@ function gameLoop() {
 }
 
 draw();
+document.getElementById("instructions-btn").addEventListener("click", showInstructions);
