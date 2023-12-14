@@ -124,11 +124,11 @@ function startGame() {
 }
 
 function showInstructions() {
-  let x = document.getElementById("instructions");
-  if (x.style.display === "none") {
-    x.style.display = "block";
+  let instructionsDiv = document.getElementById("instructions");
+  if (instructionsDiv.style.display === "none") {
+    instructionsDiv.style.display = "block";
   } else {
-    x.style.display = "none";
+    instructionsDiv.style.display = "none";
   }
 }
 
