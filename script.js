@@ -170,6 +170,49 @@ function startGame() {
   }
 }
 
+function resetGame() {
+  // Reset all game-related variables to their initial values
+  isPaused = true;
+  score = 0;
+  lvlcount = 1;
+  leftLives = 5;
+  rightLives = 5;
+
+  // Reset paddles, ball, and other relevant objects
+  leftPaddle.y = canvas.height / 2 - paddleHeight / 2;
+  rightPaddle.y = canvas.height / 2 - paddleHeight / 2;
+
+  ball.x = canvas.width / 2;
+  ball.y = canvas.height / 2;
+  ball.speedX = 200;
+  ball.speedY = 200;
+
+  // Reset arrays
+  laserArray = [];
+  obstacleArrayArray = [];
+  obstacleTwoArray = [];
+  planetArray = [];
+  ufoArrayArray = [];
+  powerUpArray = [];
+  livesArray = [];
+  onHitArray = [];
+
+  // Reset other game-related settings
+  isPaused = false;
+
+  // Reset paddle heights if they were modified during gameplay
+  leftPaddle.height = 60;
+  rightPaddle.height = 60;
+
+  // Reset other settings and configurations as needed
+
+  // Clear canvas
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Draw the initial state of the game
+  draw();
+}
+
 let instructionsDiv = document.getElementById("instructions");
 
 function showInstructions() {
@@ -180,15 +223,6 @@ function showInstructions() {
     }
 }
 
-
-/* function selectDifficulty() {
-  if (difficultyDiv.style.display === "none") {
-      difficultyDiv.style.display = "block";
-  } else {
-    difficultyDiv.style.display = "none";
-  }
-  
-} */
 
 function startMultiplayer() {}
 // Create the ball
@@ -753,18 +787,6 @@ draw();
 
 // EVENTLISTENERS
 document.getElementById("instructions-btn").addEventListener("click", showInstructions);
-/*
-document.getElementById("easy-btn").addEventListener("click", function() {
-  startGame('easy');
-});
-
-document.getElementById("medium-btn").addEventListener("click", function() {
-  startGame('medium');
-});
-
-document.getElementById("hard-btn").addEventListener("click", function() {
-  startGame('hard');
-});*/
 
 document.getElementById("easy-btn").addEventListener("click", function() {
   chooseDifficulty('easy');
