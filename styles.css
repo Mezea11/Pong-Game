@@ -17,8 +17,8 @@ canvas {
     margin: auto;
     background-color: black;
     background-image: url(Assets/pong-background.png);
-    background-size: 100%, 100%;
-    background-position:;
+    background-size: 114%;
+    background-position: 25% 25%;
     border: 1px solid white;
 }
 
