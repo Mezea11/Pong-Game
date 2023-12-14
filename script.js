@@ -55,6 +55,9 @@ ufoGrey1Img.src = "Assets/UfoGrey1.png"
 let ufoGrey2Img = new Image();
 ufoGrey2Img.src = "Assets/UfoGrey2.png"
 
+let questionmarkImg = new Image();
+questionmarkImg.src = "Assets/question-mark.png"
+
 let deltaTime = 0;
 let lastTime = 0;
 
@@ -281,8 +284,8 @@ function draw() {
   for (let i = 0; i < powerUpArray.length; i++) {
     let powerUp = powerUpArray[i];
     if (powerUp.status === 1) {
-      ctx.fillStyle = "purple";
-      ctx.fillRect(powerUp.x, powerUp.y, powerUp.width, powerUp.height);
+      //ctx.fillStyle = "purple";
+      ctx.drawImage(questionmarkImg, powerUp.x, powerUp.y, powerUp.width, powerUp.height);
     }
   }
 
