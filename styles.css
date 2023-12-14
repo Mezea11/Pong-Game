@@ -43,12 +43,12 @@ canvas {
     gap: 10px;
 }
 
-.button {
+button {
     width: 7rem;
     height: 2rem;
 }
 
-.button:hover {
+button:hover {
     cursor: pointer;
     transform: scale(1.1);
     transition: 0.3s ease-in-out;
