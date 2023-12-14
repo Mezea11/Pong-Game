@@ -32,7 +32,7 @@ laserBall.volume = 0.05;
 let obstacleBall = new Audio("Assets/click2.wav");
 obstacleBall.volume = 0.1;
 let ufoMove = new Audio ("Assets/ufoMove.wav");
-ufoMove.volume = 0.8;
+ufoMove.volume = 0.5;
 
 // delcare arrays
 let laserArray = [];
@@ -248,6 +248,7 @@ function collisionEffect() {
     height: 5,
     speedX: speedX,
     speedY: speedY,
+    lifeSpan: 0
   });
   onHitArray.push(onHit(newSpeedX, newSpeedY));
   onHitArray.push(onHit(newSpeedX, newSpeedY - 0.5));
@@ -409,10 +410,8 @@ function draw() {
     let onHit = onHitArray[i];
     ctx.fillStyle = "white";
     ctx.fillRect(onHit.x, onHit.y, onHit.width, onHit.height);
-    if (
-      (!leftPaddle.hit && ball.x > 100) ||
-      (!rightPaddle.hit && ball.x < canvas.width - 100)
-    ) {
+    onHit.lifeSpan += deltaTime;
+    if (onHit.lifeSpan >= 0.500) {
       onHitArray = [];
     }
   }
@@ -450,9 +449,6 @@ function update() {
     leftPaddle.hit = true;
   }
   
-  if (shotsArray > 4) {
-  shotsArray.slice(0,4);
-  }
   // initiera movement hinder
   for (let i = 0; i < obstacleArrayArray.length; i++) {
     let obstacleArray = obstacleArrayArray[i];
@@ -533,8 +529,12 @@ function update() {
     leftPaddle.hit = false;
     // on paddle hit effect
     collisionEffect();
-    shotsArray.push(shots);
+    
+    if (shotsArray.length < 4) {
+      shotsArray.push(shots);
+    }
   }
+
   // bounce off right paddle
   if (
     ball.x + ball.radius > rightPaddle.x &&
@@ -550,7 +550,7 @@ function update() {
     collisionEffect();
   }
 
-  // direction for onHit effect
+  // direction for objects in collsionEffect
   for (let i = 0; i < onHitArray.length; i++) {
     let onHit = onHitArray[i];
     if (!leftPaddle.hit && i >= 3) {
