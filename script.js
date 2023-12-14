@@ -144,18 +144,15 @@ function startGame(difficulty) {
 
     // Customize the game based on the selected difficulty
     if (difficulty === 'easy') {
-      // Set up the game for easy difficulty
-      // For example, reduce the speed of the ball or increase paddle size
+      // Easy difficulty
       ball.speedX = 150;
       leftPaddle.height = 80;
     } else if (difficulty === 'medium') {
-      // Set up the game for medium difficulty
-      // You can adjust various parameters here
+      // Medium difficulty
       ball.speedX = 200;
       leftPaddle.height = 60;
     } else if (difficulty === 'hard') {
-      // Set up the game for hard difficulty
-      // You can make the game more challenging for hard difficulty
+      // Hard difficulty
       ball.speedX = 250;
       leftPaddle.height = 40;
     }
@@ -169,6 +166,49 @@ function startGame(difficulty) {
   }
 }
 
+function resetGame() {
+  // Reset all game-related variables to their initial values
+  isPaused = true;
+  score = 0;
+  lvlcount = 1;
+  leftLives = 5;
+  rightLives = 5;
+
+  // Reset paddles, ball, and other relevant objects
+  leftPaddle.y = canvas.height / 2 - paddleHeight / 2;
+  rightPaddle.y = canvas.height / 2 - paddleHeight / 2;
+
+  ball.x = canvas.width / 2;
+  ball.y = canvas.height / 2;
+  ball.speedX = 200;
+  ball.speedY = 200;
+
+  // Reset arrays
+  laserArray = [];
+  obstacleArrayArray = [];
+  obstacleTwoArray = [];
+  planetArray = [];
+  ufoArrayArray = [];
+  powerUpArray = [];
+  livesArray = [];
+  onHitArray = [];
+
+  // Reset other game-related settings
+  isPaused = false;
+
+  // Reset paddle heights if they were modified during gameplay
+  leftPaddle.height = 60;
+  rightPaddle.height = 60;
+
+  // Reset other settings and configurations as needed
+
+  // Clear canvas
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Draw the initial state of the game
+  draw();
+}
+
 let instructionsDiv = document.getElementById("instructions");
 
 function showInstructions() {
@@ -179,15 +219,6 @@ function showInstructions() {
     }
 }
 
-
-/* function selectDifficulty() {
-  if (difficultyDiv.style.display === "none") {
-      difficultyDiv.style.display = "block";
-  } else {
-    difficultyDiv.style.display = "none";
-  }
-  
-} */
 
 function startMultiplayer() {}
 // Create the ball
@@ -764,3 +795,7 @@ document.getElementById("medium-btn").addEventListener("click", function() {
 document.getElementById("hard-btn").addEventListener("click", function() {
   startGame('hard');
 });
+
+document.getElementById("reset-btn").addEventListener("click", function() {
+  resetGame();
+})
