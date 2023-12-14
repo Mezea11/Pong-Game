@@ -34,7 +34,6 @@ obstacleBall.volume = 0.1;
 
 // delcare arrays
 let laserArray = [];
-let obstacleStaticArray = [];
 let obstacleArrayArray = [];
 let obstacleTwoArray = [];
 let planetArray = [];
@@ -296,14 +295,7 @@ function draw() {
       ctx.drawImage(planet2Img, object.x, object.y, object.width, object.height)
     }
   }
-  // draw obstactle
-  for (let i = 0; i < obstacleStaticArray.length; i++) {
-    let obstacle = obstacleStaticArray[i];
-    if (obstacle.status === 1) {
-      ctx.fillStyle = "pink";
-      ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
-    }
-  }
+
   // draw obstactle
   for (let j = 0; j < obstacleArrayArray.length; j++) {
     let obstacleArray = obstacleArrayArray[j];
@@ -550,23 +542,6 @@ function update() {
       i--;
     }
   }
-  // ball and static obstacle collision
-  for (let i = 0; i < obstacleStaticArray.length; i++) {
-    let obstacle = obstacleStaticArray[i];
-    if (
-      ball.x + ball.radius > obstacle.x &&
-      ball.x - ball.radius < obstacle.x + obstacle.width &&
-      ball.y + ball.radius > obstacle.y &&
-      ball.y - ball.radius < obstacle.y + obstacle.height
-    ) {
-      ball.speedX = -ball.speedX;
-      rightPaddle.hit = true;
-      obstacle.status = 0;
-      obstacleStaticArray = [];
-      i--;
-      obstacleBall.play();
-    }
-  }
   // ball and obstacle collision
   for (let j = 0; j < obstacleArrayArray.length; j++) {
     let obstacleArray = obstacleArrayArray[j];
@@ -588,6 +563,27 @@ function update() {
       }
     }
   }
+  for (let j = 0; j < ufoArrayArray.length; j++) {
+    let ufoArray = ufoArrayArray[j];
+    for (let i = 0; i < ufoArray.length; i++) {
+      let ufo = ufoArray[i];
+      if (
+        ball.x + ball.radius > ufo.x &&
+        ball.x - ball.radius < ufo.x + ufo.width &&
+        ball.y + ball.radius > ufo.y &&
+        ball.y - ball.radius < ufo.y + ufo.height
+      ) {
+        ball.x = ufo.x + ufo.width + ball.radius;
+        ball.speedX = -ball.speedX;
+        rightPaddle.hit = true;
+        ufo.status = 0;
+        ufoArray.splice(i, 1);
+        i--;
+        obstacleBall.play();
+      }
+    }
+  }
+  //ball and plaet collision
   for (let i = 0; i < planetArray.length; i++) {
     let object = planetArray[i];
     if (!object.hit &&
@@ -710,7 +706,6 @@ function gameLoop() {
     moveRightpaddle();
     createObstacle(
       score,
-      obstacleStaticArray,
       obstacleArrayArray,
       obstacleTwoArray,
       planetArray,
