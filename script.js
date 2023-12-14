@@ -37,27 +37,31 @@ let laserArray = [];
 let obstacleStaticArray = [];
 let obstacleArrayArray = [];
 let obstacleTwoArray = [];
-let objectArray = [];
+let planetArray = [];
+let ufoArrayArray = [];
 let powerUpArray = [];
 let livesArray = [];
 let onHitArray = [];
 
 //delcare images
-let planet2Img;
-planet2Img = new Image();
-planet2Img.src = "Assets/PurplePlanet.png"; 
-
-let planet1Img;
-planet1Img = new Image();
+let planet1Img = new Image();;
 planet1Img.src = "Assets/RedPlanet.png";
 
+let planet2Img = new Image();
+planet2Img.src = "Assets/PurplePlanet.png"; 
+
+let ufoGrey1Img = new Image();
+ufoGrey1Img.src = "Assets/UfoGrey1.png"
+
+let ufoGrey2Img = new Image();
+ufoGrey2Img.src = "Assets/UfoGrey2.png"
 
 let deltaTime = 0;
 let lastTime = 0;
 
 let isPaused = false;
 
-let score = 200;
+let score = 400;
 let lvlcount = 1;
 
 let leftLives = 5;
@@ -284,8 +288,8 @@ function draw() {
   }
 
   // draw object
-  for (let i = 0; i < objectArray.length; i++) {
-    let object = objectArray[i];
+  for (let i = 0; i < planetArray.length; i++) {
+    let object = planetArray[i];
     if (!object.hit) {
       ctx.drawImage(planet1Img, object.x, object.y, object.width, object.height)
     } else if (object.hit) {
@@ -311,6 +315,21 @@ function draw() {
       }
     }
   }
+  // draw ufo
+  for (let j = 0; j < ufoArrayArray.length; j++) {
+    let ufoArray = ufoArrayArray[j];
+    for (let i = 0; i < ufoArray.length; i++) {
+      let ufo = ufoArray[i];
+      if (ufo.status === 1) {
+        ctx.drawImage(ufoGrey1Img, ufo.x, ufo.y, ufo.width, ufo.height);
+      } else if (ufo.status === 0) {
+        ctx.drawImage(ufoGrey2Img, ufo.x, ufo.y, ufo.width, ufo.height);
+        console.log('here');
+      }
+    }
+  }
+
+
   // draw obstacleTwo
   for (let i = 0; i < obstacleTwoArray.length; i++) {
     let obstacle = obstacleTwoArray[i];
@@ -352,7 +371,7 @@ function draw() {
   for (let i = 0; i < livesArray.length; i++) {
     let life = livesArray[i];
     ctx.fillStyle = "white";
-    ctx.font = "16px courier";
+//    ctx.font = "16px courier";
     ctx.fillRect(life.x + i * 5, life.y, life.width, life.height);
   }
 
@@ -360,7 +379,7 @@ function draw() {
   for (let i = 0; i < shotsArray.length; i++) {
     let shot = shotsArray[i];
     ctx.fillStyle = 'red';
-    ctx.font = "16px courier";
+//    ctx.font = "16px courier";
     ctx.fillRect(shot.x + i * 5, shot.y, shot.width, shot.height);
 //    ctx.fillRect(shot.x, shot.y, shot.width, shot.height);
   }
@@ -404,6 +423,32 @@ function update() {
       }
     }
   }
+    // initiera movement ufo
+    for (let i = 0; i < ufoArrayArray.length; i++) {
+      let ufoArray = ufoArrayArray[i];
+      for (let j = 0; j < ufoArray.length; j++) {
+        let ufo = ufoArray[j];
+        ufo.y += ufo.speed;
+        ufo.status = 1;
+      }
+    }  
+
+    // movement ufo when bounce
+    for (let i = 0; i < ufoArrayArray.length; i++) {
+      let ufoArray = ufoArrayArray[i];
+      for (let j = 0; j < ufoArray.length; j++) {
+        let ufo = ufoArray[j];
+        // ufo bounce off top and bottom edges
+        if (ufo.y < 0 || ufo.y + ufo.height > canvas.height) {
+          for (let l = 0; l < ufoArray.length; l++) {
+            let newUfo = ufoArray[l];
+            newUfo.speed = -newUfo.speed;
+            newUfo.status = 0;
+          }
+          break;
+        }
+      }
+    }
 
   // Ball bounce off the top and bottom edges
   if (ball.y - ball.radius < 0) {
@@ -543,8 +588,8 @@ function update() {
       }
     }
   }
-  for (let i = 0; i < objectArray.length; i++) {
-    let object = objectArray[i];
+  for (let i = 0; i < planetArray.length; i++) {
+    let object = planetArray[i];
     if (!object.hit &&
       ball.x + ball.radius > object.x &&
       ball.x - ball.radius < object.x + object.width &&
@@ -566,7 +611,7 @@ function update() {
       ball.y < object.y + object.height
     ) {
       ball.speedX = -ball.speedX;
-      objectArray.splice(i, 1);
+      planetArray.splice(i, 1);
       obstacleBall.play();
     }
   }
@@ -668,7 +713,8 @@ function gameLoop() {
       obstacleStaticArray,
       obstacleArrayArray,
       obstacleTwoArray,
-      objectArray
+      planetArray,
+      ufoArrayArray
     );
     getLevel(score, lvlcount, rightPaddle, powerUpArray);
     update();

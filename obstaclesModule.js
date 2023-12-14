@@ -52,8 +52,8 @@ export function getLevel(score, lvlcount, rightPaddle, powerUpArray) {
   }
 }
 // skapa hinder
-export function createObstacle(score, obstacleStaticArray, obstacleArrayArray, obstacleTwoArray, objectArray) {
-  if (score == 200 && objectArray.length <= 0) {
+export function createObstacle(score, obstacleStaticArray, obstacleArrayArray, obstacleTwoArray, planetArray, ufoArrayArray) {
+  if (score == 200 && planetArray.length <= 0) {
     let objectX = randomNumber(100, 500);
     let objectY = randomNumber(50, 250);
     let object = (x, y) => ({
@@ -63,10 +63,9 @@ export function createObstacle(score, obstacleStaticArray, obstacleArrayArray, o
       height: 40,
       hit: false
     })
-    objectArray.push(object(objectX, objectY));
+    planetArray.push(object(objectX, objectY));
   }
   
-  let obstacleArray = [];
   if (score === 200 && obstacleStaticArray.length <= 0) {
     let obstacleX = randomNumber(100, 500);
     let obstacleY = randomNumber(50, 250);
@@ -177,6 +176,31 @@ export function createObstacle(score, obstacleStaticArray, obstacleArrayArray, o
     }
   }
 
+  let ufoArray = [];
+  if (score === 400 && ufoArrayArray.length <= 0) {
+    let ufoX = randomNumber(100, 500);
+    let ufoY = randomNumber(50, 250);
+    let ufo = (x, y) => ({
+      x: x,
+      y: y,
+      width: 15,
+      height: 15,
+      status: 1,
+      speed: 3
+    })
+    ufoArray.push(ufo(ufoX, ufoY));
+    ufoArray.push(ufo(ufoX + 15, ufoY));
+    ufoArray.push(ufo(ufoX + 30, ufoY));
+    ufoArray.push(ufo(ufoX, ufoY + 15));
+    ufoArray.push(ufo(ufoX, ufoY + 30));
+    ufoArray.push(ufo(ufoX + 15, ufoY + 15));
+    ufoArray.push(ufo(ufoX + 30, ufoY + 15));
+    ufoArray.push(ufo(ufoX + 15, ufoY + 15));
+    ufoArray.push(ufo(ufoX + 30, ufoY + 30));
+    ufoArrayArray.push(ufoArray);
+  }
+
+  let obstacleArray = [];
   if (score === 400 && obstacleArrayArray.length <= 0) {
     let obstacleX = randomNumber(100, 500);
     let obstacleY = randomNumber(50, 250);
