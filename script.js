@@ -39,8 +39,6 @@ powerUpSound.volume = 0.05;
 
 // delcare arrays
 let laserArray = [];
-let obstacleArrayArray = [];
-let obstacleTwoArray = [];
 let planetArray = [];
 let ufoArrayArray = [];
 let powerUpArray = [];
@@ -201,8 +199,6 @@ function resetGame() {
   // Reset arrays
   laserArray = [];
   shotsArray = [];
-//  obstacleArrayArray = [];
-//  obstacleTwoArray = [];
   planetArray = [];
   ufoArrayArray = [];
   powerUpArray = [];
@@ -296,17 +292,12 @@ window.addEventListener("keyup", (event) => {
     laserSound.play();
     shotsArray.pop();
     }
-/*    shotsArray = shotsArray.filter(function( element ) {
-      return element !== undefined;
-      
-   });*/
   }
 
   if (event.key === "p") {
     togglePause();
   }
 });
-
 
 // move function for left side (player controlled)
 function moveLeftPaddle(gameLoop) {
@@ -587,7 +578,7 @@ function update() {
       powerUpSound.play();
     }
   }
-
+  // ball and ufoArrayArray collision
   for (let j = 0; j < ufoArrayArray.length; j++) {
     let ufoArray = ufoArrayArray[j];
     for (let i = 0; i < ufoArray.length; i++) {
@@ -605,6 +596,10 @@ function update() {
         ufoArray.splice(i, 1);
         i--;
         obstacleBall.play();
+      }
+      if (ufoArrayArray <= 0) {
+        ufoMove.pause();
+        ufoMove.currentTime = 0;
       }
     }
   }
@@ -701,11 +696,7 @@ function gameLoop() {
   if (isPaused == false) {
     moveLeftPaddle();
     moveRightpaddle();
-    createObstacle(
-      score,
-      planetArray,
-      ufoArrayArray
-    );
+    createObstacle(score, lvlcount, planetArray, ufoArrayArray);
     getLevel(score, lvlcount, rightPaddle, powerUpArray);
     update();
   }
