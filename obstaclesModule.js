@@ -11,11 +11,16 @@ function randomNumber(min, max) {
 
 // levels & powerups
 export function getLevel(score, lvlcount, rightPaddle, powerUpArray) {  
-  if (score == 200) {
-    lvlcount = 2;
-    //  rightPaddle.speed = 0.2;
 
-    if (score === 200 && powerUpArray.length == 0) {
+
+    if (lvlcount === 1) {
+      rightPaddle.speed = 150;
+      
+    }
+
+    //lvl MEDIUM
+    if (lvlcount === 2 && powerUpArray.length == 0) {
+      rightPaddle.speed = 250;
       let powerUpX = randomNumber(100, 500);
       let powerUpY = randomNumber(20, 280);
       let makepowerUp = (x, y) => ({
@@ -27,12 +32,15 @@ export function getLevel(score, lvlcount, rightPaddle, powerUpArray) {
         speed: 0,
       })
       powerUpArray.push(makepowerUp(powerUpX, powerUpY));
+      powerUpX = randomNumber(100, 500);
+      powerUpY = randomNumber(20, 280);
+      powerUpArray.push(makepowerUp(powerUpX, powerUpY));
+      
     }
-  }
-  if (score >= 400) {
-    lvlcount = 3;
-    //      rightPaddle.speed = 7;   
-    if (powerUpArray.length >= 0 && powerUpArray.length <= 0) {
+
+    //lvl HARD
+    if (lvlcount === 3 && powerUpArray.length >= 0 && powerUpArray.length <= 0) {
+      rightPaddle.speed = 300;
       let powerUpX = randomNumber(100, 500);
       let powerUpY = randomNumber(20, 280);
       let makepowerUp = (x, y) => ({
@@ -47,12 +55,15 @@ export function getLevel(score, lvlcount, rightPaddle, powerUpArray) {
       powerUpX = randomNumber(100, 500);
       powerUpY = randomNumber(20, 280);
       powerUpArray.push(makepowerUp(powerUpX, powerUpY));
+      powerUpX = randomNumber(100, 500);
+      powerUpY = randomNumber(20, 280);
+      powerUpArray.push(makepowerUp(powerUpX, powerUpY));
     }
-  }
+  
 }
 // skapa hinder
-export function createObstacle(score, obstacleArrayArray, obstacleTwoArray, planetArray, ufoArrayArray) {
-  if (score == 200 && planetArray.length <= 0) {
+export function createObstacle(score, obstacleArrayArray, obstacleTwoArray, planetArray, ufoArrayArray, lvlcount) {
+  if (score == 200 && planetArray.length <= 0 && lvlcount >= 2) {
     let planetX = randomNumber(100, 500);
     let planetY = randomNumber(50, 250);
     let planet = (x, y) => ({
@@ -64,9 +75,9 @@ export function createObstacle(score, obstacleArrayArray, obstacleTwoArray, plan
     })
     planetArray.push(planet(planetX, planetY));
   }
-  
+
   let ufoArray = [];
-  if (score === 400 && ufoArrayArray.length <= 0) {
+  if (score === 400 && ufoArrayArray.length <= 0 && lvlcount >= 2) {
     let ufoX = randomNumber(100, 500);
     let ufoY = randomNumber(50, 250);
     let ufo = (x, y) => ({
