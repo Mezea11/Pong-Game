@@ -63,6 +63,7 @@ ufoGrey2Img.src = "Assets/UfoGrey2.png"
 let questionmarkImg = new Image();
 questionmarkImg.src = "Assets/question-mark.png"
 
+let gameOver = false;
 let deltaTime = 0;
 let lastTime = 0;
 
@@ -71,9 +72,8 @@ let isPaused = false;
 let score = 0;
 let lvlcount = 1;
 
-let leftLives = 5;
-let rightLives = 5;
-
+let leftLives = 4;
+let rightLives = 4;
 
 // Create the paddles
 const paddleWidth = 10,
@@ -99,7 +99,6 @@ const rightPaddle = {
   speed: 200,
   hit: true,
 };
-
 
 function initArrays() {
     let life = {
@@ -161,6 +160,7 @@ function chooseDifficulty(difficulty) {
 function startGame() {
   if (!gameStarted) {
     gameStarted = true;
+    gameOver = false;
 
     score = 0;
 
@@ -179,10 +179,11 @@ function resetGame() {
   //window.removeEventListener("keydown", handleKeyDown);
   //window.removeEventListener("keyup", handleKeyUp);
   // Reset all game-related variables to their initial values
+  gameOver = false;
   score = 0;
   lvlcount = 1;
-  leftLives = 5;
-  rightLives = 5;
+  leftLives = 4;
+  rightLives = 4;
 
   // Reset paddles, ball, and other relevant objects
   leftPaddle.y = canvas.height / 2 - paddleHeight / 2;
@@ -282,6 +283,9 @@ window.addEventListener("keyup", (event) => {
   }
 
   if (event.key === " ") {
+    if (isPaused) {
+      return;
+    } else if (!isPaused) {
     if (shotsArray.length > 0) {
     shoot();
     // audio will trigger everytime you push space by resetting audio
@@ -290,6 +294,7 @@ window.addEventListener("keyup", (event) => {
     shotsArray.pop();
     }
   }
+}
 
   if (event.key === "p") {
     togglePause();
@@ -420,7 +425,20 @@ function draw() {
 
 // Update function to handle game logic
 function update() {
-  console.log(lvlcount);
+  if (gameOver) {
+    ctx.fillStyle = "Red";
+    ctx.font = "bold 30px Helvetica";
+    let gameOverText = "GAME OVER";
+    let textWidth = ctx.measureText(gameOverText).width;
+    let textX = (canvas.width - textWidth) / 2;
+    let textY = canvas.height / 3;
+    ctx.fillText(gameOverText, textX, textY);
+    ctx.fillStyle = "blue";
+    ctx.font = "bold 25px Helvetica";
+    ctx.fillText("Score: " + score, textX + 25, textY + 50);
+    return;
+  }
+
   // Move the ball
   ball.x += ball.speedX * deltaTime;
   ball.y += ball.speedY * deltaTime;
@@ -665,6 +683,9 @@ function update() {
     lifeArray.pop();
     ball.x = canvas.width / 2;
     ball.y = getRandomNumber(8, 292);
+    if (leftLives == 0) {
+      gameOver = true;
+    }
   }
 }
 
@@ -690,7 +711,7 @@ function gameLoop() {
   draw();
   //if game is paused skip these lines
 
-  if (isPaused == false) {
+  if (!isPaused) {
     moveLeftPaddle();
     moveRightpaddle();
     createObstacle(score, lvlcount, planetArray, ufoArrayArray);
