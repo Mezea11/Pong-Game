@@ -11,11 +11,8 @@ function randomNumber(min, max) {
 
 // levels & powerups
 export function getLevel(score, lvlcount, rightPaddle, powerUpArray) {  
-
-
     if (lvlcount === 1) {
       rightPaddle.speed = 150;
-      
     }
 
     //lvl MEDIUM
@@ -35,7 +32,6 @@ export function getLevel(score, lvlcount, rightPaddle, powerUpArray) {
       powerUpX = randomNumber(100, 500);
       powerUpY = randomNumber(20, 280);
       powerUpArray.push(makepowerUp(powerUpX, powerUpY));
-      
     }
 
     //lvl HARD
@@ -62,7 +58,7 @@ export function getLevel(score, lvlcount, rightPaddle, powerUpArray) {
   
 }
 // skapa hinder
-export function createObstacle(score, obstacleArrayArray, obstacleTwoArray, planetArray, ufoArrayArray, lvlcount) {
+export function createObstacle(score, planetArray, ufoArrayArray, lvlcount) {
   if (score == 200 && planetArray.length <= 0 && lvlcount >= 2) {
     let planetX = randomNumber(100, 500);
     let planetY = randomNumber(50, 250);

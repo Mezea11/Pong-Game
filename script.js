@@ -33,6 +33,9 @@ let obstacleBall = new Audio("Assets/click2.wav");
 obstacleBall.volume = 0.1;
 let ufoMove = new Audio ("Assets/ufoMove.wav");
 ufoMove.volume = 0.5;
+let powerUpSound = new Audio("Assets/powerup.wav");
+powerUpSound.volume = 0.05;
+
 
 // delcare arrays
 let laserArray = [];
@@ -44,7 +47,7 @@ let powerUpArray = [];
 let lifeArray = [];
 let onHitArray = [];
 let shotsArray = [];
-//let shots;
+
 
 //delcare images
 let planet1Img = new Image();;
@@ -626,6 +629,8 @@ function update() {
         }      }
       powerUpArray.splice(i, 1);
       i--;
+      powerUpSound.currentTime = 0; 
+      powerUpSound.play();
     }
   }
 
