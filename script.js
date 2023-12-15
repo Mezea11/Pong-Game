@@ -129,9 +129,6 @@ function initArrays() {
 let gameStarted = false;
 
 document.getElementById("start-btn").addEventListener("mousedown", startGame);
-document.getElementById("start-btn").addEventListener("mouseup", function() {
-  canvas.focus();
-});
 
 function togglePause() {
   isPaused = !isPaused;
@@ -722,19 +719,19 @@ document.getElementById("reset-btn").addEventListener("click", function(){
   resetGame();
 })
 
-document.getElementById("easy-btn").addEventListener("click", function() {
+document.getElementById("easy-btn").addEventListener("mousedown", function() {
   removeSelectedClass();
   chooseDifficulty('easy');
   this.classList.add('selected');
 });
 
-document.getElementById("medium-btn").addEventListener("click", function() {
+document.getElementById("medium-btn").addEventListener("mousedown", function() {
   removeSelectedClass();
   chooseDifficulty('medium');
   this.classList.add('selected');
 });
 
-document.getElementById("hard-btn").addEventListener("click", function() {
+document.getElementById("hard-btn").addEventListener("mousedown", function() {
   removeSelectedClass();
   chooseDifficulty('hard');
   this.classList.add('selected');

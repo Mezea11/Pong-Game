@@ -59,7 +59,7 @@ export function getLevel(score, lvlcount, rightPaddle, powerUpArray) {
 }
 // skapa hinder
 export function createObstacle(score, lvlcount, planetArray, ufoArrayArray) {
-  if (score >= 200 && lvlcount >= 1 && planetArray.length <= 0) {
+  if (score == 200 && planetArray.length <= 0 && lvlcount >= 2) {
     let planetX = randomNumber(100, 500);
     let planetY = randomNumber(50, 250);
     let planet = (x, y) => ({
