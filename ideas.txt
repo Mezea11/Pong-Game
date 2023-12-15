@@ -22,8 +22,8 @@
     1. Fixa bakgrundsmusik och ljudeffekter på paddlar/boll och powerups
 
 6. buggar/att Fixa
-    1. interaktioner - boll/hinder, laser/boll, boll/paddel - beter sig konstigt ibland
-    2. hinder som rör sig "faller isär" efter att de studsar (samma problemm som i space invaders?)
+    1. interaktioner - boll/hinder, laser/boll, boll/paddel - beter sig konstigt ibland - fixat
+    2. hinder som rör sig "faller isär" efter att de studsar (samma problemm som i space invaders?) - fixat
 
 //tillägg 20231129  - la till grundläggande rörelse för vänstra paddeln = eventlisteners och en funktion, 
     (Pelle)           uppdaterade då också vänstra paddeln-objektets properties

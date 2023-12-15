@@ -43,6 +43,8 @@ let ufoArrayArray = [];
 let powerUpArray = [];
 let lifeArray = [];
 let onHitArray = [];
+let shotsArray = [];
+//let shots;
 
 //delcare images
 let planet1Img = new Image();;
@@ -71,29 +73,6 @@ let lvlcount = 1;
 let leftLives = 5;
 let rightLives = 5;
 
-let life = {
-  x: 5,
-  y: 30,
-  width: 4,
-  height: 15 
-};
-lifeArray.push(life);
-lifeArray.push(life);
-lifeArray.push(life);
-lifeArray.push(life);
-
-let shotsArray = [];
-
-let shots = {
-  x: 25,
-  y: 30,
-  width: 4,
-  height: 15 
-};
-shotsArray.push(shots);
-shotsArray.push(shots);
-shotsArray.push(shots);
-shotsArray.push(shots);
 
 // Create the paddles
 const paddleWidth = 10,
@@ -120,6 +99,29 @@ const rightPaddle = {
   hit: true,
 };
 
+
+function initArrays() {
+    let life = {
+      x: 5,
+      y: 30,
+      width: 4,
+      height: 15
+    };
+    lifeArray.push(life);
+    lifeArray.push(life);
+    lifeArray.push(life);
+    lifeArray.push(life);
+    let shots = {
+      x: 25,
+      y: 30,
+      width: 4,
+      height: 15
+    };
+    shotsArray.push(shots);
+    shotsArray.push(shots);
+    shotsArray.push(shots);
+    shotsArray.push(shots);
+  }
     
 //////////////////////////////////////////////////////////////////////////////////////////
 // MENU FUNCTION
@@ -161,6 +163,7 @@ function startGame() {
 
     // Start the game loop
     lastTime = Date.now();
+    initArrays();
     gameLoop();
   } else {
     // Toggle the game pause state
@@ -169,6 +172,9 @@ function startGame() {
 }
 
 function resetGame() {
+
+  //window.removeEventListener("keydown", handleKeyDown);
+  //window.removeEventListener("keyup", handleKeyUp);
   // Reset all game-related variables to their initial values
   score = 0;
   lvlcount = 1;
@@ -186,6 +192,7 @@ function resetGame() {
 
   // Reset arrays
   laserArray = [];
+  shotsArray = [];
   obstacleArrayArray = [];
   obstacleTwoArray = [];
   planetArray = [];
@@ -193,7 +200,8 @@ function resetGame() {
   powerUpArray = [];
   lifeArray = [];
   onHitArray = [];
-
+  initArrays();
+  
   // Reset other game-related settings
   isPaused = true;
 
@@ -209,6 +217,7 @@ function resetGame() {
   // Draw the initial state of the game
   draw();
 }
+
 
 let instructionsDiv = document.getElementById("instructions");
 
@@ -279,12 +288,17 @@ window.addEventListener("keyup", (event) => {
     laserSound.play();
     shotsArray.pop();
     }
+/*    shotsArray = shotsArray.filter(function( element ) {
+      return element !== undefined;
+      
+   });*/
   }
 
   if (event.key === "p") {
     togglePause();
   }
 });
+
 
 // move function for left side (player controlled)
 function moveLeftPaddle(gameLoop) {
@@ -379,7 +393,6 @@ function draw() {
     }
   }
 
-
   // draw obstacleTwo
   for (let i = 0; i < obstacleTwoArray.length; i++) {
     let obstacle = obstacleTwoArray[i];
@@ -425,11 +438,9 @@ function draw() {
 
   // draw shots
   for (let i = 0; i < shotsArray.length; i++) {
-    let shot = shotsArray[i];
+    let shots = shotsArray[i];
     ctx.fillStyle = 'red';
-//    ctx.font = "16px courier";
-    ctx.fillRect(shot.x + i * 5, shot.y, shot.width, shot.height);
-//    ctx.fillRect(shot.x, shot.y, shot.width, shot.height);
+    ctx.fillRect(shots.x + i * 5, shots.y, shots.width, shots.height);
   }
 }
 
@@ -526,6 +537,12 @@ function update() {
     collisionEffect();
     
     if (shotsArray.length < 4) {
+      let shots = {
+        x: 25,
+        y: 30,
+        width: 4,
+        height: 15
+      };
       shotsArray.push(shots);
     }
   }
@@ -760,7 +777,7 @@ function gameLoop() {
   let now = Date.now();
   deltaTime = (now - lastTime) / 1000;
   lastTime = now;
-
+  
   draw();
   //if game is paused skip these lines
 
