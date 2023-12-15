@@ -201,8 +201,8 @@ function resetGame() {
   // Reset arrays
   laserArray = [];
   shotsArray = [];
-  obstacleArrayArray = [];
-  obstacleTwoArray = [];
+//  obstacleArrayArray = [];
+//  obstacleTwoArray = [];
   planetArray = [];
   ufoArrayArray = [];
   powerUpArray = [];
@@ -367,7 +367,7 @@ function draw() {
     }
   }
 
-  // draw object
+  // draw planet
   for (let i = 0; i < planetArray.length; i++) {
     let object = planetArray[i];
     if (!object.hit) {
@@ -377,17 +377,6 @@ function draw() {
     }
   }
 
-  // draw obstactle
-  for (let j = 0; j < obstacleArrayArray.length; j++) {
-    let obstacleArray = obstacleArrayArray[j];
-    for (let i = 0; i < obstacleArray.length; i++) {
-      let obstacle = obstacleArray[i];
-      if (obstacle.status === 1) {
-        ctx.fillStyle = "pink";
-        ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
-      }
-    }
-  }
   // draw ufo
   for (let j = 0; j < ufoArrayArray.length; j++) {
     let ufoArray = ufoArrayArray[j];
@@ -401,17 +390,6 @@ function draw() {
     }
   }
 
-  // draw obstacleTwo
-  for (let i = 0; i < obstacleTwoArray.length; i++) {
-    let obstacle = obstacleTwoArray[i];
-    if (!obstacle.hit && obstacle.status === 1) {
-      ctx.fillStyle = "brown";
-      ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
-    } else if (obstacle.hit && obstacle.status === 1) {
-      ctx.fillStyle = "red";
-      ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
-    }
-  }
   // draw laser
   if (!isPaused) {
     for (let i = 0; i < laserArray.length; i++) {
@@ -454,7 +432,7 @@ function draw() {
 
 // Update function to handle game logic
 function update() {
-
+  console.log(lvlcount);
   // Move the ball
   ball.x += ball.speedX * deltaTime;
   ball.y += ball.speedY * deltaTime;
@@ -462,31 +440,7 @@ function update() {
   if (ball.x > 300) {
     leftPaddle.hit = true;
   }
-  
-  // initiera movement hinder
-  for (let i = 0; i < obstacleArrayArray.length; i++) {
-    let obstacleArray = obstacleArrayArray[i];
-    for (let j = 0; j < obstacleArray.length; j++) {
-      let obstacle = obstacleArray[j];
-      obstacle.y += obstacle.speed;
-    }
-  }
-
-  // movement hinder when bounce
-  for (let i = 0; i < obstacleArrayArray.length; i++) {
-    let obstacleArray = obstacleArrayArray[i];
-    for (let j = 0; j < obstacleArray.length; j++) {
-      let obstacle = obstacleArray[j];
-      // hinder bounce off top and bottom edges
-      if (obstacle.y < 0 || obstacle.y + obstacle.height > canvas.height) {
-        for (let l = 0; l < obstacleArray.length; l++) {
-          let newObject = obstacleArray[l];
-          newObject.speed = -newObject.speed;
-        }
-        break;
-      }
-    }
-  }
+ 
     // initiera movement ufo
     for (let i = 0; i < ufoArrayArray.length; i++) {
       let ufoArray = ufoArrayArray[i];
@@ -634,27 +588,6 @@ function update() {
     }
   }
 
-  // ball and obstacle collision
-  for (let j = 0; j < obstacleArrayArray.length; j++) {
-    let obstacleArray = obstacleArrayArray[j];
-    for (let i = 0; i < obstacleArray.length; i++) {
-      let obstacle = obstacleArray[i];
-      if (
-        ball.x + ball.radius > obstacle.x &&
-        ball.x - ball.radius < obstacle.x + obstacle.width &&
-        ball.y + ball.radius > obstacle.y &&
-        ball.y - ball.radius < obstacle.y + obstacle.height
-      ) {
-        ball.x = obstacle.x + obstacle.width + ball.radius;
-        ball.speedX = -ball.speedX;
-        rightPaddle.hit = true;
-        obstacle.status = 0;
-        obstacleArray.splice(i, 1);
-        i--;
-        obstacleBall.play();
-      }
-    }
-  }
   for (let j = 0; j < ufoArrayArray.length; j++) {
     let ufoArray = ufoArrayArray[j];
     for (let i = 0; i < ufoArray.length; i++) {
@@ -703,35 +636,7 @@ function update() {
       obstacleBall.play();
     }
   }
-  // ball and obstacleTwo collision
-  for (let i = 0; i < obstacleTwoArray.length; i++) {
-    let obstacle = obstacleTwoArray[i];
-    if (
-      !obstacle.hit &&
-      ball.x + ball.radius > obstacle.x &&
-      ball.x - ball.radius < obstacle.x + obstacle.width &&
-      ball.y + ball.radius > obstacle.y &&
-      ball.y - ball.radius < obstacle.y + obstacle.height
-    ) {
-      obstacle.hit = true;
-      ball.speedX = -ball.speedX;
-      rightPaddle.hit = true;
-      obstacleBall.play();
-    } else if (
-      obstacle.hit &&
-      ball.x + ball.radius > obstacle.x &&
-      ball.x - ball.radius < obstacle.x + obstacle.width &&
-      ball.y > obstacle.y &&
-      ball.y < obstacle.y + obstacle.height
-    ) {
-      ball.speedX = -ball.speedX;
-      rightPaddle.hit = true;
-      obstacle.status = 0;
-      obstacleBall.play();
-      obstacleTwoArray.splice(i, 1);
-      i--;
-    }
-  }
+
   // check for and handle collision between laser and ball, and handle laserArray when laser leaves canvas
   for (let i = 0; i < laserArray.length; i++) {
     let laser = laserArray[i];
@@ -798,8 +703,6 @@ function gameLoop() {
     moveRightpaddle();
     createObstacle(
       score,
-      obstacleArrayArray,
-      obstacleTwoArray,
       planetArray,
       ufoArrayArray
     );
@@ -811,7 +714,6 @@ function gameLoop() {
 }
 
 draw();
-
 
 // EVENTLISTENERS
 
