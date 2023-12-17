@@ -1,13 +1,14 @@
-import { startGame } from './script.js';
+import { startGame } from "./script.js";
 
 randomNumber();
-
+const timeStart = Date.now();
 // generate random number
 function randomNumber(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
+
 
 // levels & powerups
 export function getLevel(score, lvlcount, rightPaddle, powerUpArray) {  
@@ -57,9 +58,11 @@ export function getLevel(score, lvlcount, rightPaddle, powerUpArray) {
     }
   
 }
+
 // skapa hinder
 export function createObstacle(score, lvlcount, planetArray, ufoArrayArray) {
-  if (score == 200 && planetArray.length <= 0 && lvlcount >= 2) {
+  
+  if (score >= 100 && planetArray.length <= 0 && lvlcount >= 2) {
     let planetX = randomNumber(100, 500);
     let planetY = randomNumber(50, 250);
     let planet = (x, y) => ({

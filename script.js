@@ -35,8 +35,12 @@ let ufoMove = new Audio ("Assets/ufoMove.wav");
 ufoMove.volume = 0.5;
 let powerUpSound = new Audio("Assets/powerup.wav");
 powerUpSound.volume = 0.05;
-
-
+let gameOverSound = new Audio("Assets/gameoverSound.wav");
+gameOverSound.volume = 0.5;
+let gameStartSound = new Audio("Assets/gameStartSound.wav");
+gameStartSound.volume = 0.7;
+let looseLifeSound = new Audio ("Assets/looseLife.wav");
+looseLifeSound.volume = 0.4;
 // delcare arrays
 let laserArray = [];
 let planetArray = [];
@@ -45,7 +49,6 @@ let powerUpArray = [];
 let lifeArray = [];
 let onHitArray = [];
 let shotsArray = [];
-
 
 //delcare images
 let planet1Img = new Image();;
@@ -131,7 +134,6 @@ document.getElementById("start-btn").addEventListener("mousedown", startGame);
 
 function togglePause() {
   isPaused = !isPaused;
-
   if (!isPaused) {
     return;
   }
@@ -161,11 +163,14 @@ function startGame() {
   if (!gameStarted) {
     gameStarted = true;
     gameOver = false;
-
     score = 0;
-
+    gameStartSound.play();
     // Start the game loop
     lastTime = Date.now();
+    onHitArray = [];
+    laserArray = [];
+    shotsArray = [];
+    lifeArray = [];
     initArrays();
     gameLoop();
   } else {
@@ -175,11 +180,8 @@ function startGame() {
 }
 
 function resetGame() {
-
-  //window.removeEventListener("keydown", handleKeyDown);
-  //window.removeEventListener("keyup", handleKeyUp);
-  // Reset all game-related variables to their initial values
   gameOver = false;
+  gameStarted = false;
   score = 0;
   lvlcount = 1;
   leftLives = 4;
@@ -201,7 +203,6 @@ function resetGame() {
   ufoArrayArray = [];
   powerUpArray = [];
   lifeArray = [];
-  onHitArray = [];
   initArrays();
   
   // Reset other game-related settings
@@ -244,9 +245,9 @@ const ball = {
 
 // skapa onHit effekt när boll träffar paddel
 function collisionEffect() {
-  let newSpeedX = 2;
-  let newSpeedY = 2;
-
+  let newSpeedX = 120;
+  let newSpeedY = 120;
+  
   let onHit = (speedX, speedY) => ({
     x: ball.x,
     y: ball.y,
@@ -257,11 +258,11 @@ function collisionEffect() {
     lifeSpan: 0
   });
   onHitArray.push(onHit(newSpeedX, newSpeedY));
-  onHitArray.push(onHit(newSpeedX, newSpeedY - 0.5));
-  onHitArray.push(onHit(newSpeedX - 0.5, newSpeedY + 0.5));
+  onHitArray.push(onHit(newSpeedX, newSpeedY - 30));
+  onHitArray.push(onHit(newSpeedX - 30, newSpeedY + 30));
   onHitArray.push(onHit(newSpeedX, newSpeedY));
-  onHitArray.push(onHit(newSpeedX, newSpeedY - 0.5));
-  onHitArray.push(onHit(newSpeedX - 0.5, newSpeedY + 0.5));
+  onHitArray.push(onHit(newSpeedX, newSpeedY - 30));
+  onHitArray.push(onHit(newSpeedX - 30, newSpeedY + 30));
 }
 
 // Event listeners för att hantera spelarens rörelse + laser
@@ -387,7 +388,7 @@ function draw() {
   if (!isPaused) {
     for (let i = 0; i < laserArray.length; i++) {
       let laser = laserArray[i];
-      laser.x += laser.speed;
+      laser.x += laser.speed * deltaTime;
       ctx.fillStyle = "orange";
       ctx.fillRect(laser.x, laser.y, laser.width, laser.height);
     }
@@ -530,22 +531,22 @@ function update() {
     collisionEffect();
   }
 
-  // direction for objects in collsionEffect
+  // direction for objects in collisionEffect
   for (let i = 0; i < onHitArray.length; i++) {
     let onHit = onHitArray[i];
     if (!leftPaddle.hit && i >= 3) {
-      onHit.y += onHit.speedY;
-      onHit.x += onHit.speedX;
+      onHit.y += onHit.speedY * deltaTime;
+      onHit.x += onHit.speedX * deltaTime;
     } else if (!leftPaddle.hit && i <= 2) {
-      onHit.y -= onHit.speedY;
-      onHit.x += onHit.speedX;
+      onHit.y -= onHit.speedY * deltaTime;
+      onHit.x += onHit.speedX * deltaTime;
     }
     if (!rightPaddle.hit && i >= 3) {
-      onHit.y += onHit.speedY;
-      onHit.x -= onHit.speedX;
+      onHit.y += onHit.speedY * deltaTime;
+      onHit.x -= onHit.speedX * deltaTime;
     } else if (!rightPaddle.hit && i <= 2) {
-      onHit.y -= onHit.speedY;
-      onHit.x -= onHit.speedX;
+      onHit.y -= onHit.speedY * deltaTime;
+      onHit.x -= onHit.speedX * deltaTime;
     }
   }
 
@@ -647,7 +648,7 @@ function update() {
     }
   }
 
-  // check for and handle collision between laser and ball, and handle laserArray when laser leaves canvas
+  // laser and ball collision, laserArray when laser leaves canvas
   for (let i = 0; i < laserArray.length; i++) {
     let laser = laserArray[i];
     // check for collision
@@ -683,8 +684,13 @@ function update() {
     lifeArray.pop();
     ball.x = canvas.width / 2;
     ball.y = getRandomNumber(8, 292);
+    if (leftLives > 0) {
+      looseLifeSound.currentTime = 0;
+      looseLifeSound.play();  
+    }
     if (leftLives == 0) {
       gameOver = true;
+      gameOverSound.play();
     }
   }
 }
@@ -696,18 +702,18 @@ function shoot() {
     y: leftPaddle.y + leftPaddle.height / 2,
     width: 20,
     height: 20,
-    speed: 12,
+    speed: 720,
   };
   laserArray.push(laser);
 }
 
 // Game loop
-function gameLoop() {
+export function gameLoop() {
 
   let now = Date.now();
   deltaTime = (now - lastTime) / 1000;
   lastTime = now;
-  
+
   draw();
   //if game is paused skip these lines
 
@@ -736,9 +742,9 @@ function removeSelectedClass() {
 
 document.getElementById("instructions-btn").addEventListener("click", showInstructions);
 
-document.getElementById("reset-btn").addEventListener("click", function(){
+document.getElementById("reset-btn").addEventListener("mousedown", function(){
   resetGame();
-})
+});
 
 document.getElementById("easy-btn").addEventListener("mousedown", function() {
   removeSelectedClass();
