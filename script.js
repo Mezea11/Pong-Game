@@ -94,6 +94,7 @@ const leftPaddle = {
   height: paddleHeight,
   speed: 350,
   hit: true,
+  own: true,
   keys: {
     up: false,
     down: false,
@@ -107,6 +108,7 @@ const rightPaddle = {
   height: paddleHeight,
   speed: 200,
   hit: true,
+  own: true
 };
 
 function initArrays() {
@@ -602,6 +604,8 @@ function update() {
     paddleBall.play();
     //control onHit effect for left paddle
     leftPaddle.hit = false;
+    leftPaddle.own = true;
+    rightPaddle.own = false;
     // on paddle hit effect
     collisionEffect();
     
@@ -627,6 +631,8 @@ function update() {
     paddleBall.play();
     // right paddle stop moving after ball hits paddle + control onHit effect for right paddle
     rightPaddle.hit = false;
+    rightPaddle.own = true;
+    leftPaddle.own = false;
     // on paddle hit effect
     collisionEffect();
   }
@@ -732,6 +738,10 @@ function update() {
         ball.x = object.x + object.width + ball.radius
       } else if (ball.x <= object.x + object.width / 2) {
         ball.x = object.x - ball.radius;
+      } if (leftPaddle.own) {
+        score += 25;
+      } else if (!leftPaddle.own) {
+        score -= 25;
       }
       object.hit = true;
       ball.speedX = -ball.speedX;
@@ -741,7 +751,11 @@ function update() {
       ball.x - ball.radius < object.x + object.width &&
       ball.y > object.y &&
       ball.y < object.y + object.height
-    ) {
+    ) { if (leftPaddle.own) {
+      score += 50;
+    } else if (!leftPaddle.own) {
+      score -= 50;
+    }
       ball.speedX = -ball.speedX;
       planetArray.splice(i, 1);
       objectBall.play();
