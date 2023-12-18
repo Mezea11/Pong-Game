@@ -1,4 +1,4 @@
-import { getLevel, createObstacle } from "./obstaclesModule.js";
+import { getLevel, spawnTimer, createObject } from "./objectModule.js";
 
 // export startgame function to other modules
 export { startGame };
@@ -29,8 +29,8 @@ let laserSound = new Audio("Assets/laser2.wav");
 laserSound.volume = 0.1;
 let laserBall = new Audio("Assets/laser.wav");
 laserBall.volume = 0.05;
-let obstacleBall = new Audio("Assets/click2.wav");
-obstacleBall.volume = 0.1;
+let objectBall = new Audio("Assets/click2.wav");
+objectBall.volume = 0.1;
 let ufoMove = new Audio ("Assets/ufoMove.wav");
 ufoMove.volume = 0.5;
 let powerUpSound = new Audio("Assets/powerup.wav");
@@ -38,9 +38,15 @@ powerUpSound.volume = 0.05;
 let gameOverSound = new Audio("Assets/gameoverSound.wav");
 gameOverSound.volume = 0.5;
 let gameStartSound = new Audio("Assets/gameStartSound.wav");
-gameStartSound.volume = 0.7;
+gameStartSound.volume = 0.4;
 let looseLifeSound = new Audio ("Assets/looseLife.wav");
 looseLifeSound.volume = 0.4;
+let objectSpawnSound1 = new Audio ('Assets/spawnSound1.wav');
+objectSpawnSound1.volume = 0.3;
+let objectSpawnSound2 = new Audio ('Assets/spawnSound2.wav');
+objectSpawnSound2.volume = 0.3;
+let objectSpawnSound3 = new Audio ('Assets/spawnSound3.wav');
+objectSpawnSound3.volume = 0.3;
 // delcare arrays
 let laserArray = [];
 let planetArray = [];
@@ -160,10 +166,15 @@ function chooseDifficulty(difficulty) {
 }
 
 function startGame() {
+  if (!localStorage.getItem('highscore')) {
+    console.log('hello world');
+    localStorage.setItem('highscore', JSON.stringify([]));
+  }
   if (!gameStarted) {
     gameStarted = true;
     gameOver = false;
     score = 0;
+    isPaused = false;
     gameStartSound.play();
     // Start the game loop
     lastTime = Date.now();
@@ -171,7 +182,10 @@ function startGame() {
     laserArray = [];
     shotsArray = [];
     lifeArray = [];
+    ufoArrayArray = [];
     initArrays();
+    highscoreInput.style.visibility = 'hidden';
+    spawnTimer();
     gameLoop();
   } else {
     // Toggle the game pause state
@@ -232,7 +246,6 @@ function showInstructions() {
     }
 }
 
-
 function startMultiplayer() {}
 // Create the ball
 const ball = {
@@ -247,7 +260,6 @@ const ball = {
 function collisionEffect() {
   let newSpeedX = 120;
   let newSpeedY = 120;
-  
   let onHit = (speedX, speedY) => ({
     x: ball.x,
     y: ball.y,
@@ -424,6 +436,70 @@ function draw() {
   }
 }
 
+let highscoreInput = document.createElement('input');
+highscoreInput.setAttribute('id', 'highscoreInput');
+highscoreInput.innerHTML = "<strong>Input Name</strong>";
+document.body.append(highscoreInput);
+highscoreInput.style.visibility = 'hidden';
+
+if (localStorage.getItem('highscore') == null) {
+  localStorage.setItem('highscore', JSON.stringify([]));
+}
+
+highscoreInput.addEventListener('keypress', function (event) {
+  if (event.key === 'Enter') {
+    let name = highscoreInput.value;
+    let entry = {
+      score: score,
+      name: name
+    } 
+    addToLocalStorage(entry); 
+//    highscoreInput.style.visibility = 'hidden';
+  }
+})
+
+let highscoreList = document.createElement('table');
+highscoreList.setAttribute('id', 'highscoreList');
+highscoreList.innerHTML = 'Highscore';
+document.body.append(highscoreList);
+
+let titleRow = document.createElement('tr');
+titleRow.setAttribute('id', 'title');
+highscoreList.append(titleRow);
+let titleName = document.createElement('td');
+titleName.innerHTML = 'Name';
+let titleScore = document.createElement('td');
+titleScore.innerHTML = 'Score';
+titleRow.append(titleName);
+titleRow.append(titleScore);
+
+
+function addToLocalStorage(entry) {
+    let array = JSON.parse(localStorage.getItem('highscore'));
+    array.push(entry);
+    localStorage.setItem('highscore', JSON.stringify(array));
+    highscoreInput.value ='';
+    renderLocalStorage();
+  }
+
+function renderLocalStorage() {
+  let temp = JSON.parse(localStorage.getItem('highscore'));
+  highscoreList.innerHTML = ''; // Clear the existing content
+  highscoreList.append(titleRow); // Re-add the title row
+  for (let i = 0; i < temp.length; i++) {
+    let item = temp[i];
+    let row = document.createElement('tr');
+    let name = document.createElement('td');
+    name.innerHTML = item.name;
+    let score = document.createElement('td');
+    score.innerHTML = item.score;
+    row.append(name, score);
+    highscoreList.append(row);
+  }
+}
+
+renderLocalStorage();
+
 // Update function to handle game logic
 function update() {
   if (gameOver) {
@@ -437,9 +513,9 @@ function update() {
     ctx.fillStyle = "blue";
     ctx.font = "bold 25px Helvetica";
     ctx.fillText("Score: " + score, textX + 25, textY + 50);
+    highscoreInput.style.visibility = 'visible';
     return;
   }
-
   // Move the ball
   ball.x += ball.speedX * deltaTime;
   ball.y += ball.speedY * deltaTime;
@@ -453,7 +529,7 @@ function update() {
       let ufoArray = ufoArrayArray[i];
       for (let j = 0; j < ufoArray.length; j++) {
         let ufo = ufoArray[j];
-        ufo.y += ufo.speed;
+        ufo.y += ufo.speed * deltaTime;
       }
     }  
 
@@ -611,7 +687,7 @@ function update() {
         ufo.status = 0;
         ufoArray.splice(i, 1);
         i--;
-        obstacleBall.play();
+        objectBall.play();
       }
       if (ufoArrayArray <= 0) {
         ufoMove.pause();
@@ -635,7 +711,7 @@ function update() {
       }
       object.hit = true;
       ball.speedX = -ball.speedX;
-      obstacleBall.play();
+      objectBall.play();
     } else if (object.hit &&
       ball.x + ball.radius > object.x &&
       ball.x - ball.radius < object.x + object.width &&
@@ -644,7 +720,7 @@ function update() {
     ) {
       ball.speedX = -ball.speedX;
       planetArray.splice(i, 1);
-      obstacleBall.play();
+      objectBall.play();
     }
   }
 
@@ -708,7 +784,7 @@ function shoot() {
 }
 
 // Game loop
-export function gameLoop() {
+function gameLoop() {
 
   let now = Date.now();
   deltaTime = (now - lastTime) / 1000;
@@ -720,8 +796,8 @@ export function gameLoop() {
   if (!isPaused) {
     moveLeftPaddle();
     moveRightpaddle();
-    createObstacle(score, lvlcount, planetArray, ufoArrayArray);
-    getLevel(score, lvlcount, rightPaddle, powerUpArray);
+    createObject(score, lvlcount, planetArray, ufoArrayArray, objectSpawnSound1, objectSpawnSound3);
+    getLevel(score, lvlcount, rightPaddle, powerUpArray, objectSpawnSound2);
     update();
   }
 
