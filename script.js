@@ -448,8 +448,6 @@ highscoreForm.append(highscoreLabel);
 let highscoreInput = document.createElement('input');
 highscoreInput.setAttribute('id', 'highscoreInput');
 highscoreForm.append(highscoreInput);
-//document.body.append(highscoreInput);
-//highscoreInput.style.visibility = 'hidden';
 highscoreForm.style.visibility = 'hidden';
 
 if (localStorage.getItem('highscore') == null) {
@@ -498,7 +496,7 @@ function addToLocalStorage(entry) {
 
 function renderLocalStorage() {
   let temp = JSON.parse(localStorage.getItem('highscore'));
-  highscoreList.innerHTML = ''; // Clear the existing content
+  highscoreList.innerHTML = 'Highscore'; // Clear the existing content
   highscoreList.append(titleRow); // Re-add the title row
   for (let i = 0; i <  Math.min(temp.length, 5); i++) {
     let item = temp[i];
