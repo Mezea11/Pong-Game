@@ -515,6 +515,17 @@ renderLocalStorage();
 // Update function to handle game logic
 function update() {
   if (gameOver) {
+    let canvas = document.getElementById('pongCanvas');
+    let context = canvas.getContext('2d');
+
+    context.beginPath();
+    context.rect(150, 45, 310, 200);
+    context.fillStyle = 'gray';
+    context.fill();
+    context.lineWidth = 7;
+    context.strokeStyle = 'whitesmoke';
+    context.stroke();
+
     ctx.fillStyle = "Red";
     ctx.font = "bold 30px Helvetica";
     let gameOverText = "GAME OVER";

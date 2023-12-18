@@ -13,7 +13,7 @@ export function spawnTimer() {
   lastSpawn = Date.now();
 }
 // levels & powerups
-export function getLevel(score, lvlcount, rightPaddle, powerUpArray, objectSpawnSound2) {  
+export function getLevel(lvlcount, rightPaddle, powerUpArray, objectSpawnSound2) {  
     if (lvlcount === 1) {
       rightPaddle.speed = 150;
     }
