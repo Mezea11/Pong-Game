@@ -86,7 +86,7 @@ export function createObject(score, lvlcount, planetArray, ufoArrayArray, object
 
   let ufoArray = [];
   if ((score === 400 && ufoArrayArray.length <= 0 && lvlcount >= 2) || 
-      (Date.now() - lastSpawn > 4000 && planetArray.length <= 0)) {
+      (Date.now() - lastSpawn > 7000 && ufoArrayArray.length <= 0 && lvlcount >= 2)) {
     let ufoX = randomNumber(100, 500);
     let ufoY = randomNumber(50, 250);
     let ufo = (x, y) => ({

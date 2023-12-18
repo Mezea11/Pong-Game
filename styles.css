@@ -29,7 +29,7 @@ canvas {
     z-index: 2;
     color: white;
     outline: none;
-    bottom: 12rem;
+    top: 16rem;
 }
 
 input, label {
