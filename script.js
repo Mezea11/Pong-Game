@@ -454,7 +454,7 @@ highscoreInput.addEventListener('keypress', function (event) {
       name: name
     } 
     addToLocalStorage(entry); 
-//    highscoreInput.style.visibility = 'hidden';
+    highscoreInput.style.visibility = 'hidden';
   }
 })
 
