@@ -23,12 +23,23 @@ canvas {
     z-index: 1;
 }
 
-#highscoreInput {
+#highscoreForm {
     position: absolute;
-    margin: 0;
+    outline: none;
     z-index: 2;
+    color: white;
+    outline: none;
+    bottom: 12rem;
+}
+
+input, label {
+    display:block;
+}
+
+#highscoreInput {
+    border: none;
+    outline: none;
     background: white;
-    border: 2px solid white;
 }
 
 #highscoreList {

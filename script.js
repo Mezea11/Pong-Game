@@ -184,7 +184,8 @@ function startGame() {
     lifeArray = [];
     ufoArrayArray = [];
     initArrays();
-    highscoreInput.style.visibility = 'hidden';
+//    highscoreInput.style.visibility = 'hidden';
+    highscoreForm.style.visibility = 'hidden';
     spawnTimer();
     gameLoop();
   } else {
@@ -436,11 +437,20 @@ function draw() {
   }
 }
 
+
+let highscoreForm = document.createElement('form');
+highscoreForm.setAttribute('id', 'highscoreForm');
+document.body.append(highscoreForm);
+let highscoreLabel = document.createElement('label');
+highscoreLabel.innerHTML = "Enter name:";
+highscoreLabel.setAttribute('id', 'highscoreLabel');
+highscoreForm.append(highscoreLabel);
 let highscoreInput = document.createElement('input');
 highscoreInput.setAttribute('id', 'highscoreInput');
-highscoreInput.innerHTML = "<strong>Input Name</strong>";
-document.body.append(highscoreInput);
-highscoreInput.style.visibility = 'hidden';
+highscoreForm.append(highscoreInput);
+//document.body.append(highscoreInput);
+//highscoreInput.style.visibility = 'hidden';
+highscoreForm.style.visibility = 'hidden';
 
 if (localStorage.getItem('highscore') == null) {
   localStorage.setItem('highscore', JSON.stringify([]));
@@ -454,7 +464,8 @@ highscoreInput.addEventListener('keypress', function (event) {
       name: name
     } 
     addToLocalStorage(entry); 
-    highscoreInput.style.visibility = 'hidden';
+    highscoreForm.style.visibility = 'hidden';
+//    highscoreInput.style.visibility = 'hidden';
   }
 })
 
@@ -516,7 +527,8 @@ function update() {
     ctx.fillStyle = "blue";
     ctx.font = "bold 25px Helvetica";
     ctx.fillText("Score: " + score, textX + 25, textY + 50);
-    highscoreInput.style.visibility = 'visible';
+//    highscoreInput.style.visibility = 'visible';
+    highscoreForm.style.visibility = 'visible';
     return;
   }
   // Move the ball
