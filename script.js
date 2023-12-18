@@ -477,6 +477,9 @@ titleRow.append(titleScore);
 function addToLocalStorage(entry) {
     let array = JSON.parse(localStorage.getItem('highscore'));
     array.push(entry);
+    array.sort(function(a, b) { 
+      return b.score - a.score;
+  })
     localStorage.setItem('highscore', JSON.stringify(array));
     highscoreInput.value ='';
     renderLocalStorage();
@@ -486,7 +489,7 @@ function renderLocalStorage() {
   let temp = JSON.parse(localStorage.getItem('highscore'));
   highscoreList.innerHTML = ''; // Clear the existing content
   highscoreList.append(titleRow); // Re-add the title row
-  for (let i = 0; i < temp.length; i++) {
+  for (let i = 0; i <  Math.min(temp.length, 5); i++) {
     let item = temp[i];
     let row = document.createElement('tr');
     let name = document.createElement('td');
