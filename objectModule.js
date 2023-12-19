@@ -64,7 +64,7 @@ export function getLevel(lvlcount, rightPaddle, powerUpArray, objectSpawnSound2)
     } 
 }
 
-// skapa hinder
+// Create obstacle
 export function createObject(score, lvlcount, planetArray, ufoArrayArray, objectSpawnSound1, objectSpawnSound3) {
   let spawned = false;
   if ((score >= 100 && planetArray.length <= 0 && lvlcount >= 2) || 
