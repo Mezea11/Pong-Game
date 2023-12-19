@@ -42,7 +42,7 @@ let powerUpArray = [];
 let livesArray = [];
 let onHitArray = [];
 
-//delcare images
+//declare images
 let planet1Img = new Image();;
 planet1Img.src = "Assets/RedPlanet.png";
 
@@ -172,7 +172,7 @@ const ball = {
   speedY: 200,
 };
 
-// skapa onHit effekt när boll träffar paddel
+// create onHit effect when ball hits paddle
 function collisionEffect() {
   let newSpeedX = 2;
   let newSpeedY = 2;
@@ -193,7 +193,7 @@ function collisionEffect() {
   onHitArray.push(onHit(newSpeedX - 0.5, newSpeedY + 0.5));
 }
 
-// Event listeners för att hantera spelarens rörelse + laser
+// Event listeners for handling of players movement + laser
 window.addEventListener("keydown", (event) => {
   if (event.key === "ArrowUp") {
     leftPaddle.keys.up = true;
@@ -389,7 +389,7 @@ function update() {
   if (shotsArray > 4) {
   shotsArray.slice(0,4);
   }
-  // initiera movement hinder
+  // initiate movement obstacle
   for (let i = 0; i < obstacleArrayArray.length; i++) {
     let obstacleArray = obstacleArrayArray[i];
     for (let j = 0; j < obstacleArray.length; j++) {
@@ -398,12 +398,12 @@ function update() {
     }
   }
 
-  // movement hinder when bounce
+  // movement obstacle when bounce
   for (let i = 0; i < obstacleArrayArray.length; i++) {
     let obstacleArray = obstacleArrayArray[i];
     for (let j = 0; j < obstacleArray.length; j++) {
       let obstacle = obstacleArray[j];
-      // hinder bounce off top and bottom edges
+      // obstacle bounce off top and bottom edges
       if (obstacle.y < 0 || obstacle.y + obstacle.height > canvas.height) {
         for (let l = 0; l < obstacleArray.length; l++) {
           let newObject = obstacleArray[l];
@@ -677,7 +677,7 @@ function update() {
   }
 }
 
-// skapar laser-skott
+// creates laser
 function shoot() {
   let laser = {
     x: leftPaddle.x / 2,

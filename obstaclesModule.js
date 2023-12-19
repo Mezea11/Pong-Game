@@ -51,7 +51,7 @@ export function getLevel(score, lvlcount, rightPaddle, powerUpArray) {
     }
   }
 }
-// skapa hinder
+// create obstacle
 export function createObstacle(score, obstacleArrayArray, obstacleTwoArray, planetArray, ufoArrayArray) {
   if (score == 200 && planetArray.length <= 0) {
     let planetX = randomNumber(100, 500);
