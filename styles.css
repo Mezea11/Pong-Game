@@ -20,6 +20,34 @@ canvas {
     background-size: 114%;
     background-position: 25% 25%;
     border: 1px solid white;
+    z-index: 1;
+}
+
+#highscoreForm {
+    position: absolute;
+    outline: none;
+    z-index: 2;
+    color: white;
+    outline: none;
+    top: 16rem;
+}
+
+input, label {
+    display:block;
+}
+
+#highscoreInput {
+    border: none;
+    outline: none;
+    background: white;
+}
+
+#highscoreList {
+    position: relative;
+    justify-items: end;
+    padding: 1rem;
+    border: 2px solid white;
+    color: white;
 }
 
 .game-title {

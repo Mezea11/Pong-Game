@@ -1,4 +1,4 @@
-import { getLevel, createObstacle } from "./obstaclesModule.js";
+import { getLevel, spawnTimer, createObject } from "./objectModule.js";
 
 // export startgame function to other modules
 export { startGame };
@@ -29,22 +29,34 @@ let laserSound = new Audio("Assets/laser2.wav");
 laserSound.volume = 0.1;
 let laserBall = new Audio("Assets/laser.wav");
 laserBall.volume = 0.05;
-let obstacleBall = new Audio("Assets/click2.wav");
-obstacleBall.volume = 0.1;
+let objectBall = new Audio("Assets/click2.wav");
+objectBall.volume = 0.1;
 let ufoMove = new Audio ("Assets/ufoMove.wav");
 ufoMove.volume = 0.5;
-
-// delcare arrays
+let powerUpSound = new Audio("Assets/powerup.wav");
+powerUpSound.volume = 0.05;
+let gameOverSound = new Audio("Assets/gameoverSound.wav");
+gameOverSound.volume = 0.5;
+let gameStartSound = new Audio("Assets/gameStartSound.wav");
+gameStartSound.volume = 0.4;
+let looseLifeSound = new Audio ("Assets/looseLife.wav");
+looseLifeSound.volume = 0.4;
+let objectSpawnSound1 = new Audio ('Assets/spawnSound1.wav');
+objectSpawnSound1.volume = 0.3;
+let objectSpawnSound2 = new Audio ('Assets/spawnSound2.wav');
+objectSpawnSound2.volume = 0.3;
+let objectSpawnSound3 = new Audio ('Assets/spawnSound3.wav');
+objectSpawnSound3.volume = 0.3;
+// declare arrays
 let laserArray = [];
-let obstacleArrayArray = [];
-let obstacleTwoArray = [];
 let planetArray = [];
 let ufoArrayArray = [];
 let powerUpArray = [];
 let lifeArray = [];
 let onHitArray = [];
+let shotsArray = [];
 
-//delcare images
+//declare images
 let planet1Img = new Image();;
 planet1Img.src = "Assets/RedPlanet.png";
 
@@ -60,6 +72,7 @@ ufoGrey2Img.src = "Assets/UfoGrey2.png"
 let questionmarkImg = new Image();
 questionmarkImg.src = "Assets/question-mark.png"
 
+let gameOver = false;
 let deltaTime = 0;
 let lastTime = 0;
 
@@ -68,32 +81,8 @@ let isPaused = false;
 let score = 0;
 let lvlcount = 1;
 
-let leftLives = 5;
-let rightLives = 5;
-
-let life = {
-  x: 5,
-  y: 30,
-  width: 4,
-  height: 15 
-};
-lifeArray.push(life);
-lifeArray.push(life);
-lifeArray.push(life);
-lifeArray.push(life);
-
-let shotsArray = [];
-
-let shots = {
-  x: 25,
-  y: 30,
-  width: 4,
-  height: 15 
-};
-shotsArray.push(shots);
-shotsArray.push(shots);
-shotsArray.push(shots);
-shotsArray.push(shots);
+let leftLives = 4;
+let rightLives = 4;
 
 // Create the paddles
 const paddleWidth = 10,
@@ -105,6 +94,7 @@ const leftPaddle = {
   height: paddleHeight,
   speed: 350,
   hit: true,
+  own: true,
   keys: {
     up: false,
     down: false,
@@ -118,21 +108,40 @@ const rightPaddle = {
   height: paddleHeight,
   speed: 200,
   hit: true,
+  own: true
 };
 
+function initArrays() {
+    let life = {
+      x: 5,
+      y: 30,
+      width: 4,
+      height: 15
+    };
+    lifeArray.push(life);
+    lifeArray.push(life);
+    lifeArray.push(life);
+    lifeArray.push(life);
+    let shots = {
+      x: 25,
+      y: 30,
+      width: 4,
+      height: 15
+    };
+    shotsArray.push(shots);
+    shotsArray.push(shots);
+    shotsArray.push(shots);
+    shotsArray.push(shots);
+  }
     
 //////////////////////////////////////////////////////////////////////////////////////////
 // MENU FUNCTION
 let gameStarted = false;
 
 document.getElementById("start-btn").addEventListener("mousedown", startGame);
-document.getElementById("start-btn").addEventListener("mouseup", function() {
-  canvas.focus();
-});
 
 function togglePause() {
   isPaused = !isPaused;
-
   if (!isPaused) {
     return;
   }
@@ -140,27 +149,46 @@ function togglePause() {
 function chooseDifficulty(difficulty) {
       if (difficulty === 'easy') {
         // Set up the game for easy difficulty
+        lvlcount = 1;
         ball.speedX = 150;
         leftPaddle.height = 80;
+        
       } else if (difficulty === 'medium') {
         // Set up the game for medium difficulty
+        lvlcount = 2;
         ball.speedX = 200;
         leftPaddle.height = 60;
+  
       } else if (difficulty === 'hard') {
         // Set up the game for hard difficulty
-        ball.speedX = 250;
-        leftPaddle.height = 40;
+        lvlcount = 3;
+        ball.speedX = 400;
+        leftPaddle.height = 60;
       }
 }
 
 function startGame() {
+  if (!localStorage.getItem('highscore')) {
+    console.log('hello world');
+    localStorage.setItem('highscore', JSON.stringify([]));
+  }
   if (!gameStarted) {
     gameStarted = true;
-
+    gameOver = false;
     score = 0;
-
+    isPaused = false;
+    gameStartSound.play();
     // Start the game loop
     lastTime = Date.now();
+    onHitArray = [];
+    laserArray = [];
+    shotsArray = [];
+    lifeArray = [];
+    ufoArrayArray = [];
+    initArrays();
+//    highscoreInput.style.visibility = 'hidden';
+    highscoreForm.style.visibility = 'hidden';
+    spawnTimer();
     gameLoop();
   } else {
     // Toggle the game pause state
@@ -169,11 +197,12 @@ function startGame() {
 }
 
 function resetGame() {
-  // Reset all game-related variables to their initial values
+  gameOver = false;
+  gameStarted = false;
   score = 0;
   lvlcount = 1;
-  leftLives = 5;
-  rightLives = 5;
+  leftLives = 4;
+  rightLives = 4;
 
   // Reset paddles, ball, and other relevant objects
   leftPaddle.y = canvas.height / 2 - paddleHeight / 2;
@@ -186,14 +215,13 @@ function resetGame() {
 
   // Reset arrays
   laserArray = [];
-  obstacleArrayArray = [];
-  obstacleTwoArray = [];
+  shotsArray = [];
   planetArray = [];
   ufoArrayArray = [];
   powerUpArray = [];
   lifeArray = [];
-  onHitArray = [];
-
+  initArrays();
+  
   // Reset other game-related settings
   isPaused = true;
 
@@ -210,6 +238,7 @@ function resetGame() {
   draw();
 }
 
+<<<<<<< HEAD
 function gameOver() {
   // Display "GAME OVER" text in the center of the screen
   ctx.font = '3em Arial';
@@ -223,6 +252,8 @@ function gameOver() {
   // Pause the game so that the player can read the message before restarting
   isPaused = true;
 }
+=======
+>>>>>>> 74c60c36e90b17046deb3c3cf84d80f389d869d4
 
 let instructionsDiv = document.getElementById("instructions");
 
@@ -234,7 +265,6 @@ function showInstructions() {
     }
 }
 
-
 function startMultiplayer() {}
 // Create the ball
 const ball = {
@@ -245,11 +275,10 @@ const ball = {
   speedY: 200,
 };
 
-// skapa onHit effekt när boll träffar paddel
+// create onHit effect when ball hits paddle
 function collisionEffect() {
-  let newSpeedX = 2;
-  let newSpeedY = 2;
-
+  let newSpeedX = 120;
+  let newSpeedY = 120;
   let onHit = (speedX, speedY) => ({
     x: ball.x,
     y: ball.y,
@@ -260,14 +289,14 @@ function collisionEffect() {
     lifeSpan: 0
   });
   onHitArray.push(onHit(newSpeedX, newSpeedY));
-  onHitArray.push(onHit(newSpeedX, newSpeedY - 0.5));
-  onHitArray.push(onHit(newSpeedX - 0.5, newSpeedY + 0.5));
+  onHitArray.push(onHit(newSpeedX, newSpeedY - 30));
+  onHitArray.push(onHit(newSpeedX - 30, newSpeedY + 30));
   onHitArray.push(onHit(newSpeedX, newSpeedY));
-  onHitArray.push(onHit(newSpeedX, newSpeedY - 0.5));
-  onHitArray.push(onHit(newSpeedX - 0.5, newSpeedY + 0.5));
+  onHitArray.push(onHit(newSpeedX, newSpeedY - 30));
+  onHitArray.push(onHit(newSpeedX - 30, newSpeedY + 30));
 }
 
-// Event listeners för att hantera spelarens rörelse + laser
+// Event listeners for handling of players movement + laser
 window.addEventListener("keydown", (event) => {
   if (event.key === "ArrowUp") {
     leftPaddle.keys.up = true;
@@ -286,6 +315,9 @@ window.addEventListener("keyup", (event) => {
   }
 
   if (event.key === " ") {
+    if (isPaused) {
+      return;
+    } else if (!isPaused) {
     if (shotsArray.length > 0) {
     shoot();
     // audio will trigger everytime you push space by resetting audio
@@ -294,6 +326,7 @@ window.addEventListener("keyup", (event) => {
     shotsArray.pop();
     }
   }
+}
 
   if (event.key === "p") {
     togglePause();
@@ -359,7 +392,7 @@ function draw() {
     }
   }
 
-  // draw object
+  // draw planet
   for (let i = 0; i < planetArray.length; i++) {
     let object = planetArray[i];
     if (!object.hit) {
@@ -369,17 +402,6 @@ function draw() {
     }
   }
 
-  // draw obstactle
-  for (let j = 0; j < obstacleArrayArray.length; j++) {
-    let obstacleArray = obstacleArrayArray[j];
-    for (let i = 0; i < obstacleArray.length; i++) {
-      let obstacle = obstacleArray[i];
-      if (obstacle.status === 1) {
-        ctx.fillStyle = "pink";
-        ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
-      }
-    }
-  }
   // draw ufo
   for (let j = 0; j < ufoArrayArray.length; j++) {
     let ufoArray = ufoArrayArray[j];
@@ -393,23 +415,11 @@ function draw() {
     }
   }
 
-
-  // draw obstacleTwo
-  for (let i = 0; i < obstacleTwoArray.length; i++) {
-    let obstacle = obstacleTwoArray[i];
-    if (!obstacle.hit && obstacle.status === 1) {
-      ctx.fillStyle = "brown";
-      ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
-    } else if (obstacle.hit && obstacle.status === 1) {
-      ctx.fillStyle = "red";
-      ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
-    }
-  }
   // draw laser
   if (!isPaused) {
     for (let i = 0; i < laserArray.length; i++) {
       let laser = laserArray[i];
-      laser.x += laser.speed;
+      laser.x += laser.speed * deltaTime;
       ctx.fillStyle = "orange";
       ctx.fillRect(laser.x, laser.y, laser.width, laser.height);
     }
@@ -439,17 +449,115 @@ function draw() {
 
   // draw shots
   for (let i = 0; i < shotsArray.length; i++) {
-    let shot = shotsArray[i];
+    let shots = shotsArray[i];
     ctx.fillStyle = 'red';
-//    ctx.font = "16px courier";
-    ctx.fillRect(shot.x + i * 5, shot.y, shot.width, shot.height);
-//    ctx.fillRect(shot.x, shot.y, shot.width, shot.height);
+    ctx.fillRect(shots.x + i * 5, shots.y, shots.width, shots.height);
   }
 }
 
+
+let highscoreForm = document.createElement('form');
+highscoreForm.setAttribute('id', 'highscoreForm');
+document.body.append(highscoreForm);
+let highscoreLabel = document.createElement('label');
+highscoreLabel.innerHTML = "Enter name:";
+highscoreLabel.setAttribute('id', 'highscoreLabel');
+highscoreForm.append(highscoreLabel);
+let highscoreInput = document.createElement('input');
+highscoreInput.setAttribute('id', 'highscoreInput');
+highscoreForm.append(highscoreInput);
+highscoreForm.style.visibility = 'hidden';
+
+if (localStorage.getItem('highscore') == null) {
+  localStorage.setItem('highscore', JSON.stringify([]));
+}
+
+highscoreInput.addEventListener('keypress', function (event) {
+  if (event.key === 'Enter') {
+    let name = highscoreInput.value;
+    let entry = {
+      score: score,
+      name: name
+    } 
+    addToLocalStorage(entry); 
+    highscoreForm.style.visibility = 'hidden';
+//    highscoreInput.style.visibility = 'hidden';
+  }
+})
+
+let highscoreList = document.createElement('table');
+highscoreList.setAttribute('id', 'highscoreList');
+highscoreList.innerHTML = 'Highscore';
+document.body.append(highscoreList);
+
+let titleRow = document.createElement('tr');
+titleRow.setAttribute('id', 'title');
+highscoreList.append(titleRow);
+let titleName = document.createElement('td');
+titleName.innerHTML = 'Name';
+let titleScore = document.createElement('td');
+titleScore.innerHTML = 'Score';
+titleRow.append(titleName);
+titleRow.append(titleScore);
+
+
+function addToLocalStorage(entry) {
+    let array = JSON.parse(localStorage.getItem('highscore'));
+    array.push(entry);
+    array.sort(function(a, b) { 
+      return b.score - a.score;
+  })
+    localStorage.setItem('highscore', JSON.stringify(array));
+    highscoreInput.value ='';
+    renderLocalStorage();
+  }
+
+function renderLocalStorage() {
+  let temp = JSON.parse(localStorage.getItem('highscore'));
+  highscoreList.innerHTML = 'Highscore'; // Clear the existing content
+  highscoreList.append(titleRow); // Re-add the title row
+  for (let i = 0; i <  Math.min(temp.length, 5); i++) {
+    let item = temp[i];
+    let row = document.createElement('tr');
+    let name = document.createElement('td');
+    name.innerHTML = item.name;
+    let score = document.createElement('td');
+    score.innerHTML = item.score;
+    row.append(name, score);
+    highscoreList.append(row);
+  }
+}
+
+renderLocalStorage();
+
 // Update function to handle game logic
 function update() {
+  if (gameOver) {
+    let canvas = document.getElementById('pongCanvas');
+    let context = canvas.getContext('2d');
 
+    context.beginPath();
+    context.rect(150, 45, 310, 200);
+    context.fillStyle = 'gray';
+    context.fill();
+    context.lineWidth = 7;
+    context.strokeStyle = 'whitesmoke';
+    context.stroke();
+
+    ctx.fillStyle = "Red";
+    ctx.font = "bold 30px Helvetica";
+    let gameOverText = "GAME OVER";
+    let textWidth = ctx.measureText(gameOverText).width;
+    let textX = (canvas.width - textWidth) / 2;
+    let textY = canvas.height / 3;
+    ctx.fillText(gameOverText, textX, textY);
+    ctx.fillStyle = "blue";
+    ctx.font = "bold 25px Helvetica";
+    ctx.fillText("Score: " + score, textX + 25, textY + 50);
+//    highscoreInput.style.visibility = 'visible';
+    highscoreForm.style.visibility = 'visible';
+    return;
+  }
   // Move the ball
   ball.x += ball.speedX * deltaTime;
   ball.y += ball.speedY * deltaTime;
@@ -457,37 +565,13 @@ function update() {
   if (ball.x > 300) {
     leftPaddle.hit = true;
   }
-  
-  // initiera movement hinder
-  for (let i = 0; i < obstacleArrayArray.length; i++) {
-    let obstacleArray = obstacleArrayArray[i];
-    for (let j = 0; j < obstacleArray.length; j++) {
-      let obstacle = obstacleArray[j];
-      obstacle.y += obstacle.speed;
-    }
-  }
-
-  // movement hinder when bounce
-  for (let i = 0; i < obstacleArrayArray.length; i++) {
-    let obstacleArray = obstacleArrayArray[i];
-    for (let j = 0; j < obstacleArray.length; j++) {
-      let obstacle = obstacleArray[j];
-      // hinder bounce off top and bottom edges
-      if (obstacle.y < 0 || obstacle.y + obstacle.height > canvas.height) {
-        for (let l = 0; l < obstacleArray.length; l++) {
-          let newObject = obstacleArray[l];
-          newObject.speed = -newObject.speed;
-        }
-        break;
-      }
-    }
-  }
+ 
     // initiera movement ufo
     for (let i = 0; i < ufoArrayArray.length; i++) {
       let ufoArray = ufoArrayArray[i];
       for (let j = 0; j < ufoArray.length; j++) {
         let ufo = ufoArray[j];
-        ufo.y += ufo.speed;
+        ufo.y += ufo.speed * deltaTime;
       }
     }  
 
@@ -536,10 +620,18 @@ function update() {
     paddleBall.play();
     //control onHit effect for left paddle
     leftPaddle.hit = false;
+    leftPaddle.own = true;
+    rightPaddle.own = false;
     // on paddle hit effect
     collisionEffect();
     
     if (shotsArray.length < 4) {
+      let shots = {
+        x: 25,
+        y: 30,
+        width: 4,
+        height: 15
+      };
       shotsArray.push(shots);
     }
   }
@@ -555,26 +647,28 @@ function update() {
     paddleBall.play();
     // right paddle stop moving after ball hits paddle + control onHit effect for right paddle
     rightPaddle.hit = false;
+    rightPaddle.own = true;
+    leftPaddle.own = false;
     // on paddle hit effect
     collisionEffect();
   }
 
-  // direction for objects in collsionEffect
+  // direction for objects in collisionEffect
   for (let i = 0; i < onHitArray.length; i++) {
     let onHit = onHitArray[i];
     if (!leftPaddle.hit && i >= 3) {
-      onHit.y += onHit.speedY;
-      onHit.x += onHit.speedX;
+      onHit.y += onHit.speedY * deltaTime;
+      onHit.x += onHit.speedX * deltaTime;
     } else if (!leftPaddle.hit && i <= 2) {
-      onHit.y -= onHit.speedY;
-      onHit.x += onHit.speedX;
+      onHit.y -= onHit.speedY * deltaTime;
+      onHit.x += onHit.speedX * deltaTime;
     }
     if (!rightPaddle.hit && i >= 3) {
-      onHit.y += onHit.speedY;
-      onHit.x -= onHit.speedX;
+      onHit.y += onHit.speedY * deltaTime;
+      onHit.x -= onHit.speedX * deltaTime;
     } else if (!rightPaddle.hit && i <= 2) {
-      onHit.y -= onHit.speedY;
-      onHit.x -= onHit.speedX;
+      onHit.y -= onHit.speedY * deltaTime;
+      onHit.x -= onHit.speedX * deltaTime;
     }
   }
 
@@ -591,6 +685,7 @@ function update() {
       ball.y > powerUp.y &&
       ball.y < powerUp.y + powerUp.height
     ) {
+
       const temp = getRandomNumber(1, 3);
       if (temp == 1) {
         if (leftPaddle.height == 60) {
@@ -617,29 +712,11 @@ function update() {
         }      }
       powerUpArray.splice(i, 1);
       i--;
+      powerUpSound.currentTime = 0; 
+      powerUpSound.play();
     }
   }
-  // ball and obstacle collision
-  for (let j = 0; j < obstacleArrayArray.length; j++) {
-    let obstacleArray = obstacleArrayArray[j];
-    for (let i = 0; i < obstacleArray.length; i++) {
-      let obstacle = obstacleArray[i];
-      if (
-        ball.x + ball.radius > obstacle.x &&
-        ball.x - ball.radius < obstacle.x + obstacle.width &&
-        ball.y + ball.radius > obstacle.y &&
-        ball.y - ball.radius < obstacle.y + obstacle.height
-      ) {
-        ball.x = obstacle.x + obstacle.width + ball.radius;
-        ball.speedX = -ball.speedX;
-        rightPaddle.hit = true;
-        obstacle.status = 0;
-        obstacleArray.splice(i, 1);
-        i--;
-        obstacleBall.play();
-      }
-    }
-  }
+  // ball and ufoArrayArray collision
   for (let j = 0; j < ufoArrayArray.length; j++) {
     let ufoArray = ufoArrayArray[j];
     for (let i = 0; i < ufoArray.length; i++) {
@@ -656,7 +733,11 @@ function update() {
         ufo.status = 0;
         ufoArray.splice(i, 1);
         i--;
-        obstacleBall.play();
+        objectBall.play();
+      }
+      if (ufoArrayArray <= 0) {
+        ufoMove.pause();
+        ufoMove.currentTime = 0;
       }
     }
   }
@@ -673,51 +754,31 @@ function update() {
         ball.x = object.x + object.width + ball.radius
       } else if (ball.x <= object.x + object.width / 2) {
         ball.x = object.x - ball.radius;
+      } if (leftPaddle.own) {
+        score += 25;
+      } else if (!leftPaddle.own) {
+        score -= 25;
       }
       object.hit = true;
       ball.speedX = -ball.speedX;
-      obstacleBall.play();
+      objectBall.play();
     } else if (object.hit &&
       ball.x + ball.radius > object.x &&
       ball.x - ball.radius < object.x + object.width &&
       ball.y > object.y &&
       ball.y < object.y + object.height
-    ) {
+    ) { if (leftPaddle.own) {
+      score += 50;
+    } else if (!leftPaddle.own) {
+      score -= 50;
+    }
       ball.speedX = -ball.speedX;
       planetArray.splice(i, 1);
-      obstacleBall.play();
+      objectBall.play();
     }
   }
-  // ball and obstacleTwo collision
-  for (let i = 0; i < obstacleTwoArray.length; i++) {
-    let obstacle = obstacleTwoArray[i];
-    if (
-      !obstacle.hit &&
-      ball.x + ball.radius > obstacle.x &&
-      ball.x - ball.radius < obstacle.x + obstacle.width &&
-      ball.y + ball.radius > obstacle.y &&
-      ball.y - ball.radius < obstacle.y + obstacle.height
-    ) {
-      obstacle.hit = true;
-      ball.speedX = -ball.speedX;
-      rightPaddle.hit = true;
-      obstacleBall.play();
-    } else if (
-      obstacle.hit &&
-      ball.x + ball.radius > obstacle.x &&
-      ball.x - ball.radius < obstacle.x + obstacle.width &&
-      ball.y > obstacle.y &&
-      ball.y < obstacle.y + obstacle.height
-    ) {
-      ball.speedX = -ball.speedX;
-      rightPaddle.hit = true;
-      obstacle.status = 0;
-      obstacleBall.play();
-      obstacleTwoArray.splice(i, 1);
-      i--;
-    }
-  }
-  // check for and handle collision between laser and ball, and handle laserArray when laser leaves canvas
+
+  // laser and ball collision, laserArray when laser leaves canvas
   for (let i = 0; i < laserArray.length; i++) {
     let laser = laserArray[i];
     // check for collision
@@ -753,17 +814,25 @@ function update() {
     lifeArray.pop();
     ball.x = canvas.width / 2;
     ball.y = getRandomNumber(8, 292);
+    if (leftLives > 0) {
+      looseLifeSound.currentTime = 0;
+      looseLifeSound.play();  
+    }
+    if (leftLives == 0) {
+      gameOver = true;
+      gameOverSound.play();
+    }
   }
 }
 
-// skapar laser-skott
+// creates laser
 function shoot() {
   let laser = {
     x: leftPaddle.x / 2,
     y: leftPaddle.y + leftPaddle.height / 2,
     width: 20,
     height: 20,
-    speed: 12,
+    speed: 720,
   };
   laserArray.push(laser);
 }
@@ -778,17 +847,11 @@ function gameLoop() {
   draw();
   //if game is paused skip these lines
 
-  if (isPaused == false) {
+  if (!isPaused) {
     moveLeftPaddle();
     moveRightpaddle();
-    createObstacle(
-      score,
-      obstacleArrayArray,
-      obstacleTwoArray,
-      planetArray,
-      ufoArrayArray
-    );
-    getLevel(score, lvlcount, rightPaddle, powerUpArray);
+    createObject(score, lvlcount, planetArray, ufoArrayArray, objectSpawnSound1, objectSpawnSound3);
+    getLevel(score, lvlcount, rightPaddle, powerUpArray, objectSpawnSound2);
     update();
   }
 
@@ -796,7 +859,6 @@ function gameLoop() {
 }
 
 draw();
-
 
 // EVENTLISTENERS
 
@@ -810,23 +872,23 @@ function removeSelectedClass() {
 
 document.getElementById("instructions-btn").addEventListener("click", showInstructions);
 
-document.getElementById("reset-btn").addEventListener("click", function(){
+document.getElementById("reset-btn").addEventListener("mousedown", function(){
   resetGame();
-})
+});
 
-document.getElementById("easy-btn").addEventListener("click", function() {
+document.getElementById("easy-btn").addEventListener("mousedown", function() {
   removeSelectedClass();
   chooseDifficulty('easy');
   this.classList.add('selected');
 });
 
-document.getElementById("medium-btn").addEventListener("click", function() {
+document.getElementById("medium-btn").addEventListener("mousedown", function() {
   removeSelectedClass();
   chooseDifficulty('medium');
   this.classList.add('selected');
 });
 
-document.getElementById("hard-btn").addEventListener("click", function() {
+document.getElementById("hard-btn").addEventListener("mousedown", function() {
   removeSelectedClass();
   chooseDifficulty('hard');
   this.classList.add('selected');
