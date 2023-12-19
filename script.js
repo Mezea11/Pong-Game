@@ -478,9 +478,9 @@ let titleRow = document.createElement('tr');
 titleRow.setAttribute('id', 'title');
 highscoreList.append(titleRow);
 let titleName = document.createElement('td');
-titleName.innerHTML = 'Name';
+titleName.innerHTML = 'Name:';
 let titleScore = document.createElement('td');
-titleScore.innerHTML = 'Score';
+titleScore.innerHTML = 'Score:';
 titleRow.append(titleName);
 titleRow.append(titleScore);
 

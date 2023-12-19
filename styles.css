@@ -12,6 +12,7 @@ body {
     opacity: 95%;
 }
 
+
 canvas {
     position: relative;
     display: block;
@@ -30,7 +31,7 @@ canvas {
     z-index: 2;
     color: white;
     outline: none;
-    top: 16rem;
+    top: 10rem;
 }
 
 input, label {
@@ -44,11 +45,18 @@ input, label {
 }
 
 #highscoreList {
-    position: relative;
+    position: absolute;
+    z-index: 1;
+    top: 5.5rem;
     justify-items: end;
     padding: 1rem;
     border: 2px solid white;
     color: white;
+    display: flex;
+    flex-direction: column;
+    margin-right: 50rem;
+    background-color: black;
+    height: 12rem;
 }
 
 .game-title {
@@ -88,6 +96,7 @@ button:hover {
     font-family: "Courier New", Courier, monospace;
     max-width: 15rem;
     text-align: center;
+    position: relative;
 }
 
 #instructions-section {
