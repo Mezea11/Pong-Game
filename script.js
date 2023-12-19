@@ -186,7 +186,6 @@ function startGame() {
     lifeArray = [];
     ufoArrayArray = [];
     initArrays();
-//    highscoreInput.style.visibility = 'hidden';
     highscoreForm.style.visibility = 'hidden';
     spawnTimer();
     gameLoop();
@@ -439,7 +438,7 @@ function draw() {
   }
 }
 
-
+// input form for highscore
 let highscoreForm = document.createElement('form');
 highscoreForm.setAttribute('id', 'highscoreForm');
 document.body.append(highscoreForm);
@@ -452,10 +451,11 @@ highscoreInput.setAttribute('id', 'highscoreInput');
 highscoreForm.append(highscoreInput);
 highscoreForm.style.visibility = 'hidden';
 
+// create empty array if highscore is empty
 if (localStorage.getItem('highscore') == null) {
   localStorage.setItem('highscore', JSON.stringify([]));
 }
-
+// eventlistener for highscore input
 highscoreInput.addEventListener('keypress', function (event) {
   if (event.key === 'Enter') {
     let name = highscoreInput.value;
@@ -465,10 +465,10 @@ highscoreInput.addEventListener('keypress', function (event) {
     } 
     addToLocalStorage(entry); 
     highscoreForm.style.visibility = 'hidden';
-//    highscoreInput.style.visibility = 'hidden';
   }
 })
 
+// creating elements for highscore list
 let highscoreList = document.createElement('table');
 highscoreList.setAttribute('id', 'highscoreList');
 highscoreList.innerHTML = 'Highscore';
@@ -538,7 +538,6 @@ function update() {
     ctx.fillStyle = "blue";
     ctx.font = "bold 25px Helvetica";
     ctx.fillText("Score: " + score, textX + 25, textY + 50);
-//    highscoreInput.style.visibility = 'visible';
     highscoreForm.style.visibility = 'visible';
     return;
   }
