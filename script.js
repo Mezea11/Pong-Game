@@ -186,7 +186,6 @@ function startGame() {
     lifeArray = [];
     ufoArrayArray = [];
     initArrays();
-//    highscoreInput.style.visibility = 'hidden';
     highscoreForm.style.visibility = 'hidden';
     spawnTimer();
     gameLoop();
@@ -238,6 +237,22 @@ function resetGame() {
   draw();
 }
 
+<<<<<<< HEAD
+function gameOver() {
+  // Display "GAME OVER" text in the center of the screen
+  ctx.font = '3em Arial';
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#fff';
+  ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 + 100);
+  // Show final score
+  ctx.font = '2em Arial';
+  ctx.fillText(`Score: ${score}`, canvas.width / 2, canvas.height / 2 + 140
+  , (canvas.width - 80) / 2);
+  // Pause the game so that the player can read the message before restarting
+  isPaused = true;
+}
+=======
+>>>>>>> 74c60c36e90b17046deb3c3cf84d80f389d869d4
 
 let instructionsDiv = document.getElementById("instructions");
 
@@ -439,7 +454,7 @@ function draw() {
   }
 }
 
-
+// input form for highscore
 let highscoreForm = document.createElement('form');
 highscoreForm.setAttribute('id', 'highscoreForm');
 document.body.append(highscoreForm);
@@ -452,10 +467,11 @@ highscoreInput.setAttribute('id', 'highscoreInput');
 highscoreForm.append(highscoreInput);
 highscoreForm.style.visibility = 'hidden';
 
+// create empty array if highscore is empty
 if (localStorage.getItem('highscore') == null) {
   localStorage.setItem('highscore', JSON.stringify([]));
 }
-
+// eventlistener for highscore input
 highscoreInput.addEventListener('keypress', function (event) {
   if (event.key === 'Enter') {
     let name = highscoreInput.value;
@@ -465,10 +481,10 @@ highscoreInput.addEventListener('keypress', function (event) {
     } 
     addToLocalStorage(entry); 
     highscoreForm.style.visibility = 'hidden';
-//    highscoreInput.style.visibility = 'hidden';
   }
 })
 
+// creating elements for highscore list
 let highscoreList = document.createElement('table');
 highscoreList.setAttribute('id', 'highscoreList');
 highscoreList.innerHTML = 'Highscore';
@@ -538,7 +554,6 @@ function update() {
     ctx.fillStyle = "blue";
     ctx.font = "bold 25px Helvetica";
     ctx.fillText("Score: " + score, textX + 25, textY + 50);
-//    highscoreInput.style.visibility = 'visible';
     highscoreForm.style.visibility = 'visible';
     return;
   }
