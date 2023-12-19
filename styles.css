@@ -31,7 +31,7 @@ canvas {
     z-index: 2;
     color: white;
     outline: none;
-    top: 10rem;
+    top: 12.5rem;
 }
 
 input, label {
@@ -47,7 +47,7 @@ input, label {
 #highscoreList {
     position: absolute;
     z-index: 1;
-    top: 5.5rem;
+    top: 5.6rem;
     justify-items: end;
     padding: 1rem;
     border: 2px solid white;
@@ -55,7 +55,6 @@ input, label {
     display: flex;
     flex-direction: column;
     margin-right: 50rem;
-    background-color: black;
     height: 12rem;
 }
 
