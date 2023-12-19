@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,10 +8,11 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="multiplayer.html">
 </head>
+
 <body>
     <h1 class="game-title">PONG</h1>
     <canvas id="pongCanvas"></canvas>
-    
+
     <div id="menu">
         <button id="start-btn">Start & Pause</button>
         <button id="instructions-btn">Instructions</button>
@@ -22,22 +24,27 @@
 
 
     </div>
-        <section id="instructions-section">
+    <section id="instructions-section">
         <div id="instructions" style="display:none;">
             <h2 style="color: white;">Instructions</h2>
             <p style="color: white;">
-                Use the left and right arrow keys to move the left paddle. Use the W and S arrow keys to move the right paddle.
-             </p>
+                Use the W and S arrow keys to move the right paddle. Use the left and right arrow keys to move the left
+                paddle.
+            </p>
+            <p style="color: white;">
+                First player to get 10 points wins!
+            </p>
         </div>
-        </section>
+    </section>
 
-        <section id="difficulty-section">
-            <div id="difficulty" style="display: none;" style="display: flex; flex-direction: row;"></div>
-           
-        </section>
+    <section id="difficulty-section">
+        <div id="difficulty" style="display: none;" style="display: flex; flex-direction: row;"></div>
 
-    
+    </section>
+
+
     <script type="module" src="objectModule.js"></script>
     <script type="module" src="multiplayer.js"></script>
 </body>
+
 </html>

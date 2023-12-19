@@ -47,7 +47,7 @@ let objectSpawnSound2 = new Audio ('Assets/spawnSound2.wav');
 objectSpawnSound2.volume = 0.3;
 let objectSpawnSound3 = new Audio ('Assets/spawnSound3.wav');
 objectSpawnSound3.volume = 0.3;
-// delcare arrays
+// declare arrays
 let laserArray = [];
 let planetArray = [];
 let ufoArrayArray = [];
