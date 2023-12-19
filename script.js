@@ -237,6 +237,22 @@ function resetGame() {
   draw();
 }
 
+<<<<<<< HEAD
+function gameOver() {
+  // Display "GAME OVER" text in the center of the screen
+  ctx.font = '3em Arial';
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#fff';
+  ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 + 100);
+  // Show final score
+  ctx.font = '2em Arial';
+  ctx.fillText(`Score: ${score}`, canvas.width / 2, canvas.height / 2 + 140
+  , (canvas.width - 80) / 2);
+  // Pause the game so that the player can read the message before restarting
+  isPaused = true;
+}
+=======
+>>>>>>> 74c60c36e90b17046deb3c3cf84d80f389d869d4
 
 let instructionsDiv = document.getElementById("instructions");
 

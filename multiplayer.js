@@ -70,7 +70,7 @@ const ball = {
   y: 103,
   radius: 8,
   speedX: 300,
-  speedY: 300
+  speedY: 270
 };
 
 let gameStarted = false;
@@ -162,8 +162,8 @@ function createObject() {
 
 // create obstacle
 function CreateObstacle() {
-  if (score === 2 && obstacleArray.length == 0) {
-    let obstacleX = getRandomNumber(100, 500);
+  if ((score + score2) === 2  && obstacleArray.length == 0) {
+    let obstacleX = getRandomNumber(200, 400);
     let obstacleY = 50;
     // hinder bestående av 4 stora block
     let makeObstacle = (x, y) => ({
@@ -179,9 +179,9 @@ function CreateObstacle() {
     obstacleArray.push(makeObstacle(obstacleX, obstacleY + 20));
     obstacleArray.push(makeObstacle(obstacleX + 20, obstacleY + 20));
   }
-  if (score === 4 && obstacleArray.length <= 4) {
-    let obstacleX = getRandomNumber(100, 500);
-    let obstacleY = obstacleX;
+  if ((score + score2) === 4 && obstacleArray.length <= 4) {
+    let obstacleX = getRandomNumber(200, 400);
+    let obstacleY = 50
     // obstacle consistant of 9 smaller blocks
     let makeObstacle = (x, y) => ({
       x: x,
@@ -201,7 +201,7 @@ function CreateObstacle() {
     obstacleArray.push(makeObstacle(obstacleX + 20, obstacleY + 10));
     obstacleArray.push(makeObstacle(obstacleX + 20, obstacleY + 20));
   }
-  if (score === 6 && obstacleTwoArray.length <= 4) {
+  if ((score + score2) === 6 && obstacleTwoArray.length <= 4) {
     let obstacleX = getRandomNumber(100, 200);
     let obstacleY = obstacleX;
     // obstacle consistant of 9 smaller blocks
@@ -336,7 +336,7 @@ function draw() {
   for (let i = 0; i < obstacleArray.length; i++) {
     let obstacle = obstacleArray[i];
     if (obstacle.status === 1) {
-      ctx.fillStyle = 'pink';
+      ctx.fillStyle = 'blue';
       ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
     }
   }
@@ -344,10 +344,10 @@ function draw() {
   for (let i = 0; i < obstacleTwoArray.length; i++) {
     let obstacle = obstacleTwoArray[i];
     if (!obstacle.hit && obstacle.status === 1) {
-      ctx.fillStyle = 'brown';
+      ctx.fillStyle = 'purple';
       ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
     } else if (obstacle.hit && obstacle.status === 1) {
-      ctx.fillStyle = 'red';
+      ctx.fillStyle = 'purple';
       ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
     }
   }
