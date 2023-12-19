@@ -237,7 +237,6 @@ function resetGame() {
   draw();
 }
 
-<<<<<<< HEAD
 function gameOver() {
   // Display "GAME OVER" text in the center of the screen
   ctx.font = '3em Arial';
@@ -251,8 +250,6 @@ function gameOver() {
   // Pause the game so that the player can read the message before restarting
   isPaused = true;
 }
-=======
->>>>>>> 74c60c36e90b17046deb3c3cf84d80f389d869d4
 
 let instructionsDiv = document.getElementById("instructions");
 
