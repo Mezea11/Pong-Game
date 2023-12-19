@@ -34,6 +34,8 @@ canvas {
     top: 12.5rem;
 }
 
+
+
 input, label {
     display:block;
 }
@@ -52,10 +54,14 @@ input, label {
     padding: 1rem;
     border: 2px solid white;
     color: white;
-    display: flex;
     flex-direction: column;
     margin-right: 50rem;
     height: 12rem;
+}
+
+#highscoreList td {
+    text-align: left;
+
 }
 
 .game-title {
