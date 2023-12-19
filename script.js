@@ -237,7 +237,6 @@ function resetGame() {
   draw();
 }
 
-
 let instructionsDiv = document.getElementById("instructions");
 
 function showInstructions() {
@@ -444,8 +443,8 @@ highscoreForm.setAttribute('id', 'highscoreForm');
 document.body.append(highscoreForm);
 let highscoreLabel = document.createElement('label');
 highscoreLabel.innerHTML = "Enter name:";
-highscoreLabel.setAttribute('id', 'highscoreLabel');
 highscoreForm.append(highscoreLabel);
+highscoreLabel.setAttribute('id', 'highscoreLabel');
 let highscoreInput = document.createElement('input');
 highscoreInput.setAttribute('id', 'highscoreInput');
 highscoreForm.append(highscoreInput);
@@ -537,7 +536,7 @@ function update() {
     ctx.fillText(gameOverText, textX, textY);
     ctx.fillStyle = "blue";
     ctx.font = "bold 25px Helvetica";
-    ctx.fillText("Score: " + score, textX + 25, textY + 50);
+    ctx.fillText("Score: " + score, textX + 25, textY + 80);
     highscoreForm.style.visibility = 'visible';
     return;
   }
