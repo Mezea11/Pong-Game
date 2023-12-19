@@ -50,7 +50,7 @@ input, label {
     position: absolute;
     z-index: 1;
     top: 5.5rem;
-    align-items: start;
+    justify-items: start;
     padding: 1rem;
     border: 2px solid white;
     color: white;
