@@ -8,6 +8,7 @@ function randomNumber(min, max) {
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
+// spawnTimer
 let lastSpawn = Date.now();
 export function spawnTimer() {
   lastSpawn = Date.now();
@@ -64,7 +65,7 @@ export function getLevel(lvlcount, rightPaddle, powerUpArray, objectSpawnSound2)
     } 
 }
 
-// skapa hinder
+// Create obstacle
 export function createObject(score, lvlcount, planetArray, ufoArrayArray, objectSpawnSound1, objectSpawnSound3) {
   let spawned = false;
   if ((score >= 100 && planetArray.length <= 0 && lvlcount >= 2) || 

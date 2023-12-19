@@ -5,7 +5,7 @@ const ctx = canvas.getContext('2d');
 canvas.width = 600;
 canvas.height = 300;
 
-// audio
+// Audio
 let paddleBall = new Audio('Assets/click.wav');
 paddleBall.volume = 0.2;
 let laserSound = new Audio('Assets/laser2.wav');
@@ -37,13 +37,13 @@ let gameOver1 = false;
 let gameOver2 = false;
 
 // Create the paddles
-const paddleWidth = 10, paddleHeight = 50;
+const paddleWidth = 10, paddleHeight = 44;
 const leftPaddle = {
   x: 0,
   y: canvas.height / 2 - paddleHeight / 2,
   width: paddleWidth,
   height: paddleHeight,
-  speed: 350,
+  speed: 375,
   hit: true,
   keys: {
     up: false,
@@ -56,7 +56,7 @@ const rightPaddle = {
   y: canvas.height / 2 - paddleHeight / 2,
   width: paddleWidth,
   height: paddleHeight,
-  speed: 350,
+  speed: 375,
   hit: true,
   keys: {
     up: false,
@@ -67,7 +67,7 @@ const rightPaddle = {
 // Create the ball
 const ball = {
   x: canvas.width / 2,
-  y: canvas.height / 2,
+  y: 103,
   radius: 8,
   speedX: 300,
   speedY: 300
@@ -75,6 +75,7 @@ const ball = {
 
 let gameStarted = false;
 
+// Start and pause
 document.getElementById("start-btn").addEventListener("mousedown", () => {
   isPaused = !isPaused;
 });
@@ -82,8 +83,6 @@ document.getElementById("start-btn").addEventListener("mousedown", () => {
 function startGame() {
   if (!gameStarted) {
     gameStarted = true;
-    // Reset game state or perform any necessary initialization
-    resetGame();
     // Start the game loop
     gameLoop();
   } else {
@@ -164,7 +163,7 @@ function createObject() {
 // create obstacle
 function CreateObstacle() {
   if (score === 2 && obstacleArray.length == 0) {
-    let obstacleX = getRandomNumber(100, 300);
+    let obstacleX = getRandomNumber(100, 500);
     let obstacleY = 50;
     // hinder bestående av 4 stora block
     let makeObstacle = (x, y) => ({
@@ -181,7 +180,7 @@ function CreateObstacle() {
     obstacleArray.push(makeObstacle(obstacleX + 20, obstacleY + 20));
   }
   if (score === 4 && obstacleArray.length <= 4) {
-    let obstacleX = getRandomNumber(100, 200);
+    let obstacleX = getRandomNumber(100, 500);
     let obstacleY = obstacleX;
     // obstacle consistant of 9 smaller blocks
     let makeObstacle = (x, y) => ({
@@ -311,8 +310,9 @@ function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   // Draw paddles
-  ctx.fillStyle = 'white';
+  ctx.fillStyle = 'green';
   ctx.fillRect(leftPaddle.x, leftPaddle.y, leftPaddle.width, leftPaddle.height);
+  ctx.fillStyle = 'red';
   ctx.fillRect(rightPaddle.x, rightPaddle.y, rightPaddle.width, rightPaddle.height);
 
   // Draw ball
@@ -578,7 +578,15 @@ function gameLoop() {
   requestAnimationFrame(gameLoop);
 }
 
+document.getElementById("instructions-btn").addEventListener("click", showInstructions);
+// Reset the game
+document.getElementById("reset-btn").addEventListener("mousedown", function(){
+  resetGame();
+});
+
+function resetGame() {
+  location.reload();
+}
+
 // Start the game loop
 gameLoop();
-
-document.getElementById("instructions-btn").addEventListener("click", showInstructions);
