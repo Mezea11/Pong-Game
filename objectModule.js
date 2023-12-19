@@ -1,5 +1,5 @@
 //import { startGame } from "./script.js";
-
+// tete
 randomNumber();
 
 // generate random number
