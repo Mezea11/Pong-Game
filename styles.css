@@ -49,19 +49,14 @@ input, label {
 #highscoreList {
     position: absolute;
     z-index: 1;
-    top: 5.5rem;
-    justify-items: start;
+    top: 5.6rem;
+    justify-items: end;
     padding: 1rem;
     border: 2px solid white;
     color: white;
     flex-direction: column;
     margin-right: 50rem;
     height: 12rem;
-}
-
-#highscoreList td {
-    text-align: left;
-
 }
 
 .game-title {
