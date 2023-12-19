@@ -56,13 +56,10 @@ input, label {
     color: white;
     flex-direction: column;
     margin-right: 50rem;
-    height: 12rem;
+    height: auto;
 }
 
-#highscoreList td {
-    text-align: left;
 
-}
 
 .game-title {
     display: flex;
