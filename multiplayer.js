@@ -15,8 +15,10 @@ laserBall.volume = 0.05;
 let obstacleBall = new Audio('Assets/click2.wav');
 obstacleBall.volume = 0.1;
 
-let laser;
-let laserArray = [];
+let planet1Img = new Image();;
+planet1Img.src = "Assets/RedPlanet.png";
+
+let planetArray = [];
 
 let obstacleArray = [];
 let obstacleTwoArray = [];
@@ -31,8 +33,11 @@ let isPaused = true;
 let score = 0;
 let score2 = 0;
 
+let gameOver1 = false;
+let gameOver2 = false;
+
 // Create the paddles
-const paddleWidth = 10, paddleHeight = 60;
+const paddleWidth = 10, paddleHeight = 50;
 const leftPaddle = {
   x: 0,
   y: canvas.height / 2 - paddleHeight / 2,
@@ -64,11 +69,15 @@ const ball = {
   x: canvas.width / 2,
   y: canvas.height / 2,
   radius: 8,
-  speedX: 200,
-  speedY: 200
+  speedX: 300,
+  speedY: 300
 };
 
 let gameStarted = false;
+
+document.getElementById("start-btn").addEventListener("mousedown", () => {
+  isPaused = !isPaused;
+});
 
 function startGame() {
   if (!gameStarted) {
@@ -86,6 +95,7 @@ function startGame() {
     }
   }
 }
+
 getRandomNumber();
 
 // generate random number
@@ -95,7 +105,63 @@ function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-// skapa hinder
+function randomNumber(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+function createObject() {
+  let spawned = false;
+  if ((score === 1 && planetArray.length <= 0) ||
+    (Date.now() - lastSpawn > 4000 && planetArray.length <= 0)) {
+    spawned = true;
+    let planetX = randomNumber(100, 500);
+    let planetY = randomNumber(50, 250);
+    let planet = (x, y) => ({
+      x: x,
+      y: y,
+      width: 40,
+      height: 40,
+      hit: false
+    })
+    planetArray.push(planet(planetX, planetY));
+    objectSpawnSound1.currentTime = 0;
+    objectSpawnSound1.play();
+  }
+
+  let ufoArray = [];
+  if ((score === 400 && ufoArrayArray.length <= 0 && lvlcount >= 2) ||
+    (Date.now() - lastSpawn > 7000 && ufoArrayArray.length <= 0 && lvlcount >= 2)) {
+    let ufoX = randomNumber(100, 500);
+    let ufoY = randomNumber(50, 250);
+    let ufo = (x, y) => ({
+      x: x,
+      y: y,
+      width: 20,
+      height: 20,
+      status: 1,
+      speed: 180
+    })
+    ufoArray.push(ufo(ufoX, ufoY));
+    ufoArray.push(ufo(ufoX + 23, ufoY));
+    ufoArray.push(ufo(ufoX + 46, ufoY));
+    ufoArray.push(ufo(ufoX, ufoY + 23));
+    ufoArray.push(ufo(ufoX + 23, ufoY + 23));
+    ufoArray.push(ufo(ufoX + 46, ufoY + 23));
+    ufoArray.push(ufo(ufoX, ufoY + 46));
+    ufoArray.push(ufo(ufoX + 23, ufoY + 46));
+    ufoArray.push(ufo(ufoX + 46, ufoY + 46));
+    ufoArrayArray.push(ufoArray);
+  }
+  if (spawned) {
+    lastSpawn = Date.now();
+    objectSpawnSound3.currentTime = 0;
+    objectSpawnSound3.play();
+  }
+}
+
+// create obstacle
 function CreateObstacle() {
   if (score === 2 && obstacleArray.length == 0) {
     let obstacleX = getRandomNumber(100, 300);
@@ -117,7 +183,7 @@ function CreateObstacle() {
   if (score === 4 && obstacleArray.length <= 4) {
     let obstacleX = getRandomNumber(100, 200);
     let obstacleY = obstacleX;
-    // hinder bestående av 9 mindre block
+    // obstacle consistant of 9 smaller blocks
     let makeObstacle = (x, y) => ({
       x: x,
       y: y,
@@ -139,7 +205,7 @@ function CreateObstacle() {
   if (score === 6 && obstacleTwoArray.length <= 4) {
     let obstacleX = getRandomNumber(100, 200);
     let obstacleY = obstacleX;
-    // hinder bestående av 9 mindre block
+    // obstacle consistant of 9 smaller blocks
     let makeObstacle = (x, y) => ({
       x: x,
       y: y,
@@ -160,7 +226,7 @@ function CreateObstacle() {
     obstacleTwoArray.push(makeObstacle(obstacleX + 20, obstacleY + 20));
   }
 }
-// skapa onHit effekt när boll träffar paddel
+// create onHit effect when ball hits a paddle
 function collisionEffect() {
   let newSpeedX = 2;
   let newSpeedY = 2;
@@ -179,7 +245,7 @@ function collisionEffect() {
   onHitArray.push(onHit(newSpeedX - 0.2, newSpeedY + 0.2));
 }
 
-// Event listeners för att hantera spelarens rörelse + laser
+// Event listeners for handling player movement
 window.addEventListener("keydown", (event) => {
   if (event.code === "KeyW") {
     leftPaddle.keys.up = true;
@@ -197,13 +263,6 @@ window.addEventListener("keyup", (event) => {
     leftPaddle.keys.down = false;
   }
 
-  if (event.key === ' ') {
-    shoot();
-    // audio will trigger everytime you push space by resetting audio
-    laserSound.currentTime = 0;
-    laserSound.play();
-  }
-
   if (event.key === 'p') {
     isPaused = !isPaused;
   }
@@ -218,7 +277,7 @@ function moveLeftPaddle() {
   }
 }
 
-// Event listeners för att hantera spelarens rörelse + laser
+// Event listeners for handling player movement
 window.addEventListener("keydown", (event) => {
   if (event.key === "ArrowUp") {
     rightPaddle.keys.up = true;
@@ -263,6 +322,16 @@ function draw() {
   ctx.fill();
   ctx.closePath();
 
+  // draw planet
+  for (let i = 0; i < planetArray.length; i++) {
+    let object = planetArray[i];
+    if (!object.hit) {
+      ctx.drawImage(planet1Img, object.x, object.y, object.width, object.height)
+    } else if (object.hit) {
+      ctx.drawImage(planet2Img, object.x, object.y, object.width, object.height)
+    }
+  }
+
   // draw obstactle
   for (let i = 0; i < obstacleArray.length; i++) {
     let obstacle = obstacleArray[i];
@@ -282,13 +351,7 @@ function draw() {
       ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
     }
   }
-  // draw laser
-  for (let i = 0; i < laserArray.length; i++) {
-    let laser = laserArray[i];
-    laser.x += laser.speed;
-    ctx.fillStyle = "orange";
-    ctx.fillRect(laser.x, laser.y, laser.width, laser.height);
-  }
+
   // draw collisionEffect
   for (let i = 0; i < onHitArray.length; i++) {
     let onHit = onHitArray[i];
@@ -300,17 +363,65 @@ function draw() {
     }
   }
   // draw score
-  ctx.fillStyle = "white";
+  ctx.fillStyle = "green";
   ctx.font = "16px courier";
-  ctx.fillText("player 1: " + score, 15, 20);
+  ctx.fillText("Player 1: " + score, 15, 20);
 
-  ctx.fillStyle = "white";
+  ctx.fillStyle = "red";
   ctx.font = "16px courier";
-  ctx.fillText("player 2: " + score2, 460, 20);
+  ctx.fillText("Player 2: " + score2, 460, 20);
 }
 
 // Update function to handle game logic
 function update() {
+  if (gameOver1) {
+    let canvas = document.getElementById('pongCanvas');
+    let context = canvas.getContext('2d');
+
+    context.beginPath();
+    context.rect(150, 45, 310, 200);
+    context.fillStyle = 'gray';
+    context.fill();
+    context.lineWidth = 7;
+    context.strokeStyle = 'whitesmoke';
+    context.stroke();
+
+    ctx.fillStyle = "green";
+    ctx.font = "bold 28px Helvetica";
+    let gameOverText = "Player 1 is victorious!";
+    let textWidth = ctx.measureText(gameOverText).width;
+    let textX = (canvas.width - textWidth) / 2;
+    let textY = canvas.height / 2;
+    ctx.fillText(gameOverText, textX, textY);
+   
+
+    return;
+  }
+
+  if (gameOver2) {
+    let canvas = document.getElementById('pongCanvas');
+    let context = canvas.getContext('2d');
+
+    context.beginPath();
+    context.rect(150, 45, 310, 200);
+    context.fillStyle = 'gray';
+    context.fill();
+    context.lineWidth = 7;
+    context.strokeStyle = 'whitesmoke';
+    context.stroke();
+
+    ctx.fillStyle = "red";
+    ctx.font = "bold 28px Helvetica";
+    let gameOverText = "Player 2 is victorious!";
+    let textWidth = ctx.measureText(gameOverText).width;
+    let textX = (canvas.width - textWidth) / 2;
+    let textY = canvas.height / 2;
+    ctx.fillText(gameOverText, textX, textY);
+   
+
+    return;
+  }
+
   // Move the ball
   ball.x += ball.speedX * deltaTime;
   ball.y += ball.speedY * deltaTime;
@@ -415,27 +526,6 @@ function update() {
       obstacleBall.play();
     }
   }
-  // check for and handle collision between laser and ball, and handle laserArray when laser leaves canvas
-  for (let i = 0; i < laserArray.length; i++) {
-    let laser = laserArray[i];
-    // check for collision
-    if (
-      laser.x < ball.x + ball.radius &&
-      laser.x + laser.width > ball.x &&
-      laser.y < ball.y + ball.radius &&
-      laser.y + laser.height > ball.y
-    ) {
-      // change direction and remove laser from array
-      ball.speedX = -ball.speedX;
-      laserArray.splice(i, 1);
-      i--;
-      laserBall.play();
-    }
-    // remove laser from array when leaving canvas
-    if (laser.x - laser.width > canvas.width) {
-      laserArray.splice(i, 1);
-    }
-  }
 
   // Check for scoring
   if (ball.x - ball.radius > canvas.width) {
@@ -445,23 +535,29 @@ function update() {
     ball.y = getRandomNumber(8, 292);
   }
 
-  if (ball.x + ball.radius  < 0) {
+  if (ball.x + ball.radius < 0) {
     score2 += 1;
     ball.x = canvas.width / 2;
     ball.y = getRandomNumber(8, 292);
   }
+
+  if (score == 10) {
+    gameOver1 = true;
+  }
+
+  if (score2 == 10) {
+    gameOver2 = true;
+  }
 }
 
-// skapar laser-skott
-function shoot() {
-  let laser = {
-    x: leftPaddle.x / 2,
-    y: leftPaddle.y + leftPaddle.height / 2,
-    width: 20,
-    height: 20,
-    speed: 12,
-  };
-  laserArray.push(laser);
+let instructionsDiv = document.getElementById("instructions");
+
+function showInstructions() {
+  if (instructionsDiv.style.display === "none") {
+    instructionsDiv.style.display = "block";
+  } else {
+    instructionsDiv.style.display = "none";
+  }
 }
 
 // Game loop
@@ -484,3 +580,5 @@ function gameLoop() {
 
 // Start the game loop
 gameLoop();
+
+document.getElementById("instructions-btn").addEventListener("click", showInstructions);

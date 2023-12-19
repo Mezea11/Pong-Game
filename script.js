@@ -47,7 +47,7 @@ let objectSpawnSound2 = new Audio ('Assets/spawnSound2.wav');
 objectSpawnSound2.volume = 0.3;
 let objectSpawnSound3 = new Audio ('Assets/spawnSound3.wav');
 objectSpawnSound3.volume = 0.3;
-// delcare arrays
+// declare arrays
 let laserArray = [];
 let planetArray = [];
 let ufoArrayArray = [];
@@ -56,7 +56,7 @@ let lifeArray = [];
 let onHitArray = [];
 let shotsArray = [];
 
-//delcare images
+//declare images
 let planet1Img = new Image();;
 planet1Img.src = "Assets/RedPlanet.png";
 
@@ -237,6 +237,22 @@ function resetGame() {
   draw();
 }
 
+<<<<<<< HEAD
+function gameOver() {
+  // Display "GAME OVER" text in the center of the screen
+  ctx.font = '3em Arial';
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#fff';
+  ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 + 100);
+  // Show final score
+  ctx.font = '2em Arial';
+  ctx.fillText(`Score: ${score}`, canvas.width / 2, canvas.height / 2 + 140
+  , (canvas.width - 80) / 2);
+  // Pause the game so that the player can read the message before restarting
+  isPaused = true;
+}
+=======
+>>>>>>> 74c60c36e90b17046deb3c3cf84d80f389d869d4
 
 let instructionsDiv = document.getElementById("instructions");
 
@@ -258,7 +274,7 @@ const ball = {
   speedY: 200,
 };
 
-// skapa onHit effekt när boll träffar paddel
+// create onHit effect when ball hits paddle
 function collisionEffect() {
   let newSpeedX = 120;
   let newSpeedY = 120;
@@ -279,7 +295,7 @@ function collisionEffect() {
   onHitArray.push(onHit(newSpeedX - 30, newSpeedY + 30));
 }
 
-// Event listeners för att hantera spelarens rörelse + laser
+// Event listeners for handling of players movement + laser
 window.addEventListener("keydown", (event) => {
   if (event.key === "ArrowUp") {
     leftPaddle.keys.up = true;
@@ -808,7 +824,7 @@ function update() {
   }
 }
 
-// skapar laser-skott
+// creates laser
 function shoot() {
   let laser = {
     x: leftPaddle.x / 2,
