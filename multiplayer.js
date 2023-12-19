@@ -95,7 +95,7 @@ function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-// skapa hinder
+// create obstacle
 function CreateObstacle() {
   if (score === 2 && obstacleArray.length == 0) {
     let obstacleX = getRandomNumber(100, 300);
@@ -117,7 +117,7 @@ function CreateObstacle() {
   if (score === 4 && obstacleArray.length <= 4) {
     let obstacleX = getRandomNumber(100, 200);
     let obstacleY = obstacleX;
-    // hinder bestående av 9 mindre block
+    // obstacle consistant of 9 smaller blocks
     let makeObstacle = (x, y) => ({
       x: x,
       y: y,
@@ -139,7 +139,7 @@ function CreateObstacle() {
   if (score === 6 && obstacleTwoArray.length <= 4) {
     let obstacleX = getRandomNumber(100, 200);
     let obstacleY = obstacleX;
-    // hinder bestående av 9 mindre block
+    // obstacle consistant of 9 smaller blocks
     let makeObstacle = (x, y) => ({
       x: x,
       y: y,
@@ -160,7 +160,7 @@ function CreateObstacle() {
     obstacleTwoArray.push(makeObstacle(obstacleX + 20, obstacleY + 20));
   }
 }
-// skapa onHit effekt när boll träffar paddel
+// crate onHit effect when ball hits a paddle
 function collisionEffect() {
   let newSpeedX = 2;
   let newSpeedY = 2;
@@ -179,7 +179,7 @@ function collisionEffect() {
   onHitArray.push(onHit(newSpeedX - 0.2, newSpeedY + 0.2));
 }
 
-// Event listeners för att hantera spelarens rörelse + laser
+// Event listeners for handling player movement
 window.addEventListener("keydown", (event) => {
   if (event.code === "KeyW") {
     leftPaddle.keys.up = true;
@@ -218,7 +218,7 @@ function moveLeftPaddle() {
   }
 }
 
-// Event listeners för att hantera spelarens rörelse + laser
+// Event listeners for handling player movement + laser
 window.addEventListener("keydown", (event) => {
   if (event.key === "ArrowUp") {
     rightPaddle.keys.up = true;
@@ -452,16 +452,14 @@ function update() {
   }
 }
 
-// skapar laser-skott
-function shoot() {
-  let laser = {
-    x: leftPaddle.x / 2,
-    y: leftPaddle.y + leftPaddle.height / 2,
-    width: 20,
-    height: 20,
-    speed: 12,
-  };
-  laserArray.push(laser);
+let instructionsDiv = document.getElementById("instructions");
+
+function showInstructions() {
+    if (instructionsDiv.style.display === "none") {
+        instructionsDiv.style.display = "block";
+    } else {
+        instructionsDiv.style.display = "none";
+    }
 }
 
 // Game loop
@@ -484,3 +482,5 @@ function gameLoop() {
 
 // Start the game loop
 gameLoop();
+
+document.getElementById("instructions-btn").addEventListener("click", showInstructions);
