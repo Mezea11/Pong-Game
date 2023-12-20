@@ -15,10 +15,6 @@ laserBall.volume = 0.05;
 let obstacleBall = new Audio('Assets/click2.wav');
 obstacleBall.volume = 0.1;
 
-let planet1Img = new Image();;
-planet1Img.src = "Assets/RedPlanet.png";
-
-let planetArray = [];
 
 let obstacleArray = [];
 let obstacleTwoArray = [];
@@ -102,62 +98,6 @@ function getRandomNumber(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1) + min);
-}
-
-function randomNumber(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1) + min);
-}
-
-function createObject() {
-  let spawned = false;
-  if ((score === 1 && planetArray.length <= 0) ||
-    (Date.now() - lastSpawn > 4000 && planetArray.length <= 0)) {
-    spawned = true;
-    let planetX = randomNumber(100, 500);
-    let planetY = randomNumber(50, 250);
-    let planet = (x, y) => ({
-      x: x,
-      y: y,
-      width: 40,
-      height: 40,
-      hit: false
-    })
-    planetArray.push(planet(planetX, planetY));
-    objectSpawnSound1.currentTime = 0;
-    objectSpawnSound1.play();
-  }
-
-  let ufoArray = [];
-  if ((score === 400 && ufoArrayArray.length <= 0 && lvlcount >= 2) ||
-    (Date.now() - lastSpawn > 7000 && ufoArrayArray.length <= 0 && lvlcount >= 2)) {
-    let ufoX = randomNumber(100, 500);
-    let ufoY = randomNumber(50, 250);
-    let ufo = (x, y) => ({
-      x: x,
-      y: y,
-      width: 20,
-      height: 20,
-      status: 1,
-      speed: 180
-    })
-    ufoArray.push(ufo(ufoX, ufoY));
-    ufoArray.push(ufo(ufoX + 23, ufoY));
-    ufoArray.push(ufo(ufoX + 46, ufoY));
-    ufoArray.push(ufo(ufoX, ufoY + 23));
-    ufoArray.push(ufo(ufoX + 23, ufoY + 23));
-    ufoArray.push(ufo(ufoX + 46, ufoY + 23));
-    ufoArray.push(ufo(ufoX, ufoY + 46));
-    ufoArray.push(ufo(ufoX + 23, ufoY + 46));
-    ufoArray.push(ufo(ufoX + 46, ufoY + 46));
-    ufoArrayArray.push(ufoArray);
-  }
-  if (spawned) {
-    lastSpawn = Date.now();
-    objectSpawnSound3.currentTime = 0;
-    objectSpawnSound3.play();
-  }
 }
 
 // create obstacle
@@ -321,16 +261,6 @@ function draw() {
   ctx.fillStyle = 'yellow';
   ctx.fill();
   ctx.closePath();
-
-  // draw planet
-  for (let i = 0; i < planetArray.length; i++) {
-    let object = planetArray[i];
-    if (!object.hit) {
-      ctx.drawImage(planet1Img, object.x, object.y, object.width, object.height)
-    } else if (object.hit) {
-      ctx.drawImage(planet2Img, object.x, object.y, object.width, object.height)
-    }
-  }
 
   // draw obstactle
   for (let i = 0; i < obstacleArray.length; i++) {
