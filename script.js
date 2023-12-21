@@ -833,7 +833,7 @@ function gameLoop() {
     moveLeftPaddle();
     moveRightpaddle();
     createObject(score, lvlcount, planetArray, ufoArrayArray, objectSpawnSound1, objectSpawnSound3);
-    getLevel(score, lvlcount, rightPaddle, powerUpArray, objectSpawnSound2);
+    getLevel(lvlcount, rightPaddle, powerUpArray, objectSpawnSound2);
     update();
   }
 

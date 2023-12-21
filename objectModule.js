@@ -14,62 +14,62 @@ export function spawnTimer() {
   lastSpawn = Date.now();
 }
 // levels & powerups
-export function getLevel(lvlcount, rightPaddle, powerUpArray, objectSpawnSound2) {  
-    if (lvlcount === 1) {
-      rightPaddle.speed = 150;
-    }
+export function getLevel(lvlcount, rightPaddle, powerUpArray, objectSpawnSound2) {
+  if (lvlcount === 1) {
+    rightPaddle.speed = 150;
+  }
 
-    //lvl MEDIUM
-    if (lvlcount === 2 && powerUpArray.length == 0) {
-      rightPaddle.speed = 250;
-      let powerUpX = randomNumber(100, 500);
-      let powerUpY = randomNumber(20, 280);
-      let makepowerUp = (x, y) => ({
-        x: x,
-        y: y,
-        width: 20,
-        height: 20,
-        status: 1,
-        speed: 0,
-      })
-      powerUpArray.push(makepowerUp(powerUpX, powerUpY));
-      powerUpX = randomNumber(100, 500);
-      powerUpY = randomNumber(20, 280);
-      powerUpArray.push(makepowerUp(powerUpX, powerUpY));
-      objectSpawnSound2.currentTime = 0;
-      objectSpawnSound2.play();
-    }
+  //lvl MEDIUM
+  if (lvlcount === 2 && powerUpArray.length == 0) {
+    rightPaddle.speed = 250;
+    let powerUpX = randomNumber(100, 500);
+    let powerUpY = randomNumber(20, 280);
+    let makepowerUp = (x, y) => ({
+      x: x,
+      y: y,
+      width: 20,
+      height: 20,
+      status: 1,
+      speed: 0,
+    })
+    powerUpArray.push(makepowerUp(powerUpX, powerUpY));
+    powerUpX = randomNumber(100, 500);
+    powerUpY = randomNumber(20, 280);
+    powerUpArray.push(makepowerUp(powerUpX, powerUpY));
+    objectSpawnSound2.currentTime = 0;
+    objectSpawnSound2.play();
+  }
 
-    //lvl HARD
-    if (lvlcount === 3 && powerUpArray.length >= 0 && powerUpArray.length <= 0) {
-      rightPaddle.speed = 300;
-      let powerUpX = randomNumber(100, 500);
-      let powerUpY = randomNumber(20, 280);
-      let makepowerUp = (x, y) => ({
-        x: x,
-        y: y,
-        width: 20,
-        height: 20,
-        status: 1,
-        speed: 2,
-      })
-      powerUpArray.push(makepowerUp(powerUpX, powerUpY));
-      powerUpX = randomNumber(100, 500);
-      powerUpY = randomNumber(20, 280);
-      powerUpArray.push(makepowerUp(powerUpX, powerUpY));
-      powerUpX = randomNumber(100, 500);
-      powerUpY = randomNumber(20, 280);
-      powerUpArray.push(makepowerUp(powerUpX, powerUpY));
-      objectSpawnSound2.currentTime = 0;
-      objectSpawnSound2.play();
-    } 
+  //lvl HARD
+  if (lvlcount === 3 && powerUpArray.length >= 0 && powerUpArray.length <= 0) {
+    rightPaddle.speed = 300;
+    let powerUpX = randomNumber(100, 500);
+    let powerUpY = randomNumber(20, 280);
+    let makepowerUp = (x, y) => ({
+      x: x,
+      y: y,
+      width: 20,
+      height: 20,
+      status: 1,
+      speed: 2,
+    })
+    powerUpArray.push(makepowerUp(powerUpX, powerUpY));
+    powerUpX = randomNumber(100, 500);
+    powerUpY = randomNumber(20, 280);
+    powerUpArray.push(makepowerUp(powerUpX, powerUpY));
+    powerUpX = randomNumber(100, 500);
+    powerUpY = randomNumber(20, 280);
+    powerUpArray.push(makepowerUp(powerUpX, powerUpY));
+    objectSpawnSound2.currentTime = 0;
+    objectSpawnSound2.play();
+  }
 }
 
 // Create obstacle
 export function createObject(score, lvlcount, planetArray, ufoArrayArray, objectSpawnSound1, objectSpawnSound3) {
   let spawned = false;
-  if ((score >= 100 && planetArray.length <= 0 && lvlcount >= 2) || 
-      (Date.now() - lastSpawn > 4000 && planetArray.length <= 0)) {
+  if ((score >= 100 && planetArray.length <= 0 && lvlcount >= 2) ||
+    (Date.now() - lastSpawn > 4000 && planetArray.length <= 0)) {
     spawned = true;
     let planetX = randomNumber(100, 500);
     let planetY = randomNumber(50, 250);
@@ -86,8 +86,8 @@ export function createObject(score, lvlcount, planetArray, ufoArrayArray, object
   }
 
   let ufoArray = [];
-  if ((score === 400 && ufoArrayArray.length <= 0 && lvlcount >= 2) || 
-      (Date.now() - lastSpawn > 7000 && ufoArrayArray.length <= 0 && lvlcount >= 2)) {
+  if ((score === 400 && ufoArrayArray.length <= 0 && lvlcount >= 2) ||
+    (Date.now() - lastSpawn > 7000 && ufoArrayArray.length <= 0 && lvlcount >= 2)) {
     let ufoX = randomNumber(100, 500);
     let ufoY = randomNumber(50, 250);
     let ufo = (x, y) => ({
